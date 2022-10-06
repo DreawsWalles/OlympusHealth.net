@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  postgres-server:
+    ports:
+     - '5433:5432' 
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: OlympusHealthDB
+      POSTGRES_USER: 'postgres'
+    networks:
+      - olympus-health
+  client:
+    image: client
+    build:
+        context: ./application-client
+        dockerfile: Dockerfile
+    networks:
+      - olympus-health
+  backend:
+    image: ${DOCKER_REGISTRY-}backend
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    networks:
+        - olympus-health
+
+  
+  proxy:
+    image: nginx:mainline
+    networks:
+      - olympus-health
+
+networks:
+  olympus-health:
+    driver: bridge
