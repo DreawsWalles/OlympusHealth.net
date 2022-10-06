@@ -69,7 +69,7 @@ namespace Business.Service.MedicModel
             return _medicRepository.Query().FirstOrDefault(element => element.Login.Contains(login, System.StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public Medic? IsRegistered(RegisterModelUser model)
+        public Medic? IsRegistered(LoginModel model)
         {
             var user = _medicRepository.Query()
                 .FirstOrDefault(element => element.Login.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));

@@ -14,7 +14,7 @@ namespace Business.Service.MedicModel
 {
     public interface IMedicService
     {
-        public Medic? IsRegistered(RegisterModelUser model);
+        public Medic? IsRegistered(LoginModel model);
         public Medic? FindByLogin(string login);
         public IEnumerable<Medic> FindByFullName(string Name);
         public Medic FindById(Guid id);

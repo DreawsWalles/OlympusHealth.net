@@ -14,7 +14,7 @@ services:
   client:
     image: client
     build:
-        context: ./application-client
+        context: ./client
         dockerfile: Dockerfile
     networks:
       - olympus-health

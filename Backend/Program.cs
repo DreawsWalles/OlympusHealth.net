@@ -268,11 +268,11 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder.WithOrigins("http://localhost:3000");
         }));
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
-                {
-                    options.LoginPath = new PathString("/Account/Login");
-                });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//                .AddCookie(options => //CookieAuthenticationOptions
+//                {
+//                    options.LoginPath = new PathString("/Account/Login");
+//                });
 
 var app = builder.Build();
 
