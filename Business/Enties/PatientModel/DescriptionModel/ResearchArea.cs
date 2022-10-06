@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Business.Enties.PatientModel.DescriptionModel
 {
     [Table("ResearchAreas")]
-    [Index("Patient", IsUnique = true)]
+    [Index("Name", IsUnique = true)]
     public class ResearchArea
     {
         [Key]
@@ -19,9 +19,8 @@ namespace Business.Enties.PatientModel.DescriptionModel
         [Required]
         public string Name { get; set; }
 
-        [Required]
         [ForeignKey("PatientId")]
-        public virtual Patient Patient { get; set; }
+        public virtual Patient? Patient { get; set; }
         public virtual IEnumerable<Description>? Descriptions { get; set; }
         public virtual IEnumerable<Method> Methods { get; set; }
     }

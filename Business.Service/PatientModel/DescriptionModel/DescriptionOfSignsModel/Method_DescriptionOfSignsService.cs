@@ -35,7 +35,7 @@ namespace Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel
 
         public Method_DescriptionOfSignsDto GetById(Guid MethodId, Guid DescriptionOfSignsId)
         {
-            return _mapper.Map<Method_DescriptionOfSignsDto>(_method_DescriptionOfSignsRepository.Query().FirstOrDefault(e => e.MethodId == MethodId && e.DescriptionOfSighs == DescriptionOfSignsId)); // Написать запрос
+            return _mapper.Map<Method_DescriptionOfSignsDto>(_method_DescriptionOfSignsRepository.Query().FirstOrDefault(e => e.MethodId == MethodId && e.DescriptionOfSighsId == DescriptionOfSignsId)); // Написать запрос
         }
 
         public void Remove(Method_DescriptionOfSignsDto entity)

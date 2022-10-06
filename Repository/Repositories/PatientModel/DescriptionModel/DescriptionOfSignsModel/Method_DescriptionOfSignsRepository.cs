@@ -35,13 +35,13 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSig
 
         protected override void DeleteImplementation(Method_DescriptionOfSigns value)
         {
-            var entity = ReadImplementation(new Dictionary<int, Guid> { { 0, value.MethodId }, { 1, value.DescriptionOfSighs } });
+            var entity = ReadImplementation(new Dictionary<int, Guid> { { 0, value.MethodId }, { 1, value.DescriptionOfSighsId } });
             if (entity == null)
                 return;
             _context.Method_DescriptionOfSigns.Remove(entity);
         }
 
-        protected override Dictionary<int, Guid> KeySelector(Method_DescriptionOfSigns value) => new Dictionary<int, Guid> { { 0, value.MethodId }, { 1, value.DescriptionOfSighs } };
+        protected override Dictionary<int, Guid> KeySelector(Method_DescriptionOfSigns value) => new Dictionary<int, Guid> { { 0, value.MethodId }, { 1, value.DescriptionOfSighsId } };
 
         protected override IQueryable<Method_DescriptionOfSigns> QueryImplementation()
         {
@@ -50,12 +50,12 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSig
 
         protected override Method_DescriptionOfSigns ReadImplementation(Dictionary<int, Guid> key)
         {
-            return QueryImplementation().FirstOrDefault(i => i.MethodId == key[0] && i.DescriptionOfSighs == key[1]);
+            return QueryImplementation().FirstOrDefault(i => i.MethodId == key[0] && i.DescriptionOfSighsId == key[1]);
         }
 
         protected override async Task<Method_DescriptionOfSigns> ReadImplementationAsync(Dictionary<int, Guid> key)
         {
-            return await QueryImplementation().FirstOrDefaultAsync(i => i.MethodId == key[0] && i.DescriptionOfSighs == key[1]);
+            return await QueryImplementation().FirstOrDefaultAsync(i => i.MethodId == key[0] && i.DescriptionOfSighsId == key[1]);
         }
 
         protected override void UpdateImplementation(Method_DescriptionOfSigns entity, Method_DescriptionOfSigns value)

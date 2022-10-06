@@ -38,6 +38,6 @@ namespace Business.Enties.PatientModel
         public virtual Gender Gender { get; set; }
         public virtual IEnumerable<HistoryNode>? HistoryNodes { get; set; }
         public virtual IEnumerable<OutpatientCard>? OutpatientCards { get; set; }
-        public virtual IEnumerable<ResearchArea>? ResearchAreas { get; set; }
+        public virtual IEnumerable<ResearchArea> ResearchAreas { get; set; }
     }
 }

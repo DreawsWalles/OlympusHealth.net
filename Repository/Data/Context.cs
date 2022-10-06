@@ -344,7 +344,7 @@ namespace Repository.Data
             builder.Entity<Method_DescriptionOfSigns>(entity =>
             {
                 entity.ToTable("Method_DescriptionsOfSigns");
-                entity.HasKey(e => new { e.MethodId, e.DescriptionOfSighs });
+                entity.HasKey(e => new { e.MethodId, e.DescriptionOfSighsId });
             });
 
             builder.Entity<StatusOfTheAttribute>(entity =>
