@@ -12,7 +12,7 @@ namespace Business.Interop.PatientModel.DescriptionModel
         public string Name { get; set; }
 
         public virtual PatientDto Patient { get; set; }
-        public virtual IEnumerable<DescriptionDto>? Descriptions { get; set; }
-        public virtual IEnumerable<MethodDto> Methods { get; set; }
+        public virtual ICollection<DescriptionDto>? Descriptions { get; set; }
+        public virtual ICollection<MethodDto> Methods { get; set; }
     }
 }

@@ -16,10 +16,10 @@ namespace Business.Interop.PatientModel.DescriptionModel
         public bool AddEnter { get; set; }
 
         public virtual ResearchAreaDto ResearchArea { get; set; }
-        public virtual IEnumerable<DescriptionDto> Descriptions { get; set; }
-        public virtual IEnumerable<RadiationDoseDto> RadiationDose { get; set; }
+        public virtual ICollection<DescriptionDto> Descriptions { get; set; }
+        public virtual ICollection<RadiationDoseDto> RadiationDose { get; set; }
         public virtual ResearchCategoryDto ResearchCategory { get; set; }
-        public virtual IEnumerable<IllnessDto> Illnesses { get; set; }
-        public virtual IEnumerable<DescriptionOfSignsDto> DescriptionOfSigns { get; set; }
+        public virtual ICollection<IllnessDto> Illnesses { get; set; }
+        public virtual ICollection<DescriptionOfSignsDto> DescriptionOfSigns { get; set; }
     }
 }

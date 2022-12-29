@@ -13,7 +13,12 @@ namespace Business.Service.PatientModel.DescriptionModel
         public RadiationDoseDto Update(RadiationDoseDto entity);
         public void Remove(RadiationDoseDto entity);
 
-        public IEnumerable<RadiationDoseDto> GetAll();
+        public ICollection<RadiationDoseDto> GetAll();
         public RadiationDoseDto GetById(Guid id);
+
+        public Task<RadiationDoseDto> CreateAsync(RadiationDoseDto entity);
+        public Task<RadiationDoseDto> UpdateAsync(RadiationDoseDto entity);
+        public Task<ICollection<RadiationDoseDto>> GetAllAsync();
+        public Task<RadiationDoseDto> GetByIdAsync(Guid id);
     }
 }

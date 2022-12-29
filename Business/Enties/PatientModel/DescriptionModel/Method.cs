@@ -10,29 +10,23 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel
 {
-    [Table("Methods")]
     public class Method
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string NameFieldMethod { get; set; }
 
-        [Required]
         public string NameTitle { get; set; }
         public bool AddEnter { get; set; } = false;
 
-        [Required]
-        [ForeignKey("ResearchAreaId")]
-        public virtual ResearchArea ResearchArea { get; set; }
-        public virtual IEnumerable<Description> Descriptions { get; set; }
-        public virtual IEnumerable<RadiationDose> RadiationDose { get; set; }
 
-        [Required]
-        [ForeignKey("ResearchCategoryId")]
+        public virtual ResearchArea ResearchArea { get; set; }
+        public virtual ICollection<Description> Descriptions { get; set; } = new List<Description>();
+        public virtual ICollection<RadiationDose> RadiationDose { get; set; } = new List<RadiationDose>();
+
+
         public virtual ResearchCategory ResearchCategory { get; set; }
-        public virtual IEnumerable<Illness> Illnesses { get; set; }
-        public virtual IEnumerable<DescriptionOfSigns> DescriptionOfSigns { get; set; }
+        public virtual ICollection<Illness> Illnesses { get; set; } = new List<Illness>();
+        public virtual ICollection<DescriptionOfSigns> DescriptionOfSigns { get; set; } = new List<DescriptionOfSigns>();
     }
 }

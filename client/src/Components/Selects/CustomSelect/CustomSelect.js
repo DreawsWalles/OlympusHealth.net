@@ -1,5 +1,5 @@
-import dropListDown from "../../Screens/Images/dropListDown.svg"
-
+import dropListDown from "../../../Screens/Images/dropListDown.svg"
+import classes from "./CustomSelect.module.css"
 function SelectItem(props){
     const key = props.element.key;
     const value = props.element.name;
@@ -22,12 +22,12 @@ export default function CustomSelect(props){
         Hint(props.idSpan, "");
     }
     return(
-        <div className={"form-group"}>
-            <select onChange={handleOnSelect} className={"select-css"} style={{ backgroundImage:`url(${dropListDown})` }} >
+        <div className={classes.formGroup}>
+            <select onChange={handleOnSelect} className={`${classes.custom} form-control`} >
                 <option selected>Выберите пол</option>
                 {list}
             </select>
-            <span className={"error-input"} id={props.idSpan}></span>
+            <span className={classes.errorInput} id={props.idSpan}></span>
         </div>
     );
 

@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel
 
         public override List<Method> FromSqlInterpolated(FormattableString sqlCommand) => _context.Methods.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Method> FromSqlRow(string sqlCommand) => _context.Methods.FromSqlRaw(sqlCommand).ToList();
+        public override List<Method> FromSqlRow(FormattableString sqlCommand) => _context.Methods.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Method value)
         {

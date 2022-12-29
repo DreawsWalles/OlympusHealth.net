@@ -11,25 +11,20 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.Address
 {
-    [Table("Streets")]
     public class Street
     {
-        [Key]
         public Guid Id { get; set; }
-        [Required]
         public string Name { get; set; }
 
         public string? NumberOfHouse { get; set; }
 
-        [Required]
-        [ForeignKey("CityId")]
         public virtual City City { get; set; }
 
-        public virtual IEnumerable<Medic>? Medics { get; set; }
-        public virtual IEnumerable<AdvancedTrainingCourses>? AdvancedTrainingCourses { get; set; }
-        public virtual IEnumerable<HightSchool>? HightSchools { get; set; }
-        public virtual IEnumerable<Intership>? Interships { get; set; }
-        public virtual IEnumerable<Speciality>? Specialities { get; set; }
-        public virtual IEnumerable<Corpus> Corpuses { get; set; }
+        public virtual ICollection<Medic> Medics { get; set; } = new List<Medic>();
+        public virtual ICollection<AdvancedTrainingCourses> AdvancedTrainingCourses { get; set; } = new List<AdvancedTrainingCourses>();
+        public virtual ICollection<HightSchool> HightSchools { get; set; } = new List<HightSchool>();
+        public virtual ICollection<Intership> Interships { get; set; } = new List<Intership>();
+        public virtual ICollection<Speciality> Specialities { get; set; } = new List<Speciality>();
+        public virtual ICollection<Corpus> Corpuses { get; set; } = new List<Corpus>();
     }
 }

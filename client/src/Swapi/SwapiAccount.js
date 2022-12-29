@@ -1,36 +1,130 @@
+import {Api, Controllers} from "../Constants";
 
-
-
-export async function IsAutorize(){
-    debugger
-    let state;
-    let response = await fetch('http://localhost:5000/api/Account/IsAuoturize', {
-        method: 'Post'
+export async function Login(data, answer){
+    let status = 200;
+    let response = await fetch(`${Api}${Controllers["Account"]}Login`, {
+        method: 'Post',
+        headers: {
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json'
+        },
+        body:data
     })
         .then(function(response) {
+            status = response.status;
+        })
+        .catch(e => {
+            console.error(e);
+            }
+        )
+    if(status === 200){
+        answer = response.json();
+        return true;
+    }
+    return false;
+}
+
+export async function CheckLogin(login){
+    let answer;
+    await fetch(`${Api}${Controllers["Account"]}CheckLogin?login=${login}`,{
+        method: 'Post',
+        headers: {
+            'Accept': 'text/plain'
+        }
+    })
+        .then(function (response){
+            answer = response.status;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    if(answer !== 200)
+        return false;
+    return true;
+}
+
+export async function CheckEmail(email, role){
+    let answer;
+    await fetch(`${Api}${Controllers["Account"]}CheckEmail?email=${email}&role=${role}`,{
+        method:'Post',
+        headers: {
+            'Accept': 'text/plain'
+        }
+    })
+        .then(function (response){
+            answer = response.status;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    if(answer !== 200)
+        return false;
+    return true;
+}
+
+export async function CheckPhoneNumber(phoneNumber, role){
+    let answer;
+    await fetch(`${Api}${Controllers["Account"]}CheckPhoneNumber?login=${phoneNumber}&role=${role}`,{
+        method:'Post',
+        headers: {
+            'Accept': 'text/plain'
+        }
+    })
+        .then(function (response){
+            answer = response.status;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    if(answer !== 200)
+        return false;
+    return true;
+}
+
+export async function RegisterUser(data, answer){
+    answer = undefined;
+    let status = 200;
+    await fetch(`${Api}${Controllers["Account"]}RegisterUser`, {
+        method:"Post",
+        headers:{
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json'
+        },
+        body:data
+    })
+        .then(function(response) {
+            status = response.status;
             return response.json();
-            })
+        })
         .then(function (json){
-            debugger
-            state = json.message === "User is not autorize" ? false : true;
+            answer = json;
+        })
+        .catch(e => {
+                console.error(e);
+            }
+        )
+    if(status === 200){
+        return answer;
+    }
+    return answer;
+}
+export async function GetRole(token){
+    let answer = undefined;
+    debugger
+    await fetch(`${Api}${Controllers["Account"]}GetRole?token=${token}`, {
+        method: "Post",
+        headers:{
+            'Accept': 'text/plain',
+        },
+    })
+        .then(function (response){
+            return response.json()
+        })
+        .then(function (json){
+            answer = json
         })
         .catch(e => {
             console.error(e);
         });
-    return state;
-}
-
-export const Login = async(data) =>{
-    debugger
-    let state
-    let response = await fetch("http://localhost:5000/api/Account/Login", {
-        method: 'Post',
-        headers: {
-          'Accept' : 'application/json',
-          'Content-Type' : 'application/json'
-        },
-        body: data
-    });
-    debugger
-    let jsom = await response.json();
+    return answer;
 }

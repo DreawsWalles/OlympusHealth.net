@@ -20,7 +20,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.IllnessModel
 
         public override List<SignsOfResearch> FromSqlInterpolated(FormattableString sqlCommand) => _context.SignsOfResearch.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<SignsOfResearch> FromSqlRow(string sqlCommand) => _context.SignsOfResearch.FromSqlRaw(sqlCommand).ToList();
+        public override List<SignsOfResearch> FromSqlRow(FormattableString sqlCommand) => _context.SignsOfResearch.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(SignsOfResearch value)
         {

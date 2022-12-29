@@ -12,6 +12,6 @@ namespace Business.Interop.InstitutionModel
         public string Name { get; set; }
         public string Avatar { get; set; }
 
-        public virtual IEnumerable<CorpusDto> Corpuses { get; set; }
+        public virtual ICollection<CorpusDto> Corpuses { get; set; }
     }
 }

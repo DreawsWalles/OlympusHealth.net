@@ -1,0 +1,14 @@
+.btnIsAuto{
+    --bs-btn-padding-y:0.1rem !important;
+    --bs-btn-padding-x:0.5rem !important;
+    border-radius: 10px !important;
+    font-family: "Century Gothic";
+    font-size: 18px !important;
+    margin-top: 8px !important;
+}
+.none{
+    display:none !important;
+}
+.btnSymbol {
+    margin-left: -1em;
+}

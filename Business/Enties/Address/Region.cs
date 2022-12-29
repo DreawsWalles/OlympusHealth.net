@@ -8,18 +8,14 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.Address
 {
-    [Table("Regions")]
     public class Region
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
-        [ForeignKey("CountryId")]
+
         public virtual Country Country { get; set; }
-        public virtual IEnumerable<City>? Citys { get; set; }
+        public virtual ICollection<City> Citys { get; set; } = new List<City>();
     }
 }

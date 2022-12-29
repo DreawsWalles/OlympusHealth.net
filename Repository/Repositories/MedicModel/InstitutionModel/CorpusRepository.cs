@@ -19,7 +19,7 @@ namespace Repository.Repositories.MedicModel.InstitutionModel
 
         public override List<Corpus> FromSqlInterpolated(FormattableString sqlCommand) => _context.Corpuses.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Corpus> FromSqlRow(string sqlCommand) => _context.Corpuses.FromSqlRaw(sqlCommand).ToList();
+        public override List<Corpus> FromSqlRow(FormattableString sqlCommand) => _context.Corpuses.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Corpus value)
         {

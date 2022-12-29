@@ -20,7 +20,7 @@ namespace Repository.Repositories
         public override List<HistoryNode> FromSqlInterpolated(FormattableString sqlCommand) => _context.HistoryNodes.FromSqlInterpolated(sqlCommand).ToList();
 
 
-        public override List<HistoryNode> FromSqlRow(string sqlCommand) => _context.HistoryNodes.FromSqlRaw(sqlCommand).ToList();
+        public override List<HistoryNode> FromSqlRow(FormattableString sqlCommand) => _context.HistoryNodes.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(HistoryNode value)
         {

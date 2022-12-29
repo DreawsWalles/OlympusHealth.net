@@ -20,7 +20,7 @@ namespace Repository.Repositories
         public override List<Gender> FromSqlInterpolated(FormattableString sqlCommand) => _context.Genders.FromSqlInterpolated(sqlCommand).ToList();
 
 
-        public override List<Gender> FromSqlRow(string sqlCommand) => _context.Genders.FromSqlRaw(sqlCommand).ToList();
+        public override List<Gender> FromSqlRow(FormattableString sqlCommand) => _context.Genders.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Gender value)
         {

@@ -3,21 +3,23 @@ version: '3.4'
 services:
   postgres-server:
     ports:
-     - '5433:5432' 
-    image: postgres
+     - '5432:5432' 
+    image: postgres:15.1
+    container_name: postgresql
     environment:
       POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: OlympusHealthDB
+      POSTGRES_DB: OlympusHealth
       POSTGRES_USER: 'postgres'
     networks:
       - olympus-health
+
   client:
     image: client
     build:
         context: ./client
         dockerfile: Dockerfile
     networks:
-      - olympus-health
+      - olympus-health  
   backend:
     image: ${DOCKER_REGISTRY-}backend
     build:
@@ -27,10 +29,10 @@ services:
         - olympus-health
 
   
-  proxy:
-    image: nginx:mainline
-    networks:
-      - olympus-health
+  #proxy:
+  #  image: nginx:mainline
+  #  networks:
+  #    - olympus-health
 
 networks:
   olympus-health:

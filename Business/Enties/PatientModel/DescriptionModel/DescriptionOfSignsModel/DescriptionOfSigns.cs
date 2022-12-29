@@ -8,19 +8,15 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel.DescriptionOfSignsModel
 {
-    [Table("DescriptionsOfSigns")]
     public class DescriptionOfSigns
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
         public int SerialNumber { get; set; }
 
-        public IEnumerable<Method> Methods { get; set; }
-        public IEnumerable<StatusOfTheAttribute> StatusOfTheAttributes { get; set; }
+        public ICollection<Method> Methods { get; set; } = new List<Method>();
+        public ICollection<StatusOfTheAttribute> StatusOfTheAttributes { get; set; } = new List<StatusOfTheAttribute>();
     }
 }

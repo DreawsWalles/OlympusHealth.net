@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel
 
         public override List<ProcessDynamics> FromSqlInterpolated(FormattableString sqlCommand) => _context.ProcessDynamics.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<ProcessDynamics> FromSqlRow(string sqlCommand) => _context.ProcessDynamics.FromSqlRaw(sqlCommand).ToList();
+        public override List<ProcessDynamics> FromSqlRow(FormattableString sqlCommand) => _context.ProcessDynamics.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(ProcessDynamics value)
         {

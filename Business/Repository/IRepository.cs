@@ -31,7 +31,7 @@ namespace Business.Repository
 
         TResult Query<TResult>(Func<IQueryable<T>, TResult> body);
 
-        List<T> FromSqlRow(string sqlCommand);
+        List<T> FromSqlRow(FormattableString sqlCommand);
         List<T> FromSqlInterpolated(FormattableString sqlCommand);
     }
 }

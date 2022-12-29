@@ -11,17 +11,13 @@ using System.Threading.Tasks;
 
 namespace Business.Enties
 {
-    [Table("Genders")]
-    [Index("Name", IsUnique = true)]
     public class Gender
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        public virtual IEnumerable<Medic> Medics { get; set; }
-        public virtual IEnumerable<Patient> Patients { get; set; }
+        public virtual ICollection<Medic> Medics { get; set; } = new List<Medic>();
+        public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
     }
 }

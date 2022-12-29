@@ -20,7 +20,7 @@ namespace Repository.Repositories.Address
 
         public override List<City> FromSqlInterpolated(FormattableString sqlCommand) => _context.Cities.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<City> FromSqlRow(string sqlCommand) => _context.Cities.FromSqlRaw(sqlCommand).ToList();
+        public override List<City> FromSqlRow(FormattableString sqlCommand) => _context.Cities.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(City value)
         {

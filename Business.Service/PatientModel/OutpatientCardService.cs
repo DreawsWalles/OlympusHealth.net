@@ -38,6 +38,7 @@ namespace Business.Service.PatientModel
 
         public OutpatientCardDto Create(OutpatientCardDto entity)
         {
+            CheckEntity(entity);
             OutpatientCard card = _mapper.Map<OutpatientCard>(entity);
             _outpatientCardRepository.Create(card);
             return _mapper.Map<OutpatientCardDto>(card);
@@ -68,16 +69,40 @@ namespace Business.Service.PatientModel
             return _mapper.Map<OutpatientCardDto>(_outpatientCardRepository.Query().FirstOrDefault(e => e.Id == id)); 
         }
 
+        public async Task<OutpatientCardDto> GetByIdAsync(Guid id)
+        {
+            if (id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(id));
+            var list = await _outpatientCardRepository.QueryAsync();
+            return _mapper.Map<OutpatientCardDto>(list.FirstOrDefault(e => e.Id == id));
+        }
+
         public void Remove(OutpatientCardDto entity)
         {
+            CheckEntity(entity);    
+            if(entity.Id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(entity));
             OutpatientCard card = _mapper.Map<OutpatientCard>(entity);
             _outpatientCardRepository.Delete(card);
         }
 
         public OutpatientCardDto Update(OutpatientCardDto entity)
         {
+            CheckEntity(entity);
+            if (entity.Id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(entity));
             OutpatientCard card = _mapper.Map<OutpatientCard>(entity);
             _outpatientCardRepository.Update(card);
+            return _mapper.Map<OutpatientCardDto>(card);
+        }
+
+        public async Task<OutpatientCardDto> UpdateAsync(OutpatientCardDto entity)
+        {
+            CheckEntity(entity);
+            if (entity.Id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(entity));
+            OutpatientCard card = _mapper.Map<OutpatientCard>(entity);
+            await _outpatientCardRepository.CreateOrUpdateAsync(card);
             return _mapper.Map<OutpatientCardDto>(card);
         }
     }

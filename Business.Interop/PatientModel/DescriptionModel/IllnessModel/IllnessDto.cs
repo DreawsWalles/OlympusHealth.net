@@ -11,7 +11,7 @@ namespace Business.Interop.PatientModel.DescriptionModel.IllnessModel
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public virtual IEnumerable<MethodDto> Methods { get; set; }
-        public virtual IEnumerable<SignsOfResearchDto> SignsOfResearches { get; set; }
+        public virtual ICollection<MethodDto> Methods { get; set; }
+        public virtual ICollection<SignsOfResearchDto> SignsOfResearches { get; set; }
     }
 }

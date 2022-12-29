@@ -19,7 +19,7 @@ namespace Repository.Repositories.MedicModel
 
         public override List<Files> FromSqlInterpolated(FormattableString sqlCommand) => _context.Files.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Files> FromSqlRow(string sqlCommand) => _context.Files.FromSqlRaw(sqlCommand).ToList();
+        public override List<Files> FromSqlRow(FormattableString sqlCommand) => _context.Files.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Files value)
         {

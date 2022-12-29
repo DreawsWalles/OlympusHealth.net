@@ -10,20 +10,16 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.MedicModel.PlaceOfStudyModel
 {
-    [Table("AdvancedTrainingCourses")]
     [Index("Name", IsUnique = true)]
     public class AdvancedTrainingCourses
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
-        [ForeignKey("StreetId")]
+
         public virtual Street Street { get; set; }
 
-        public virtual IEnumerable<PlaceOfStudy>? PlaceOfStudies { get; set; }
+        public virtual ICollection<PlaceOfStudy> PlaceOfStudies { get; set; } = new List<PlaceOfStudy>();
     }
 }

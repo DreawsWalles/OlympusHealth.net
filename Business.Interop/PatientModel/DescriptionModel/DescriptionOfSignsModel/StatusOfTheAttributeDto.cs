@@ -12,6 +12,6 @@ namespace Business.Interop.PatientModel.DescriptionModel.DescriptionOfSignsModel
         public string Name { get; set; }
 
         public virtual DescriptionOfSignsDto DescriptionOfSigns { get; set; }
-        public virtual IEnumerable<DescriptionDto> Descriptions { get; set; }
+        public virtual ICollection<DescriptionDto> Descriptions { get; set; }
     }
 }

@@ -9,19 +9,16 @@ using System.Threading.Tasks;
 
 namespace Business.Enties
 {
-    [Table("SysAdmins")]
-    [Index("Login", IsUnique = true)]
     public class SysAdmin
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Login { get; set; }
 
-        [Required]
         public string Password { get; set; }
 
-        public virtual IEnumerable<HistoryNode>? HistoryNodes { get; set; }
+        public virtual ICollection<HistoryNode> HistoryNodes { get; set; } = new List<HistoryNode>();
+
+        public bool Accept { get; set; } = false;
     }
 }

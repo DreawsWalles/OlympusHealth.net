@@ -13,7 +13,12 @@ namespace Business.Service.PatientModel.DescriptionModel
         public ResearchCategoryDto Update(ResearchCategoryDto entity);
         public void Remove(ResearchCategoryDto entity);
 
-        public IEnumerable<ResearchCategoryDto> GetAll();
+        public ICollection<ResearchCategoryDto> GetAll();
         public ResearchCategoryDto GetById(Guid id);
+
+        public Task<ResearchCategoryDto> CreateAsync(ResearchCategoryDto entity);
+        public Task<ResearchCategoryDto> UpdateAsync(ResearchCategoryDto entity);
+        public Task<ICollection<ResearchCategoryDto>> GetAllAsync();
+        public Task<ResearchCategoryDto> GetByIdAsync(Guid id);
     }
 }

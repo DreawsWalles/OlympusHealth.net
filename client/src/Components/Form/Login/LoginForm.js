@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
 import LoginInput from "../../Inputs/LoginInput.css/LoginInput";
 import PasswordInput from "../../Inputs/PasswordInput/PasswordInput";
-import classes from "./ValidationForm.module.css"
+import classes from "./LoginForm.module.css"
 
 
-export default function ValidationForm(props){
+export default function LoginForm(props){
     const [loginValue, setLogin] = useState("");
     const [passwordValue, setPassword] = useState("");
 

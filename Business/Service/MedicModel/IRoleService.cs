@@ -12,8 +12,13 @@ namespace Business.Service.MedicModel
         public Role Create(Role entity);
         public Role Update(Role updateEntity);
         public void Remove(Role entity);
-        public IEnumerable<Role> GetAll();
+        public ICollection<Role> GetAll();
         public Role? GetById(Guid id);
+
+        public Task<Role> CreateAsync(Role entity);
+        public Task<Role> UpdateAsync(Role updateEntity);
+        public Task<ICollection<Role>> GetAllAsync();
+        public Task<Role?> GetByIdAsync(Guid id);
 
     }
 }

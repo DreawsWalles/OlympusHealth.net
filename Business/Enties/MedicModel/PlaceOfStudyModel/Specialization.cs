@@ -9,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.MedicModel.PlaceOfStudyModel
 {
-    [Table("Specializations")]
-    [Index("Name", IsUnique = true)]
     public class Specialization
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
         
-        public virtual IEnumerable<PlaceOfStudy> PlaceOfStudies { get; set; }
+        public virtual ICollection  <PlaceOfStudy> PlaceOfStudies { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Repository.Repositories
         public override List<SysAdmin> FromSqlInterpolated(FormattableString sqlCommand) => _context.SysAdmins.FromSqlInterpolated(sqlCommand).ToList();
 
 
-        public override List<SysAdmin> FromSqlRow(string sqlCommand) => _context.SysAdmins.FromSqlRaw(sqlCommand).ToList();
+        public override List<SysAdmin> FromSqlRow(FormattableString sqlCommand) => _context.SysAdmins.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(SysAdmin value)
         {

@@ -11,6 +11,6 @@ namespace Business.Interop.PatientModel.DescriptionModel
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public virtual IEnumerable<DescriptionDto> Descriptions { get; set; }
+        public virtual ICollection<DescriptionDto> Descriptions { get; set; }
     }
 }

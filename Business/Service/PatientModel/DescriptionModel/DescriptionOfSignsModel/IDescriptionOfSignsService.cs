@@ -13,7 +13,7 @@ namespace Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel
         public DescriptionOfSignsDto Update(DescriptionOfSignsDto entity);
         public void Remove(DescriptionOfSignsDto entity);
 
-        public IEnumerable<DescriptionOfSignsDto> GetAll();
+        public ICollection<DescriptionOfSignsDto> GetAll();
         public DescriptionOfSignsDto GetById(Guid id);
     }
 }

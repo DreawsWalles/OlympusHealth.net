@@ -26,6 +26,6 @@ namespace Business.Interop.PatientModel.DescriptionModel
         public virtual DescriptionDto? SubDescription { get; set; }
         public virtual ResultIllnessDto ResultIllness { get; set; }
         public virtual ProcessDynamicsDto ProcessDynamics { get; set; }
-        public virtual IEnumerable<StatusOfTheAttributeDto> StatusOfTheAttributes { get; set; }
+        public virtual ICollection<StatusOfTheAttributeDto> StatusOfTheAttributes { get; set; }
     }
 }

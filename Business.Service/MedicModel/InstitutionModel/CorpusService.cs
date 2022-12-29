@@ -28,9 +28,9 @@ namespace Business.Service.MedicModel.InstitutionModel
             return _mapper.Map<CorpusDto>(corpus);
         }
 
-        public IEnumerable<CorpusDto> GetAll()
+        public ICollection<CorpusDto> GetAll()
         {
-            return _mapper.Map<List<Corpus>, IEnumerable<CorpusDto>>(_corpusRepository.Query());
+            return _mapper.Map<List<Corpus>, ICollection<CorpusDto>>(_corpusRepository.Query());
         }
 
         public CorpusDto GetById(Guid Id)

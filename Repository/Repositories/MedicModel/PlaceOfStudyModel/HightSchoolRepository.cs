@@ -19,7 +19,7 @@ namespace Repository.Repositories.MedicModel.PlaceOfStudyModel
 
         public override List<HightSchool> FromSqlInterpolated(FormattableString sqlCommand) => _context.HightSchools.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<HightSchool> FromSqlRow(string sqlCommand) => _context.HightSchools.FromSqlRaw(sqlCommand).ToList();
+        public override List<HightSchool> FromSqlRow(FormattableString sqlCommand) => _context.HightSchools.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(HightSchool value)
         {

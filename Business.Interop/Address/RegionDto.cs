@@ -11,7 +11,7 @@ namespace Business.Interop.Address
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public virtual CountryDto Country { get; set; }
-        public virtual IEnumerable<CityDto>? Citys { get; set; }
+        public Guid CountryId { get; set; }
+        public virtual ICollection<CityDto>? Citys { get; set; }
     }
 }

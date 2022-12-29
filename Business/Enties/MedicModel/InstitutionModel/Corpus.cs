@@ -9,27 +9,18 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.MedicModel.InstitutionModel
 {
-    [Table("Corpuses")]
     public class Corpus
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
-        [ForeignKey("InstitutionId")]
         public virtual Institution Institution { get; set; }
 
-        [Required]
-        [ForeignKey("StreetId")]
         public virtual Street Street { get; set; }
-        public virtual IEnumerable<Device>? Devices { get; set; }
-        public virtual IEnumerable<Department>? Departments { get; set; }
-        public virtual IEnumerable<Corpus_Medic> Corpus_Medics { get; set; }
+        public virtual ICollection<Device> Devices { get; set; } = new List<Device>();
+        public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
 
-        [NotMapped]
-        public virtual IEnumerable<Medic> Medics { get; set; }
+        public virtual Medic Medics { get; set; }
     }
 }

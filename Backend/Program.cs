@@ -18,7 +18,9 @@ using Business.Service.PatientModel.DescriptionModel;
 using Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel;
 using Business.Service.PatientModel.DescriptionModel.IllnessModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Repository.Data;
 using Repository.Repositories;
 using Repository.Repositories.Address;
@@ -29,15 +31,9 @@ using Repository.Repositories.PatientModel;
 using Repository.Repositories.PatientModel.DescriptionModel;
 using Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSignsModel;
 using Repository.Repositories.PatientModel.DescriptionModel.IllnessModel;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-//builder.Services.AddDbContext<Context>(
-//    options => options
-//        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
-//    contextLifetime: ServiceLifetime.Scoped,
-//    optionsLifetime: ServiceLifetime.Transient);
 
 builder.Services.AddDbContext<Context>(
     options => options
@@ -61,11 +57,11 @@ builder.Services.AddScoped<IStreetService, StreetService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMedicService, MedicService>();
 builder.Services.AddScoped<IFilesService, FilesService>();
+builder.Services.AddScoped<IAccessService, AccessService>();
 
 #region InstitutionModel
 
 builder.Services.AddScoped<ICorpusService, CorpusService>();
-builder.Services.AddScoped<ICorpus_MedicService, Corpus_MedicService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IInstitutionService, InstitutionService>();
@@ -122,7 +118,6 @@ builder.Services.AddScoped<IDescriptionService, DescriptionService>();
 #region IllnessModel
 
 builder.Services.AddScoped<IIllnessService, IllnessService>();
-builder.Services.AddScoped<IIllness_MethodService, Illness_MethodService>();
 builder.Services.AddScoped<IResultIllnessService, ResultIllnessService>();
 builder.Services.AddScoped<ISignsOfResearchService, SignsOfResearchService>();
 
@@ -130,9 +125,7 @@ builder.Services.AddScoped<ISignsOfResearchService, SignsOfResearchService>();
 
 #region DescriptionOfSignsModel
 
-builder.Services.AddScoped<IDescription_StatusOfTheAttributeService, Description_StatusOfTheAttributeService>();
 builder.Services.AddScoped<IDescriptionOfSignsService, DescriptionOfSignsService>();
-builder.Services.AddScoped<IMethod_DescriptionOfSignsService, Method_DescriptionOfSignsService>();
 builder.Services.AddScoped<IStatusOfTheAttributeService, StatusOfTheAttributeService>();
 
 #endregion
@@ -163,11 +156,11 @@ builder.Services.AddScoped<IStreetRepository, StreetRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IMedicRepository, MedicRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IAccessRepository, AccessRepository>();
 
 #region InstitutionModel
 
 builder.Services.AddScoped<ICorpusRepository, CorpusRepository>();
-builder.Services.AddScoped<ICorpus_MedicRepository, Corpus_MedicRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
 builder.Services.AddScoped<IInstitutionRepository, InstitutionRepository>();
@@ -224,7 +217,6 @@ builder.Services.AddScoped<IDescriptionRepository, DescriptionRepository>();
 #region IllnessModel
 
 builder.Services.AddScoped<IIllnessRepository, IllnessRepository>();
-builder.Services.AddScoped<IIllness_MethodRepository, Illness_MethodRepository>();
 builder.Services.AddScoped<IResultIllnessRepository, ResultIllnessRepository>();
 builder.Services.AddScoped<ISignsOfResearchRepository, SignsOfResearchRepository>();
 
@@ -232,9 +224,7 @@ builder.Services.AddScoped<ISignsOfResearchRepository, SignsOfResearchRepository
 
 #region DescriptionOfSignsModel
 
-builder.Services.AddScoped<IDescription_StatusOfTheAttributeRepository, Description_StatusOfTheAttributeRepository>();
 builder.Services.AddScoped<IDescriptionOfSignsRepository, DescriptionOfSignsRepository>();
-builder.Services.AddScoped<IMethod_DescriptionOfSignsRepository, Method_DescriptionOfSignsRepository>();
 builder.Services.AddScoped<IStatusOfTheAttributeRepository, StatusOfTheAttributeRepository>();
 
 #endregion
@@ -242,6 +232,7 @@ builder.Services.AddScoped<IStatusOfTheAttributeRepository, StatusOfTheAttribute
 #endregion
 
 #endregion
+
 
 builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 builder.Services.AddScoped<IHistoryNodeRepository, HistoryNodeRepository>();
@@ -265,14 +256,31 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000");
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5001", "http://localhost:5000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithMethods("PUT", "POST", "GET", "DELETE");
         }));
-
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//                .AddCookie(options => //CookieAuthenticationOptions
-//                {
-//                    options.LoginPath = new PathString("/Account/Login");
-//                });
+builder.Services.AddMvc();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = "ValidIssuer",
+                    ValidAudience = "ValidateAudience",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IssuerSigningSecretKey")),
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = new PathString("/Authorization");
+            });
 
 var app = builder.Build();
 
@@ -288,11 +296,20 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<Context>();
     if (context.Database.GetAppliedMigrations().Any())
         context.Database.Migrate();
+    SeedData.Initialize(app.Services);
 }
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();  
 app.UseAuthorization();
+app.UseCookiePolicy();
 
 app.MapControllers();
-app.UseCors("CorsPolicy");
+
+SeedData.Initialize(app.Services);
 
 app.Run();

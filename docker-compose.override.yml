@@ -9,8 +9,8 @@ services:
   client:
     ports:
       - '5001:3000'
-  proxy:
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.comf
-    ports:
-      - '80:80' 
+  #proxy:
+  #  volumes:
+  #    - ./nginx.conf:/etc/nginx/nginx.comf
+  #  ports:
+  #    - '80:80' 

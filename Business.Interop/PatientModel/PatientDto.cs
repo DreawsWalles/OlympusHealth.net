@@ -20,7 +20,7 @@ namespace Business.Interop.PatientModel
         public DateTime? Birthday { get; set; }
 
         public virtual GenderDto Gender { get; set; }
-        public virtual IEnumerable<OutpatientCardDto>? OutpatientCards { get; set; }
-        public virtual IEnumerable<ResearchAreaDto>? ResearchAreas { get; set; }
+        public virtual ICollection<OutpatientCardDto>? OutpatientCards { get; set; }
+        public virtual ICollection<ResearchAreaDto>? ResearchAreas { get; set; }
     }
 }

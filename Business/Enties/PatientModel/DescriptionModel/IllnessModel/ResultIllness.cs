@@ -9,19 +9,14 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel.IllnessModel
 {
-    [Table("ResultIllnesses")]
-    [Index("Name", IsUnique = true)]
     public class ResultIllness
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
-        [ForeignKey("SignsOfResearchId")]
+
         public virtual SignsOfResearch SignsOfResearch { get; set; }
-        public virtual IEnumerable<Description> Descriptions { get; set; }
+        public virtual ICollection<Description> Descriptions { get; set; } = new List<Description>();
     }
 }

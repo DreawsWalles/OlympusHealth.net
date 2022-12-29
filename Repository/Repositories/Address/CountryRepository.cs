@@ -19,7 +19,7 @@ namespace Repository.Repositories.Address
 
         public override List<Country> FromSqlInterpolated(FormattableString sqlCommand) => _context.Countries.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Country> FromSqlRow(string sqlCommand) => _context.Countries.FromSqlRaw(sqlCommand).ToList();
+        public override List<Country> FromSqlRow(FormattableString sqlCommand) => _context.Countries.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Country value)
         {

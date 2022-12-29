@@ -13,7 +13,12 @@ namespace Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel
         public StatusOfTheAttributeDto Update(StatusOfTheAttributeDto entity);
         public void Remove(StatusOfTheAttributeDto entity);
 
-        public IEnumerable<StatusOfTheAttributeDto> GetAll();
+        public ICollection<StatusOfTheAttributeDto> GetAll();
         public StatusOfTheAttributeDto GetById(Guid Id);
+
+        public Task<StatusOfTheAttributeDto> CreateAsync(StatusOfTheAttributeDto entity);
+        public Task<StatusOfTheAttributeDto> UpdateAsync(StatusOfTheAttributeDto entity);
+        public Task<ICollection<StatusOfTheAttributeDto>> GetAllAsync();
+        public Task<StatusOfTheAttributeDto> GetByIdAsync(Guid Id);
     }
 }

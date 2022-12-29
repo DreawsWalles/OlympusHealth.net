@@ -28,14 +28,14 @@ namespace Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel
             return _mapper.Map<DescriptionOfSignsDto>(descriptionOfSigns);
         }
 
-        public IEnumerable<DescriptionOfSignsDto> GetAll()
+        public ICollection<DescriptionOfSignsDto> GetAll()
         {
-            return _mapper.Map<List<DescriptionOfSigns>, IEnumerable<DescriptionOfSignsDto>>(_descriptionOfSignsRepository.Query());
+            return _mapper.Map<List<DescriptionOfSigns>, ICollection<DescriptionOfSignsDto>>(_descriptionOfSignsRepository.Query());
         }
 
         public DescriptionOfSignsDto GetById(Guid id)
         {
-            return _mapper.Map<DescriptionOfSignsDto>(_descriptionOfSignsRepository.Query().FirstOrDefault(e => e.Id == id)); //Написать запрос
+            return _mapper.Map<DescriptionOfSignsDto>(_descriptionOfSignsRepository.Query().FirstOrDefault(e => e.Id == id)); 
         }
 
         public void Remove(DescriptionOfSignsDto entity)

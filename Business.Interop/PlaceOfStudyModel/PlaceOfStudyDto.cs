@@ -14,7 +14,7 @@ namespace Business.Interop.PlaceOfStudyModel
     {
         public Guid Id { get; set; }
         public DateTime StartEducation { get; set; }
-        public DateTime EndEducation { get; set; }
+        public DateTime? EndEducation { get; set; }
 
         public virtual ChiefOfMedicine? Medic { get; set; }
         public virtual Doctor? Doctor { get; set; }

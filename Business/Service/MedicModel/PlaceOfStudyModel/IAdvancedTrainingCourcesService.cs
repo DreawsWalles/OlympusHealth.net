@@ -13,7 +13,13 @@ namespace Business.Service.MedicModel.PlaceOfStudyModel
         public AdvancedTrainingCoursesDto Update(AdvancedTrainingCoursesDto entity);
         public void Remove(AdvancedTrainingCoursesDto entity);
 
-        public IEnumerable<AdvancedTrainingCoursesDto> GetAll();
-        public AdvancedTrainingCoursesDto GetBuId(Guid Id);
+        public ICollection<AdvancedTrainingCoursesDto> GetAll();
+        public AdvancedTrainingCoursesDto GetById(Guid Id);
+
+        public Task<AdvancedTrainingCoursesDto> CreateAsync(AdvancedTrainingCoursesDto entity);
+        public Task<AdvancedTrainingCoursesDto> UpdateAsync(AdvancedTrainingCoursesDto entity);
+
+        public Task<ICollection<AdvancedTrainingCoursesDto>> GetAllAsync();
+        public Task<AdvancedTrainingCoursesDto> GetByIdAsync(Guid Id);
     }
 }

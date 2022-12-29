@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel
 
         public override List<ResearchArea> FromSqlInterpolated(FormattableString sqlCommand) => _context.ResearchAreas.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<ResearchArea> FromSqlRow(string sqlCommand) => _context.ResearchAreas.FromSqlRaw(sqlCommand).ToList();
+        public override List<ResearchArea> FromSqlRow(FormattableString sqlCommand) => _context.ResearchAreas.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(ResearchArea value)
         {

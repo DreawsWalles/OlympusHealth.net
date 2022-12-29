@@ -13,6 +13,6 @@ namespace Business.Interop.Address
 
         public string? NumberOfHouse { get; set; }
 
-        public virtual CityDto City { get; set; }
+        public virtual Guid CityId { get; set; }
     }
 }

@@ -10,26 +10,20 @@ using System.Threading.Tasks;
 
 namespace Business.Enties
 {
-    [Table("HistoryNodes")]
     public class HistoryNode
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Text { get; set; }
 
         [Required]
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public string? File { get; set; }
 
-        [ForeignKey("SysAdminId")]
         public virtual SysAdmin? SysAdmin { get; set; }
 
-        [ForeignKey("MedicId")]
         public virtual Medic? Medic { get; set; }
 
-        [ForeignKey("PatientId")]
         public virtual Patient? Patient { get; set; }
     }
 }

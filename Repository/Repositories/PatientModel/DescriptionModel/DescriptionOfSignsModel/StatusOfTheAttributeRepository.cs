@@ -20,7 +20,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSig
 
         public override List<StatusOfTheAttribute> FromSqlInterpolated(FormattableString sqlCommand) => _context.StatusOfTheAttributes.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<StatusOfTheAttribute> FromSqlRow(string sqlCommand) => _context.StatusOfTheAttributes.FromSqlRaw(sqlCommand).ToList();
+        public override List<StatusOfTheAttribute> FromSqlRow(FormattableString sqlCommand) => _context.StatusOfTheAttributes.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(StatusOfTheAttribute value)
         {

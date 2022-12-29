@@ -20,7 +20,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel
 
         public override List<Description> FromSqlInterpolated(FormattableString sqlCommand) => _context.Descriptions.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Description> FromSqlRow(string sqlCommand) => _context.Descriptions.FromSqlRaw(sqlCommand).ToList();
+        public override List<Description> FromSqlRow(FormattableString sqlCommand) => _context.Descriptions.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Description value)
         {

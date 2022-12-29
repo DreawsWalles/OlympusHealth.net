@@ -20,7 +20,7 @@ namespace Repository.Repositories.MedicModel
 
         public override List<Role> FromSqlInterpolated(FormattableString sqlCommand) => _context.Roles.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Role> FromSqlRow(string sqlCommand) => _context.Roles.FromSqlRaw(sqlCommand).ToList();
+        public override List<Role> FromSqlRow(FormattableString sqlCommand) => _context.Roles.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Role value)
         {
@@ -45,7 +45,7 @@ namespace Repository.Repositories.MedicModel
         protected override IQueryable<Role> QueryImplementation()
         {
             return _context.Roles
-                                .Include(e => e.Medic); //Здесь реализовать многие ко многим
+                       .Include(e => e.Medic); //Здесь реализовать многие ко многим
         }
 
         protected override Role ReadImplementation(Guid key)

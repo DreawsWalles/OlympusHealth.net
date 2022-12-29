@@ -12,6 +12,6 @@ namespace Business.Interop.PatientModel.DescriptionModel.IllnessModel
         public string Name { get; set; }
 
         public virtual IllnessDto Illness { get; set; }
-        public virtual IEnumerable<ResultIllnessDto> ResultIllnesses { get; set; }
+        public virtual ICollection<ResultIllnessDto> ResultIllnesses { get; set; }
     }
 }

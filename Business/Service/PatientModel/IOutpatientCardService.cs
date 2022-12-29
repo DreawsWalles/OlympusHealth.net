@@ -13,7 +13,13 @@ namespace Business.Service.PatientModel
         public OutpatientCardDto Update(OutpatientCardDto entity);
         public void Remove(OutpatientCardDto entity);
 
-        public IEnumerable<OutpatientCardDto> GetAll();
+        public ICollection<OutpatientCardDto> GetAll();
         public OutpatientCardDto GetById(Guid id);
+
+
+        public Task<OutpatientCardDto> CreateAsync(OutpatientCardDto entity);
+        public Task<OutpatientCardDto> UpdateAsync(OutpatientCardDto entity);
+        public Task<ICollection<OutpatientCardDto>> GetAllAsync();
+        public Task<OutpatientCardDto> GetByIdAsync(Guid id);
     }
 }

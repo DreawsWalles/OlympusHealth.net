@@ -15,7 +15,7 @@ namespace Business.Interop.InstitutionModel
 
         public virtual InstitutionDto Institution { get; set; }
         public virtual StreetDto Street { get; set; }
-        public virtual IEnumerable<DeviceDto>? Devices { get; set; }
-        public virtual IEnumerable<DepartmentDto>? Departments { get; set; }
+        public virtual ICollection<DeviceDto>? Devices { get; set; }
+        public virtual ICollection<DepartmentDto>? Departments { get; set; }
     }
 }

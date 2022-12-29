@@ -9,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel
 {
-    [Table("ResearchCategories")]
-    [Index("Name", IsUnique = true)]
     public class ResearchCategory
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        public virtual IEnumerable<Method> Methods { get; set; }
+        public virtual ICollection<Method> Methods { get; set; } = new List<Method>();
     }
 }

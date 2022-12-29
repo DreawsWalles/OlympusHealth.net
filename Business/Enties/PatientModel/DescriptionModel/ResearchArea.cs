@@ -9,19 +9,15 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel
 {
-    [Table("ResearchAreas")]
-    [Index("Name", IsUnique = true)]
     public class ResearchArea
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [ForeignKey("PatientId")]
-        public virtual Patient? Patient { get; set; }
-        public virtual IEnumerable<Description>? Descriptions { get; set; }
-        public virtual IEnumerable<Method> Methods { get; set; }
+        public virtual Patient Patient { get; set; }
+        public virtual ICollection<Description> Descriptions { get; set; } = new List<Description>();
+        public virtual ICollection<Method> Methods { get; set; } = new List<Method>();
+        public virtual OutpatientCard OutpatientCard { get; set; }
     }
 }

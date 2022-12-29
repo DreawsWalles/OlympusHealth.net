@@ -19,7 +19,7 @@ namespace Repository.Repositories.MedicModel.PlaceOfStudyModel
 
         public override List<Intership> FromSqlInterpolated(FormattableString sqlCommand) => _context.Interships.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Intership> FromSqlRow(string sqlCommand) => _context.Interships.FromSqlRaw(sqlCommand).ToList();
+        public override List<Intership> FromSqlRow(FormattableString sqlCommand) => _context.Interships.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Intership value)
         {

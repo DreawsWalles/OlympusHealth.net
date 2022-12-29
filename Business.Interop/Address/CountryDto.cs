@@ -11,6 +11,6 @@ namespace Business.Interop.Address
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public virtual IEnumerable<RegionDto>? Regions { get; set; }
+        public virtual ICollection<RegionDto>? Regions { get; set; }
     }
 }

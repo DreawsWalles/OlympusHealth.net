@@ -1,4 +1,4 @@
-import "../../style.css"
+import classes from "./Buttom.module.css"
 
 
 export default function ButtonSymbol(props){
@@ -6,6 +6,6 @@ export default function ButtonSymbol(props){
         props.setRefresh(!props.refresh);
     }
     return(
-        <button id={props.id} className={"btn btn-IsAuto btn-success none btn-symbol"} onClick={handleOnClick}>{props.Symbol}</button>
+        <button id={props.id} className={`btn ${classes.btnIsAuto} btn-success ${classes.btnSymbol} ${classes.none}`} onClick={handleOnClick}>{props.Symbol}</button>
     )
 }

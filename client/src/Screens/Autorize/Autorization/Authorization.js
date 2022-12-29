@@ -1,8 +1,8 @@
 import {useState} from "react";
-import './Autorize.css';
-import Logo from '../Images/logo.svg';
-import {Login} from "../../Swapi/SwapiAccount";
-import ValidationForm from "../../Components/Form/Login/ValidationForm";
+import classes from './Autorize.module.css';
+import Logo from '../../Images/logo.svg';
+import {Login} from "../../../Swapi/SwapiAccount";
+import LoginForm from "../../../Components/Form/Login/LoginForm";
 
 
 
@@ -13,9 +13,9 @@ export default function Authorization(props) {
         password: ''
     });
     return(
-    <div className={"content"}>
-        <img className={"image-login"} width={"400"} height={"140"} src={Logo} />
-        <ValidationForm handleSubmit={Login}/>
+    <div className={classes.content}>
+        <img className={classes.imageLogin} width={"400"} height={"140"} src={Logo} />
+        <LoginForm handleSubmit={Login}/>
     </div>
         )
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Business.Interop.Address;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,8 @@ namespace Business.Interop.Autefication
         public string? PhoneNumber { get; set; }
         public DateTime? Birthday { get; set; }
         public virtual GenderDto Gender { get; set; }
+        public virtual StreetDto? Address { get; set; }
+        public string? Role { get; set; }
+        public RoleDto? RoleMedic { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Business.Enties.PatientModel;
 using Business.Repository.DataRepository.PatientModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using Repository.Data;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,36 @@ namespace Repository.Repositories.PatientModel
         {
             _context = context;
         }
-        public override List<Patient> FromSqlInterpolated(FormattableString sqlCommand) => _context.Patients.FromSqlInterpolated(sqlCommand).ToList();
+        public override List<Patient> FromSqlInterpolated(FormattableString sqlCommand)
+        {
+            try
+            {
+                var t = _context.Patients.FromSqlInterpolated(sqlCommand).ToList();
+                _context.SaveChanges();
+                return t;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
 
 
-        public override List<Patient> FromSqlRow(string sqlCommand) => _context.Patients.FromSqlRaw(sqlCommand).ToList();
+        public override List<Patient> FromSqlRow(FormattableString sqlCommand)
+        {
+            try
+            {
+                var t = _context.Patients.FromSql(sqlCommand).ToList();
+                _context.SaveChanges();
+                return t;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
 
         protected override void CreateImplementation(Patient value)
         {

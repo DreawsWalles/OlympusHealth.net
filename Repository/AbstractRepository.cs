@@ -106,7 +106,7 @@ namespace Repository
         #endregion
 
         #region inteface
-        public abstract List<T> FromSqlRow(string sqlCommand);
+        public abstract List<T> FromSqlRow(FormattableString sqlCommand);
         public abstract List<T> FromSqlInterpolated(FormattableString sqlCommand);
 
         public T Read(TKey key)

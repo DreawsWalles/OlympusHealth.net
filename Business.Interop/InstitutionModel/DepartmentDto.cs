@@ -16,7 +16,7 @@ namespace Business.Interop.InstitutionModel
 
         public virtual CorpusDto Corpus { get; set; }
         public virtual HeadOfDepartment HeadOfDepartment { get; set; }
-        public virtual IEnumerable<Doctor>? Doctors { get; set; }
-        public virtual IEnumerable<MedicRegistrator>? MedicRegistrators { get; set; }
+        public virtual ICollection<Doctor>? Doctors { get; set; }
+        public virtual ICollection<MedicRegistrator>? MedicRegistrators { get; set; }
     }
 }

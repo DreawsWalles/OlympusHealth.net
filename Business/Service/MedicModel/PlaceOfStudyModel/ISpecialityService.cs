@@ -13,7 +13,14 @@ namespace Business.Service.MedicModel.PlaceOfStudyModel
         public SpecialityDto Update(SpecialityDto entity);
         public void Remove(SpecialityDto entity);
 
-        public IEnumerable<SpecialityDto> GetAll();
+        public ICollection<SpecialityDto> GetAll();
         public SpecialityDto GetById(Guid Id);
+
+
+        public Task<SpecialityDto> CreateAsync(SpecialityDto entity);
+        public Task<SpecialityDto> UpdateAsync(SpecialityDto entity);
+
+        public Task<ICollection<SpecialityDto>> GetAllAsync();
+        public Task<SpecialityDto> GetByIdAsync(Guid Id);
     }
 }

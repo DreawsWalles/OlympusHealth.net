@@ -10,18 +10,12 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.MedicModel
 {
-    [Table("Roles")]
-    [Index("Name", IsUnique = true)]
     public class Role
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
-        [ForeignKey("MedicId")]
-        public virtual IEnumerable<Medic>? Medic { get; set; }
+        public virtual ICollection<Medic> Medic { get; set; } = new List<Medic>();
     }
 }

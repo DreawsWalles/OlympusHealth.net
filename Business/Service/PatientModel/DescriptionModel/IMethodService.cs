@@ -13,7 +13,12 @@ namespace Business.Service.PatientModel.DescriptionModel
         public MethodDto Update(MethodDto entity);
         public void Remove(MethodDto entity);
 
-        public IEnumerable<MethodDto> GetAll();
+        public ICollection<MethodDto> GetAll();
         public MethodDto GetById(Guid id);
+
+        public Task<MethodDto> CreateAsync(MethodDto entity);
+        public Task<MethodDto> UpdateAsync(MethodDto entity);
+        public Task<ICollection<MethodDto>> GetAllAsync();
+        public Task<MethodDto> GetByIdAsync(Guid id);
     }
 }

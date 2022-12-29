@@ -12,7 +12,7 @@ namespace Business.Interop.PatientModel.DescriptionModel.DescriptionOfSignsModel
         public string Name { get; set; }
         public int SerialNumber { get; set; }
 
-        public IEnumerable<MethodDto> Methods { get; set; }
-        public IEnumerable<StatusOfTheAttributeDto> StatusOfTheAttributes { get; set; }
+        public ICollection<MethodDto> Methods { get; set; }
+        public ICollection<StatusOfTheAttributeDto> StatusOfTheAttributes { get; set; }
     }
 }

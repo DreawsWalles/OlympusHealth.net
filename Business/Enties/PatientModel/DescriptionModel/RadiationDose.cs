@@ -8,17 +8,12 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.PatientModel.DescriptionModel
 {
-    [Table("RadiationDoses")]
     public class RadiationDose
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public double Dose { get; set; }
 
-        [Required]
-        [ForeignKey("MethodId")]
         public virtual Method Method { get; set; }
     }
 }

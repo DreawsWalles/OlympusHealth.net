@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {GetRole} from "../../Swapi/SwapiAccount";
+import {GetRole} from "../Swapi/SwapiAccount";
 import {Navigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
-export default function Autorize(props) {
+export default function Navigation(props) {
 
     const [isAutorize, setIsAutorize] = useState(true);
     const [cookie, setCookie] = useCookies(["user"]);

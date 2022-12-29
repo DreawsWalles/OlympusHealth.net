@@ -62,6 +62,9 @@ namespace Business.Service
             CreateMap<Medic, HeadOfDepartment>();
             CreateMap<HeadOfDepartment, Medic>();
 
+            CreateMap<Access, AccessDto>();
+            CreateMap<AccessDto, Access>();
+
             #region PlaceOfStudy
             CreateMap<Specialization, SpecializationDto>();
             CreateMap<SpecializationDto, Specialization>();
@@ -103,8 +106,6 @@ namespace Business.Service
             #endregion
 
             #region Institution
-            CreateMap<Corpus_Medic, Corpus_MedicDto>();
-            CreateMap<Corpus_MedicDto, Corpus_Medic>();
 
             CreateMap<Institution, InstitutionDto>();
             CreateMap<InstitutionDto, Institution>();
@@ -169,22 +170,17 @@ namespace Business.Service
             CreateMap<Illness, IllnessDto>();
             CreateMap<IllnessDto, Illness>();
 
-            CreateMap<Illness_Method, Illness_MethodDto>();
-            CreateMap<Illness_MethodDto, Illness_Method>();
             #endregion
 
             #region DescriptionOfSigns
             CreateMap<StatusOfTheAttribute, StatusOfTheAttributeDto>();
             CreateMap<StatusOfTheAttributeDto, StatusOfTheAttribute>();
 
-            CreateMap<Method_DescriptionOfSigns, Method_DescriptionOfSignsDto>();
-            CreateMap<Method_DescriptionOfSignsDto, Method_DescriptionOfSigns>();
+
 
             CreateMap<DescriptionOfSigns, DescriptionOfSignsDto>();
             CreateMap<DescriptionOfSignsDto, DescriptionOfSigns>();
 
-            CreateMap<Description_StatusOfTheAttribute, Description_StatusOfTheAttributeDto>();
-            CreateMap<Description_StatusOfTheAttributeDto, Description_StatusOfTheAttribute>();
             #endregion
 
             CreateMap<Description, DescriptionDto>()

@@ -19,7 +19,7 @@ namespace Repository.Repositories.Address
 
         public override List<Street> FromSqlInterpolated(FormattableString sqlCommand) => _context.Streets.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<Street> FromSqlRow(string sqlCommand) => _context.Streets.FromSqlRaw(sqlCommand).ToList();
+        public override List<Street> FromSqlRow(FormattableString sqlCommand) => _context.Streets.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(Street value)
         {

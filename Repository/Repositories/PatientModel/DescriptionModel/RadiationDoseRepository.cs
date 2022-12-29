@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel
 
         public override List<RadiationDose> FromSqlInterpolated(FormattableString sqlCommand) => _context.RadiationDoses.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<RadiationDose> FromSqlRow(string sqlCommand) => _context.RadiationDoses.FromSqlRaw(sqlCommand).ToList();
+        public override List<RadiationDose> FromSqlRow(FormattableString sqlCommand) => _context.RadiationDoses.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(RadiationDose value)
         {

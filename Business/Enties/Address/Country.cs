@@ -9,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace Business.Enties.Address
 {
-    [Index("Name", IsUnique = true)]
-    [Table("Countries")]
     public class Country
     {
-        [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        public virtual IEnumerable<Region>? Regions { get; set; }
+        public virtual ICollection<Region> Regions { get; set; } = new List<Region>();
     }
 }

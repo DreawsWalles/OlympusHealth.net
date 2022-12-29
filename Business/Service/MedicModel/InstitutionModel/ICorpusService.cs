@@ -13,7 +13,7 @@ namespace Business.Service.MedicModel.InstitutionModel
         public CorpusDto Update(CorpusDto entity);
         public void Remove(CorpusDto entity);
 
-        public IEnumerable<CorpusDto> GetAll();
+        public ICollection<CorpusDto> GetAll();
         public CorpusDto GetById(Guid Id);
     }
 }

@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.IllnessModel
 
         public override List<ResultIllness> FromSqlInterpolated(FormattableString sqlCommand) => _context.ResultIllnesses.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<ResultIllness> FromSqlRow(string sqlCommand) => _context.ResultIllnesses.FromSqlRaw(sqlCommand).ToList();
+        public override List<ResultIllness> FromSqlRow(FormattableString sqlCommand) => _context.ResultIllnesses.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(ResultIllness value)
         {

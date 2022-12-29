@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "Mazzard";
+  src: local("Mazzard"), url("./Fonts/Mazzard.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "MyArchive";
+  src: local("Archive-Regular"), url("./Fonts/Archive-Regular.otf") format("opentype");
+  font-weight: normal;
+}

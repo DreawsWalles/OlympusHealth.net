@@ -20,7 +20,7 @@ namespace Repository.Repositories.PatientModel
         public override List<OutpatientCard> FromSqlInterpolated(FormattableString sqlCommand) => _context.OutpatientCards.FromSqlInterpolated(sqlCommand).ToList();
 
 
-        public override List<OutpatientCard> FromSqlRow(string sqlCommand) => _context.OutpatientCards.FromSqlRaw(sqlCommand).ToList();
+        public override List<OutpatientCard> FromSqlRow(FormattableString sqlCommand) => _context.OutpatientCards.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(OutpatientCard value)
         {

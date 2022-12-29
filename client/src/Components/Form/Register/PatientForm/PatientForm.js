@@ -1,14 +1,15 @@
-import TextInput from "../../Inputs/TextInput/TextInput";
+import TextInput from "../../../Inputs/TextInput/TextInput";
 import {useEffect, useState} from "react";
-import ButtonAuto from "../../Buttons/ButtonAuto";
-import {GetAll, GetById} from "../../../Swapi/SwapiGender";
-import CustomSelect from "../../Selects/CustomSelect";
-import ButtonSymbol from "../../Buttons/ButtonSymbol";
-import PasswordInput from "../../Inputs/PasswordInput/PasswordInput";
-import GenerateLogin from "../../../Generators/GenerateLogin";
-import GeneratePassword from "../../../Generators/GeneratePassword";
-import {CheckEmail, CheckLogin, CheckPhoneNumber, RegisterUser} from "../../../Swapi/SwapiAccount";
+import ButtonAuto from "../../../Buttons/ButtonAuto";
+import {GetAll, GetById} from "../../../../Swapi/SwapiGender";
+import CustomSelect from "../../../Selects/CustomSelect/CustomSelect";
+import ButtonSymbol from "../../../Buttons/ButtonSymbol";
+import PasswordInput from "../../../Inputs/PasswordInput/PasswordInput";
+import GenerateLogin from "../../../../Generators/GenerateLogin";
+import GeneratePassword from "../../../../Generators/GeneratePassword";
+import {CheckEmail, CheckLogin, CheckPhoneNumber, RegisterUser} from "../../../../Swapi/SwapiAccount";
 import {useCookies} from "react-cookie";
+import classes from "./PatientForm.module.css"
 
 export default function PatientForm(props){
     const [genders, setGenders] = useState();
@@ -224,9 +225,9 @@ export default function PatientForm(props){
 
     }
     return(
-        <div className={"container-patient"}>
-            <div className={"row row-patient"}>
-               <div className={"col-3 text"}>
+        <div className={classes.containerPatient}>
+            <div className={`row ${classes.rowPatient}`}>
+               <div className={`col-3 ${classes.text}`}>
                    <div>Логин:</div>
                </div>
                <div className={"col-7 input"}>
@@ -240,7 +241,7 @@ export default function PatientForm(props){
                         required
                    />
                </div>
-               <div className={"col-1 btn-auto"}>
+               <div className={`col-1 ${classes.btnAuto}`}>
                    <ButtonAuto
                        idInput={"login"}
                        oldDataSet={setAutoLogin}
@@ -249,7 +250,7 @@ export default function PatientForm(props){
                        id={"btn-login"}
                        btnRefresh={"btn-login-refresh"}/>
                </div>
-                <div className={"col-1 btn-auto"}>
+                <div className={`col-1 ${classes.btnAuto}`}>
                     <ButtonSymbol
                         refresh={refreshLogin}
                         setRefresh={setRefreshLogin}
@@ -258,21 +259,20 @@ export default function PatientForm(props){
                         id={"btn-login-refresh"} />
                 </div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Пароль:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <PasswordInput
                         id={"password"}
-                        className={"form-control textInput"}
                         placeholder={"Введите пароль..."}
                         idSpan={"error-password"}
                         onChange={setPassword}
                         required
                     />
                 </div>
-                <div className={"col-1 btn-auto"}>
+                <div className={`col-1 ${classes.btnAuto}`}>
                     <ButtonAuto
                         idInput={"password"}
                         oldDataSet={setAutoPassword}
@@ -290,25 +290,23 @@ export default function PatientForm(props){
                         id={"btn-password-refresh"} />
                 </div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Имя:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <TextInput
                         id={"name"}
                         type={"text"}
-                        className={"form-control textInput"}
                         placeholder={"Введите ваше имя"}
                         idSpan={"error-name"}
                         onChange={setName}
                         required
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Фамилия:</div>
                 </div>
                 <div className={"col-7 input"}>
@@ -322,83 +320,73 @@ export default function PatientForm(props){
                         required
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Отчество:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <TextInput
                         id={"patronymic"}
                         type={"text"}
-                        className={"form-control textInput"}
                         placeholder={"Введите ваше отчество..."}
                         idSpan={"error-patronymic"}
                         onChange={setPatronymic}
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Email:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <TextInput
                         id={"email"}
                         type={"email"}
-                        className={"form-control textInput"}
                         placeholder={"Введите ваш email"}
                         idSpan={"error-email"}
                         onChange={setEmail}
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Номер телефона:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <TextInput
                         id={"phoneNumber"}
                         type={"tel"}
-                        className={"form-control textInput"}
                         placeholder={"Введите номер телефона..."}
                         idSpan={"error-numberPhone"}
                         onChange={setPhoneNumber}
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Дата рождения:</div>
                 </div>
                 <div className={"col-7 input"}>
                     <TextInput
                         id={"dateBirthday"}
                         type={"date"}
-                        className={"form-control textInput"}
                         placeholder={"Введите дату рождения..."}
                         idSpan={"error-dateBirthday"}
                         onChange={setDateBirthday}
                     />
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-patient"}>
-                <div className={"col-3 text"}>
+            <div className={`row ${classes.rowPatient}`}>
+                <div className={`col-3 ${classes.text}`}>
                     <div>Пол:</div>
                 </div>
                 <div className={"col-7 input"}>
                     {gendersElement}
                 </div>
-                <div className={"col-1 btn-auto"}></div>
             </div>
-            <div className={"row row-btn"}>
-                <button onClick={submitForms} className={"btn-register"}>{props.textButton}</button>
+            <div className={`row ${classes.rowBtn}`}>
+                <button onClick={submitForms} className={classes.btnRegister}>{props.textButton}</button>
             </div>
         </div>
     )

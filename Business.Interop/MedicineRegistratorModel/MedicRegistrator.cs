@@ -25,8 +25,9 @@ namespace Business.Interop.MedicineRegistratorModel
 
         public virtual GenderDto Gender { get; set; }
         public virtual StreetDto? Address { get; set; }
-        public virtual IEnumerable<Files>? Files { get; set; }
-        public virtual IEnumerable<PlaceOfStudyDto>? PlaceOfStudies { get; set; }
+        public virtual ICollection<Files>? Files { get; set; }
+        public virtual ICollection<PlaceOfStudyDto>? PlaceOfStudies { get; set; }
         public virtual DepartmentDto? Department { get; set; }
+        public virtual ICollection<AccessDto> AccessRights { get; set; }
     }
 }

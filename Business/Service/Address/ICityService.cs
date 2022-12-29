@@ -11,8 +11,15 @@ namespace Business.Service.Address
     {
         public CityDto Create(CityDto entity);
         public CityDto Update(CityDto updateEntity);
+        public ICollection<CityDto> GetByMatchName(string name,string country, string region);
         public void Remove(CityDto entity);
-        public IEnumerable<CityDto> GetAll();
+        public ICollection<CityDto> GetAll();
         public CityDto? GetById(Guid Id);
+
+        public Task<CityDto> CreateAsync(CityDto entity);
+        public Task<CityDto> UpdateAsync(CityDto updateEntity);
+        public Task<ICollection<CityDto>> GetByMatchNameAsync(string name, string country, string region);
+        public Task<ICollection<CityDto>> GetAllAsync();
+        public Task<CityDto?> GetByIdAsync(Guid Id);
     }
 }

@@ -13,7 +13,13 @@ namespace Business.Service.MedicModel.PlaceOfStudyModel
         public HightSchoolDto Update(HightSchoolDto entity);
         public void Remove(HightSchoolDto entity);
 
-        public IEnumerable<HightSchoolDto> GetAll();
+        public ICollection<HightSchoolDto> GetAll();
         public HightSchoolDto GetById(Guid Id);
+
+        public Task<HightSchoolDto> CreateAsync(HightSchoolDto entity);
+        public Task<HightSchoolDto> UpdateAsync(HightSchoolDto entity);
+
+        public Task<ICollection<HightSchoolDto>> GetAllTask();
+        public Task<HightSchoolDto> GetByIdAsync(Guid Id);
     }
 }

@@ -19,7 +19,7 @@ namespace Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSig
 
         public override List<DescriptionOfSigns> FromSqlInterpolated(FormattableString sqlCommand) => _context.DescriptionOfSigns.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<DescriptionOfSigns> FromSqlRow(string sqlCommand) => _context.DescriptionOfSigns.FromSqlRaw(sqlCommand).ToList();
+        public override List<DescriptionOfSigns> FromSqlRow(FormattableString sqlCommand) => _context.DescriptionOfSigns.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(DescriptionOfSigns value)
         {

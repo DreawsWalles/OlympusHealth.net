@@ -13,7 +13,13 @@ namespace Business.Service.MedicModel.InstitutionModel
         public InstitutionDto Update(InstitutionDto entity);
         public void Remove(InstitutionDto entity);
 
-        public IEnumerable<InstitutionDto> GetAll();
+        public ICollection<InstitutionDto> GetAll();
         public InstitutionDto GetById(Guid Id);
+
+        public Task<InstitutionDto> CreateAsync(InstitutionDto entity);
+        public Task<InstitutionDto> UpdateAsync(InstitutionDto entity);
+
+        public Task<ICollection<InstitutionDto>> GetAllAsync();
+        public Task<InstitutionDto> GetByIdAsync(Guid Id);
     }
 }

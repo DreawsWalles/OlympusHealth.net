@@ -1,14 +1,13 @@
-import "../../style.css"
-import {useEffect} from "react";
+import classes from "./DefaultComponent.module.css"
 
 export default function DefaultComponent(props){
     return(
-        <div className={"content-default"}>
-            <div className={"row title-text"}>
-                <div id={"text-one"} className={"col"}>Регистрация</div>
+        <div className={classes.contentDefault}>
+            <div className={`row ${classes.titleText}`}>
+                <div  className={`col ${classes.textOne}`}>Регистрация</div>
             </div>
-            <div className={"row title-text"}>
-                <div id={"text-two"} className={"col"}>Выберите вид пользователя</div>
+            <div className={`row ${classes.titleText}`}>
+                <div className={`col ${classes.textTwo}`}>Выберите вид пользователя</div>
             </div>
         </div>
     )

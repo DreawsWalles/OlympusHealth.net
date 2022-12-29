@@ -19,7 +19,7 @@ namespace Repository.Repositories.MedicModel.PlaceOfStudyModel
 
         public override List<AdvancedTrainingCourses> FromSqlInterpolated(FormattableString sqlCommand) => _context.AdvancedTrainingCourses.FromSqlInterpolated(sqlCommand).ToList();
 
-        public override List<AdvancedTrainingCourses> FromSqlRow(string sqlCommand) => _context.AdvancedTrainingCourses.FromSqlRaw(sqlCommand).ToList();
+        public override List<AdvancedTrainingCourses> FromSqlRow(FormattableString sqlCommand) => _context.AdvancedTrainingCourses.FromSql(sqlCommand).ToList();
 
         protected override void CreateImplementation(AdvancedTrainingCourses value)
         {
