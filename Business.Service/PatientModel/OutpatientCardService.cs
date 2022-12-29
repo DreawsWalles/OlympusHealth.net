@@ -17,8 +17,23 @@ namespace Business.Service.PatientModel
 
         public OutpatientCardService(IOutpatientCardRepository outpatientCardRepository, IMapper mapper)
         {
-            _outpatientCardRepository = outpatientCardRepository;
-            _mapper = mapper;
+            _outpatientCardRepository = outpatientCardRepository ?? throw new ArgumentNullException(nameof(outpatientCardRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        private static void CheckEntity(OutpatientCardDto entity)
+        {
+            if(entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            DateTime currentDate = new();
+            if (entity.DateLastAdmission.Year > currentDate.Year)
+                throw new ArgumentException(nameof(entity.DateLastAdmission.Year));
+            if (entity.DateLastAdmission.Month > currentDate.Month)
+                throw new ArgumentException(nameof(entity.DateLastAdmission.Month));
+            if (entity.DateLastAdmission.Day >= currentDate.Day)
+                throw new ArgumentException(nameof(entity.DateLastAdmission.Year));
+            if (entity.Patient == null)
+                throw new ArgumentNullException(nameof(entity.Patient));
         }
 
         public OutpatientCardDto Create(OutpatientCardDto entity)
@@ -28,14 +43,29 @@ namespace Business.Service.PatientModel
             return _mapper.Map<OutpatientCardDto>(card);
         }
 
-        public IEnumerable<OutpatientCardDto> GetAll()
+        public async Task<OutpatientCardDto> CreateAsync(OutpatientCardDto entity)
         {
-            return _mapper.Map<List<OutpatientCard>, IEnumerable<OutpatientCardDto>>(_outpatientCardRepository.Query());
+            CheckEntity(entity);
+            OutpatientCard card = _mapper.Map<OutpatientCard>(entity);
+            await _outpatientCardRepository.CreateAsync(card);
+            return _mapper.Map<OutpatientCardDto>(card);
+        }
+
+        public ICollection<OutpatientCardDto> GetAll()
+        {
+            return _mapper.Map<List<OutpatientCard>, ICollection<OutpatientCardDto>>(_outpatientCardRepository.Query());
+        }
+
+        public async Task<ICollection<OutpatientCardDto>> GetAllAsync()
+        {
+            return _mapper.Map<List<OutpatientCard>, ICollection<OutpatientCardDto>>(await _outpatientCardRepository.QueryAsync());
         }
 
         public OutpatientCardDto GetById(Guid id)
         {
-            return _mapper.Map<OutpatientCardDto>(_outpatientCardRepository.Query().FirstOrDefault(e => e.Id == id)); // написать запрос
+            if(id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(id));
+            return _mapper.Map<OutpatientCardDto>(_outpatientCardRepository.Query().FirstOrDefault(e => e.Id == id)); 
         }
 
         public void Remove(OutpatientCardDto entity)

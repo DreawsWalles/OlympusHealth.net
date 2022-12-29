@@ -1,0 +1,14 @@
+.textInput{
+    border-radius: 10px;
+    border:#A72036 1.8px solid;
+    height:3em;
+}
+.formGroup{
+    position: relative;
+    margin-bottom:25px;
+}
+
+.textInput:focus{
+    outline: 0;
+    outline-offset: 0;
+}
