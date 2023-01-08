@@ -14,11 +14,12 @@ namespace Business.Service.MedicModel
         public void Remove(Role entity);
         public ICollection<Role> GetAll();
         public Role? GetById(Guid id);
+        public Guid? GetByName(string name);
 
         public Task<Role> CreateAsync(Role entity);
         public Task<Role> UpdateAsync(Role updateEntity);
         public Task<ICollection<Role>> GetAllAsync();
         public Task<Role?> GetByIdAsync(Guid id);
-
+        public Task<Guid?> GetByNameAsync(string name);
     }
 }

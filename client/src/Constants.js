@@ -4,5 +4,6 @@ export const Controllers =
     {
         Account : "Account/",
         Address : "Address/",
-        Gender : "Gender/"
+        Gender : "Gender/",
+        RoleMedic: "RoleMedic/"
     }

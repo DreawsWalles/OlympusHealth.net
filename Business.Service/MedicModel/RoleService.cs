@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Business.Service.MedicModel
 {
@@ -65,6 +66,20 @@ namespace Business.Service.MedicModel
                 throw new ArgumentException(nameof(id));
             var list = await _roleRepository.QueryAsync();
             return list.FirstOrDefault(e => e.Id == id);
+        }
+
+        public Guid? GetByName(string name)
+        {
+            if(name == null)
+                throw new ArgumentNullException(nameof(name));
+            return _roleRepository.Query().FirstOrDefault(e => e.Name == name)?.Id;
+        }
+
+        public async Task<Guid?> GetByNameAsync(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            return (await _roleRepository.QueryAsync()).FirstOrDefault(e => e.Name == name)?.Id;
         }
 
         public void Remove(Role entity)

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "postgresql1": {
-      "containerPorts": "5440:5432",
+      "containerPorts": "5434:5432",
       "secretStore": "LocalSecretsFile",
       "containerName": "postgresql",
       "containerImage": "postgres",

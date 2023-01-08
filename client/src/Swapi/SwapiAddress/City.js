@@ -50,7 +50,6 @@ async function getCityByApi(city, country, region){
         .catch(e => {
             console.error(e);
         });
-    debugger
     let result = new Array();
     for(let i = 0; i < tmp.suggestions.length; i++){
         if(tmp.suggestions[i].data.country === country && tmp.suggestions[i].data.region_with_type === region && tmp.suggestions[i].data.area_type === null

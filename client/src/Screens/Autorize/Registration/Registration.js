@@ -6,6 +6,7 @@ import MedicWorker from "../../../Components/Form/Register/MedicWorker/MedicWork
 import Loader from "../../../Components/Loader/Loader";
 import {Navigate} from "react-router-dom";
 import classes from "./Registration.module.css"
+import SysAdminForm from "../../../Components/Form/Register/SysAdmin/SysAdminForm";
 
 export default function Registration(props){
     const [registered, setRegistered] = useState(false);
@@ -28,13 +29,26 @@ export default function Registration(props){
     }, [isLoaded]);
     function handleOnChangeSelect(e){
         console.log(e.target.value);
+        debugger
         switch (e.target.value)
         {
             case '1':
                 setType(<PatientForm isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}  />)
                 break;
             case '2':
-                setType(<MedicWorker choice={'doctor'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                setType(<MedicWorker choice={'Doctor'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                break;
+            case '3':
+                setType(<MedicWorker choice={'Chief of medical'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                break;
+            case '4':
+                setType(<MedicWorker choice={'HeadOfDepartment'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                break;
+            case '5':
+                setType(<MedicWorker choice={'MedicRegistrator'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                break;
+            case '6':
+                setType(<SysAdminForm choice={"SysAdmin"} setRegistered={setRegistered} textButton={"Добавить"} />)
                 break;
             default:
                 setIsLoaded(true);

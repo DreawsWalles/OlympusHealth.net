@@ -52,7 +52,6 @@ async function getStreetByApi(country, region, city, street){
         .catch(e => {
             console.error(e);
         });
-    debugger
     for(let i = 0; i < tmp.suggestions.length; i++) {
         if (tmp.suggestions[i].data.country === country && tmp.suggestions[i].data.region_with_type === region
             && tmp.suggestions[i].data.area_type === null && tmp.suggestions[i].data.city_with_type === city) {

@@ -8,8 +8,12 @@ import ButtonAuto from "../../../Buttons/ButtonAuto";
 import ButtonSymbol from "../../../Buttons/ButtonSymbol";
 import PasswordInput from "../../../Inputs/PasswordInput/PasswordInput";
 import InputWithDynamicDataList from "../../../Inputs/InputWithDynamicDataList/InputWithDynamicDataList";
-import {GetCountryByName} from "../../../../Swapi/SwapiAddress";
+import {GetCountryMatchName} from "../../../../Swapi/SwapiAddress/Country";
+import {GetRegionMatchName} from "../../../../Swapi/SwapiAddress/Region";
+import {GetCityMatchName} from "../../../../Swapi/SwapiAddress/City";
+import {GetNumberHouseMatchName} from "../../../../Swapi/SwapiAddress/NumberHouse";
 import classes from "./GeneralMedicForm.module.css"
+import {GetStreetMatchName} from "../../../../Swapi/SwapiAddress/Street";
 
 export default function GeneralMedicForm(props){
     const [autoLogin, setAutoLogin] = useState();
@@ -91,7 +95,46 @@ export default function GeneralMedicForm(props){
             }
         })();
     }, [genders]);
-
+    function handleInputCountry(e){
+        let elCountry = document.getElementById("countryInput");
+        let elReg = document.getElementById("regionInput");
+        if(elCountry.value === "") {
+            elReg.setAttribute("disabled", true)
+        }
+        else{
+            elReg.removeAttribute("disabled");
+        }
+    }
+    function handleInputRegion(e){
+        let elReg = document.getElementById("regionInput");
+        let elCity = document.getElementById("cityInput");
+        if(elReg.value === ""){
+            elCity.setAttribute("disabled", true);
+        }
+        else{
+            elCity.removeAttribute("disabled");
+        }
+    }
+    function handleInputCity(e){
+        let elCity = document.getElementById("cityInput");
+        let elStreet = document.getElementById("streetInput");
+        if(elCity.value === ""){
+            elStreet.setAttribute("disabled", true);
+        }
+        else{
+            elStreet.removeAttribute("disabled");
+        }
+    }
+    function handleInputStreet(e){
+        let elStreet = document.getElementById('streetInput');
+        let elHouse = document.getElementById('NumberHouseInput');
+        if(elStreet.value === ""){
+            elHouse.setAttribute("disabled", true);
+        }
+        else{
+            elHouse.removeAttribute("disabled");
+        }
+    }
     return(
         <div className={classes.containerDoctor}>
             <div className={`row ${classes.rowDoctor}`}>
@@ -275,8 +318,10 @@ export default function GeneralMedicForm(props){
                         id={"countryInput"}
                         placeholder={"Введите страну..."}
                         idSpan={"error-country"}
-                        api={GetCountryByName}
+                        api={GetCountryMatchName}
                         setValue={props.setCountry}
+                        disable={false}
+                        onInput={handleInputCountry}
                     />
                 </div>
                 <div className={`row ${classes.rowDoctor}`}>
@@ -289,8 +334,11 @@ export default function GeneralMedicForm(props){
                         id={"regionInput"}
                         placeholder={"Введите регион..."}
                         idSpan={"error-region"}
-                        api={GetCountryByName}
+                        api={GetRegionMatchName}
+                        country={props.country}
                         setValue={props.setRegion}
+                        disable={true}
+                        onInput={handleInputRegion}
                     />
                 </div>
                 <div className={`row ${classes.rowDoctor}`}>
@@ -303,8 +351,12 @@ export default function GeneralMedicForm(props){
                         id={"cityInput"}
                         placeholder={"Введите город..."}
                         idSpan={"error-city"}
-                        api={GetCountryByName}
+                        api={GetCityMatchName}
                         setValue={props.setCity}
+                        country={props.country}
+                        region={props.region}
+                        disable={true}
+                        onInput={handleInputCity}
                     />
                 </div>
                 <div className={`row ${classes.rowDoctor}`}>
@@ -317,8 +369,13 @@ export default function GeneralMedicForm(props){
                         id={"streetInput"}
                         placeholder={"Введите улицу..."}
                         idSpan={"error-street"}
-                        api={GetCountryByName}
+                        api={GetStreetMatchName}
                         setValue={props.setStreet}
+                        country={props.country}
+                        region={props.region}
+                        city={props.city}
+                        disable={true}
+                        onInput={handleInputStreet}
                     />
                 </div>
                 <div className={`row ${classes.rowDoctor}`}>
@@ -331,8 +388,13 @@ export default function GeneralMedicForm(props){
                         id={"NumberHouseInput"}
                         placeholder={"Введите номер дома..."}
                         idSpan={"error-NumberHouse"}
-                        api={GetCountryByName}
+                        api={GetNumberHouseMatchName}
                         setValue={props.setNUmberHouse}
+                        country={props.country}
+                        region={props.region}
+                        city={props.city}
+                        street={props.street}
+                        disable={true}
                     />
                 </div>
             </div>

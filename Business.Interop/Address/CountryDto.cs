@@ -9,7 +9,7 @@ namespace Business.Interop.Address
     public class CountryDto
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public virtual ICollection<RegionDto>? Regions { get; set; }
     }

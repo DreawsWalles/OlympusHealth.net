@@ -128,3 +128,54 @@ export async function GetRole(token){
         });
     return answer;
 }
+
+export async function IsAccept(token){
+    let answer = undefined;
+    debugger
+    debugger
+    await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
+        method: "Post",
+        headers:{
+            'Accept': 'text/plain',
+        },
+    })
+        .then(function (response){
+            return response.json()
+        })
+        .then(function (json){
+            answer = json
+        })
+        .catch(e => {
+            console.error(e);
+        });
+    return answer;
+}
+
+export async function RegisterSysAdmin(data, answer)
+{
+    answer = undefined;
+    let status = 200;
+    await fetch(`${Api}${Controllers["Account"]}RegisterSysAdmin`, {
+        method:"Post",
+        headers:{
+            'Accept': 'text/plain',
+            'Content-Type': 'application/json'
+        },
+        body:data
+    })
+        .then(function(response) {
+            status = response.status;
+            return response.json();
+        })
+        .then(function (json){
+            answer = json;
+        })
+        .catch(e => {
+                console.error(e);
+            }
+        )
+    if(status === 200){
+        return answer;
+    }
+    return answer;
+}

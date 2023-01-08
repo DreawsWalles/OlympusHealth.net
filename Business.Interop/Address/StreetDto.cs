@@ -9,7 +9,7 @@ namespace Business.Interop.Address
     public class StreetDto
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public string? NumberOfHouse { get; set; }
 

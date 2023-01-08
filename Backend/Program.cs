@@ -32,16 +32,17 @@ using Repository.Repositories.PatientModel.DescriptionModel;
 using Repository.Repositories.PatientModel.DescriptionModel.DescriptionOfSignsModel;
 using Repository.Repositories.PatientModel.DescriptionModel.IllnessModel;
 using System.Text;
+using XAct;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<Context>(
+builder.Services.AddDbContext<Repository.Data.Context>(
     options => options
         .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
     contextLifetime: ServiceLifetime.Scoped,
     optionsLifetime: ServiceLifetime.Transient);
 
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 #region Service
 
 #region Address
@@ -293,7 +294,7 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<Context>();
+    var context = scope.ServiceProvider.GetRequiredService<Repository.Data.Context>();
     if (context.Database.GetAppliedMigrations().Any())
         context.Database.Migrate();
     SeedData.Initialize(app.Services);

@@ -34,7 +34,7 @@ namespace Backend.Controllers
         [HttpPost, Route("Region")]
         public async Task<ActionResult<List<RegionDto>>> GetRegions(string name, string country)
         {
-            if (name == null)
+            if (name == null || country == null)
                 return BadRequest("Переданы некорректные параметры");
             var list = await _regionService.GetByMatchNameAsync(name, country);
             return list.ToList();

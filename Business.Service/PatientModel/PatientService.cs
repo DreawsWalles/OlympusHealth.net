@@ -64,17 +64,12 @@ namespace Business.Service.PatientModel
             }
             if (entity.Birthday != null)
             {
-                DateTime currentDate = new();
                 DateTime birthday = (DateTime)entity.Birthday;
-                if (birthday.Year > currentDate.Year)
-                    throw new ArgumentException(nameof(birthday.Year));
-                if (birthday.Month > currentDate.Month)
-                    throw new ArgumentException(nameof(birthday.Month));
-                if (birthday.Day >= currentDate.Day)
-                    throw new ArgumentException(nameof(birthday.Year));
+                if (birthday.CompareTo(DateTime.Now) >= 0)
+                    throw new ArgumentException(nameof(entity.Birthday));
             }
             Regex validatePhoneNumberValid = new("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
-            if (entity.PhoneNumber != null && validatePhoneNumberValid.IsMatch(entity.PhoneNumber))
+            if (entity.PhoneNumber != null && !validatePhoneNumberValid.IsMatch(entity.PhoneNumber))
                 throw new ArgumentException(nameof(entity.PhoneNumber));
             if(entity.Gender == null)
                 throw new ArgumentNullException(nameof(entity.Gender));

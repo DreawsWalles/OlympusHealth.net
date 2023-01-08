@@ -118,17 +118,7 @@ export default function PatientForm(props){
     }
     function validDate(e){
         let date = new Date(e);
-        let currentDate = new Date();
-        if(date.getFullYear() > currentDate.getFullYear()) {
-            return false;
-        }
-        if(date.getMonth() > currentDate.getMonth()) {
-            return false;
-        }
-        if(date.getDate() >= currentDate.getDate()) {
-            return false;
-        }
-        return true;
+        return date < new Date();
     }
     const [cookie, setCookie] = useCookies(["user"]);
     async function submitForms(){
@@ -186,7 +176,10 @@ export default function PatientForm(props){
                 }
             }
         }
-        if(dateBirthday.length !== 0){
+        if(dateBirthday.length === 0){
+            hideError("error-dateBirthday", "это поле является обязательным");
+            return;
+        }else{
             if(!validDate(dateBirthday)) {
                 isCorrect = false;
                 hideError("error-dateBirthday", "Некорректно введенная дата");
@@ -211,7 +204,7 @@ export default function PatientForm(props){
             patronymic:patronymic,
             email:email,
             phoneNumber:phoneNumber,
-            dateBirthday:dateBirthday,
+            birthday:dateBirthday,
             gender:genderObj,
             role:"patient"
         }), answer);
@@ -220,6 +213,7 @@ export default function PatientForm(props){
             return;
         }
         debugger
+        let tmp = resultFetch.access_token;
         setCookie("user",`${resultFetch.access_token}`);
         props.setRegistered(true);
 

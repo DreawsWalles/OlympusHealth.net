@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Business.Enties.Address;
 using Business.Enties.MedicModel;
+using Business.Enties.PatientModel;
 using Business.Interop.Autefication;
 using Business.Interop.ChiefOfMedicineModel;
 using Business.Interop.DoctorModel;
 using Business.Interop.HeadOfDepartmentModel;
 using Business.Interop.MedicineRegistratorModel;
+using Business.Repository.DataRepository;
+using Business.Repository.DataRepository.Address;
 using Business.Repository.DataRepository.MedicModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -24,11 +28,26 @@ namespace Business.Service.MedicModel
     {
         private readonly IMedicRepository _medicRepository;
         private readonly IMapper _mapper;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IGenderRepository _genderRepository;
+        private readonly IAccessRepository _accessRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IRegionRepository _regionRepository;
+        private readonly ICityRepository _cityRepository;
+        private readonly IStreetRepository _streetRepository;
 
-        public MedicService(IMedicRepository medicRepository, IMapper mapper)
+        public MedicService(IMedicRepository medicRepository, IMapper mapper, ICountryRepository countryRepository, IRegionRepository regionRepository, ICityRepository cityRepository, 
+                            IStreetRepository streetRepository, IAccessRepository accessRepository, IGenderRepository genderRepository, IRoleRepository roleRepository)
         {
             _medicRepository = medicRepository ?? throw new ArgumentNullException(nameof(medicRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _countryRepository = countryRepository ?? throw new ArgumentNullException(nameof(countryRepository));
+            _regionRepository = regionRepository ?? throw new ArgumentNullException(nameof(regionRepository));
+            _cityRepository = cityRepository ?? throw new ArgumentNullException(nameof(cityRepository));
+            _streetRepository = streetRepository ?? throw new ArgumentNullException(nameof(streetRepository));
+            _accessRepository = accessRepository ?? throw new ArgumentNullException(nameof(accessRepository));
+            _genderRepository = genderRepository ?? throw new ArgumentNullException(nameof(genderRepository));
+            _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
         }
 
         #region check
@@ -56,7 +75,7 @@ namespace Business.Service.MedicModel
                 throw new ArgumentNullException(nameof(entity.Surname));
             try
             {
-                if (entity.Address != null)
+                if (entity.Email != null)
                 {
                     var Address = new System.Net.Mail.MailAddress(entity.Email);
                     if (Address.Address != entity.Email)
@@ -67,31 +86,21 @@ namespace Business.Service.MedicModel
             {
                 throw new ArgumentException(nameof(entity.Email));
             }
-            DateTime currentDate = new();
-            if (entity.DateEmployment.Year > currentDate.Year)
-                throw new ArgumentException(nameof(entity.DateEmployment.Year));
-            if (entity.DateEmployment.Month > currentDate.Month)
-                throw new ArgumentException(nameof(entity.DateEmployment.Month));
-            if (entity.DateEmployment.Day >= currentDate.Day)
-                throw new ArgumentException(nameof(entity.DateEmployment.Year));
+            if (entity.DateEmployment.CompareTo(DateTime.Now) >= 0)
+                throw new ArgumentException(nameof(entity.DateEmployment));
             if (entity.DateBirthday != null)
             {
                 DateTime birthday = (DateTime)entity.DateBirthday;
-                if (birthday.Year > currentDate.Year)
-                    throw new ArgumentException(nameof(birthday.Year));
-                if (birthday.Month > currentDate.Month)
-                    throw new ArgumentException(nameof(birthday.Month));
-                if (birthday.Day >= currentDate.Day)
-                    throw new ArgumentException(nameof(birthday.Year));
+                if (birthday.CompareTo(DateTime.Now) >= 0)
+                    throw new ArgumentException(nameof(entity.DateBirthday));
             }
             if (entity.Gender == null)
                 throw new ArgumentNullException(nameof(entity.Gender));
             if (entity.Role == null)
                 throw new ArgumentNullException(nameof(entity.Role));
-            if (entity.Address == null)
-                throw new ArgumentNullException(nameof(entity.Address));
+            
             Regex validatePhoneNumberValid = new("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
-            if (entity.PhoneNumber != null && validatePhoneNumberValid.IsMatch(entity.PhoneNumber))
+            if (entity.PhoneNumber != null && !validatePhoneNumberValid.IsMatch(entity.PhoneNumber))
                 throw new ArgumentException(nameof(entity.PhoneNumber));
         }
         #endregion
@@ -99,6 +108,93 @@ namespace Business.Service.MedicModel
         public Medic Create(Medic entity)
         {
             CheckEntity(entity);
+            entity.Role = _roleRepository.Query().First(e => e.Name == entity.Role.Name);
+            entity.Gender = _genderRepository.Query().First(e => e.Name == entity.Gender.Name);
+            entity.AccessRights = new List<Access>() { _accessRepository.Query().First(e => e.Name == "default") };
+            Street address;
+            if(_countryRepository.Query().FirstOrDefault(e => e.Name == entity.Address.City.Region.Country.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = new()
+                        {
+                            Name = entity.Address.City.Region.Name,
+                            Country = new()
+                            {
+                                Name = entity.Address.City.Region.Country.Name
+                            }
+                        }
+                    }
+                };
+            }
+            else if(_regionRepository.Query().FirstOrDefault(e => e.Country.Name == entity.Address.City.Region.Country.Name
+            && e.Name == entity.Address.City.Region.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = new()
+                        {
+                            Name = entity.Address.City.Region.Name,
+                            Country = _countryRepository.Query().First(e => e.Name == entity.Address.City.Region.Country.Name)
+                        }
+                    }
+                };
+            }
+            else if(_cityRepository.Query().FirstOrDefault(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name 
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = _regionRepository.Query().First(e => e.Country.Name == entity.Address.City.Region.Country.Name && e.Name == entity.Address.City.Region.Name)
+                    }
+                };
+            }
+            else if(_streetRepository.Query().FirstOrDefault(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name 
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = _cityRepository.Query().First(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name)
+                };
+            }
+            else if(_streetRepository.Query().FirstOrDefault(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name
+                    && e.NumberOfHouse == entity.Address.NumberOfHouse) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = _cityRepository.Query().First(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name)
+                };
+            }
+            else
+            {
+                address = _streetRepository.Query().First(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name
+                    && e.NumberOfHouse == entity.Address.NumberOfHouse);
+            }
+            entity.Address = address;
+            entity.Password = new PasswordHasher<Medic>().HashPassword(entity, entity.Password);
             _medicRepository.Create(entity);
             return entity;
         }
@@ -475,7 +571,101 @@ namespace Business.Service.MedicModel
         public async Task<Medic> CreateAsync(Medic entity)
         {
             CheckEntity(entity);
-            await _medicRepository.CreateAsync(entity);
+            entity.Role = (await _roleRepository.QueryAsync()).First(e => e.Name == entity.Role.Name);
+            entity.Gender = (await _genderRepository.QueryAsync()).First(e => e.Name == entity.Gender.Name);
+            entity.AccessRights = new List<Access>() { (await _accessRepository.QueryAsync()).First(e => e.Name == "default") };
+            Street address;
+            if ((await _countryRepository.QueryAsync()).FirstOrDefault(e => e.Name == entity.Address.City.Region.Country.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = new()
+                        {
+                            Name = entity.Address.City.Region.Name,
+                            Country = new()
+                            {
+                                Name = entity.Address.City.Region.Country.Name
+                            }
+                        }
+                    }
+                };
+            }
+            else if ((await _regionRepository.QueryAsync()).FirstOrDefault(e => e.Country.Name == entity.Address.City.Region.Country.Name
+            && e.Name == entity.Address.City.Region.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = new()
+                        {
+                            Name = entity.Address.City.Region.Name,
+                            Country = (await _countryRepository.QueryAsync()).First(e => e.Name == entity.Address.City.Region.Country.Name)
+                        }
+                    }
+                };
+            }
+            else if ((await _cityRepository.QueryAsync()).FirstOrDefault(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = new()
+                    {
+                        Name = entity.Address.City.Name,
+                        Region = (await _regionRepository.QueryAsync()).First(e => e.Country.Name == entity.Address.City.Region.Country.Name && e.Name == entity.Address.City.Region.Name)
+                    }
+                };
+            }
+            else if ((await _streetRepository.QueryAsync()).FirstOrDefault(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = (await _cityRepository.QueryAsync()).First(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name)
+                };
+            }
+            else if ((await _streetRepository.QueryAsync()).FirstOrDefault(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name
+                    && e.NumberOfHouse == entity.Address.NumberOfHouse) == null)
+            {
+                address = new()
+                {
+                    Name = entity.Address.Name,
+                    NumberOfHouse = entity.Address.NumberOfHouse,
+                    City = (await _cityRepository.QueryAsync()).First(e => e.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.Region.Name == entity.Address.City.Region.Name && e.Name == entity.Address.City.Name)
+                };
+            }
+            else
+            {
+                address = (await _streetRepository.QueryAsync()).First(e => e.City.Region.Country.Name == entity.Address.City.Region.Country.Name
+                    && e.City.Region.Name == entity.Address.City.Region.Name && e.City.Name == entity.Address.City.Name && e.Name == entity.Address.Name
+                    && e.NumberOfHouse == entity.Address.NumberOfHouse);
+            }
+            entity.Address = address;
+            entity.Password = new PasswordHasher<Medic>().HashPassword(entity, entity.Password);
+            try
+            {
+                await _medicRepository.CreateOrUpdateAsync(entity);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return entity;
         }
 
@@ -526,6 +716,13 @@ namespace Business.Service.MedicModel
         public async Task<MedicRegistrator> UpdateAsync(MedicRegistrator entity)
         {
             return _mapper.Map<MedicRegistrator>(await UpdateAsync(_mapper.Map<Medic>(entity)));
+        }
+
+        public async Task<Medic?> FindByIdAsync(Guid id)
+        {
+            if (id.CompareTo(new Guid()) == 0)
+                throw new ArgumentNullException(nameof(id));
+            return (await _medicRepository.QueryAsync()).FirstOrDefault(e => e.Id == id);
         }
 
         #endregion

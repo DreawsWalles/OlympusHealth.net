@@ -59,5 +59,8 @@ namespace Business.Service.MedicModel
 
         public Task<MedicRegistrator> CreateAsync(MedicRegistrator entity);
         public Task<MedicRegistrator> UpdateAsync(MedicRegistrator entity);
+
+        public Task<ICollection<Medic>> GetAllAsync();
+        public Task<Medic?> FindByIdAsync(Guid id);
     }
 }

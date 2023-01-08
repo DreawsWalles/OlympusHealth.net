@@ -18,7 +18,10 @@ namespace Business.Interop.Autefication
         public string? PhoneNumber { get; set; }
         public DateTime? Birthday { get; set; }
         public virtual GenderDto Gender { get; set; }
-        public virtual StreetDto? Address { get; set; }
+        public virtual StreetDto? Street { get; set; }
+        public virtual string? City { get; set; }   
+        public virtual string? Region { get; set; }
+        public virtual string? Country { get; set; }    
         public string? Role { get; set; }
         public RoleDto? RoleMedic { get; set; }
     }

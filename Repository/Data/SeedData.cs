@@ -82,18 +82,18 @@ namespace Repository.Data
                             {
                                 new Region()
                                 {
-                                    Name = "Воронежская область",
+                                    Name = "Воронежская обл",
                                     Citys = new List<City>()
                                     {
                                         new City()
                                         {
-                                            Name = "Воронеж",
+                                            Name = "г Воронеж",
                                             Streets = new List<Street>()
                                             {
                                                 new Street()
                                                 {
-                                                    Name = "Ленинградская",
-                                                    NumberOfHouse = "55а"
+                                                    Name = "ул Ленинградская",
+                                                    NumberOfHouse = "55А"
                                                 }
                                             }
                                         }

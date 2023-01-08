@@ -1,6 +1,6 @@
 .textInput{
-    border-radius: 10px;
-    border:#A72036 1.8px solid;
+    border-radius: 10px !important;
+    border:#A72036 1.8px solid !important;
     height:3em;
 }
 .formGroup{

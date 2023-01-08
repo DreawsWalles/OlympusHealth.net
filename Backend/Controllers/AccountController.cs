@@ -17,6 +17,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using XSystem.Security.Cryptography;
+using Business.Interop.Address;
+using Business.Interop.DoctorModel;
+using Business.Interop.HeadOfDepartmentModel;
+using Business.Interop.MedicineRegistratorModel;
+using Business.Interop.ChiefOfMedicineModel;
+using Business.Enties.Address;
+using MimeKit;
+using System.Net.Mail;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Controllers
 {
@@ -81,17 +90,17 @@ namespace Backend.Controllers
             return BadRequest(model);
         }
 
-        private bool checkLogin(string login)
+        private async Task<bool> checkLogin(string login)
         {
-            var admins = _adminService.GetAll();
+            var admins = await _adminService.GetAllAsync();
             foreach (var admin in admins)
                 if (admin.Login == login)
                     return true;
-            var medics = _medicService.GetAll();
+            var medics = await _medicService.GetAllAsync();
             foreach (var medic in medics)
                 if (medic.Login == login)
                     return true;
-            var patients = _patientService.GetAll();
+            var patients = await _patientService.GetAllAsync();
             foreach (var patient in patients)
                 if (patient.Login == login)
                     return true;
@@ -103,7 +112,7 @@ namespace Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                return checkLogin(login) ? true : NotFound(login);
+                return await checkLogin(login) ? true : NotFound(login);
             }
             return BadRequest("Переданы некорректные данные");
                       
@@ -126,18 +135,18 @@ namespace Backend.Controllers
                 return false;
             }
         }
-        private bool checkEmail(string email, string role)
+        private async Task<bool> checkEmail(string email, string role)
         {
             switch (role)
             {
                 case "medic":
-                    var medics = _medicService.GetAll();
+                    var medics = await _medicService.GetAllAsync();
                     foreach (var medic in medics)
                         if (medic.Email == email)
                             return true;
                     return false;
                 case "patient":
-                    var patients = _patientService.GetAll();
+                    var patients = await _patientService.GetAllAsync();
                     foreach (var patient in patients)
                         if (patient.Email == email)
                             return true;
@@ -154,7 +163,7 @@ namespace Backend.Controllers
             {
                 if (!isValidEmail(email))
                     return BadRequest("Переданы некорректные данные");
-                return checkEmail(email, role) ? true : NotFound(email);
+                return await checkEmail(email, role) ? true : NotFound(email);
             }
             return BadRequest("Переданы некорректные данные");
         }
@@ -165,18 +174,18 @@ namespace Backend.Controllers
             Regex validatePhoneNumberValid = new("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
             return validatePhoneNumberValid.IsMatch(trimPhoneNumber);
         }
-        private bool checkPhoneNumber(string phoneNumber, string role)
+        private async Task<bool> checkPhoneNumber(string phoneNumber, string role)
         {
             switch (role)
             {
                 case "medic":
-                    var medics = _medicService.GetAll();
+                    var medics = await _medicService.GetAllAsync();
                     foreach (var medic in medics)
                         if (medic.PhoneNumber == phoneNumber)
                             return true;
                     return false;
                 case "patient":
-                    var patients = _patientService.GetAll();
+                    var patients = await _patientService.GetAllAsync();
                     foreach (var patient in patients)
                         if (patient.PhoneNumber == phoneNumber)
                             return true;
@@ -193,22 +202,55 @@ namespace Backend.Controllers
             {
                 if (!isValidPhoneNumber(phoneNumber))
                     return BadRequest("Переданы некорректные данные");
-                return checkPhoneNumber(phoneNumber, role) ? true : NotFound(phoneNumber);
+                return await checkPhoneNumber(phoneNumber, role) ? true : NotFound(phoneNumber);
             }
             return BadRequest("Переданы некорректные данные");      
         }
 
         private static bool isValidDate(string date)
         {
-            DateOnly dateTime = new(Convert.ToInt32(date[..4]), Convert.ToInt32(date.Substring(5, 2)), Convert.ToInt32(date.Substring(7, 2)));
-            DateOnly currentDate = new();
-            if (dateTime.Year > currentDate.Year)
+            try
+            {
+                DateTime dateTime = Convert.ToDateTime(date);
+                return dateTime.CompareTo(DateTime.Now) < 0;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return false;
-            if (dateTime.Month > currentDate.Month)
+            }
+        }
+        private static bool IsValidAddress(RegisterModelUser entity)
+        {
+            if(entity == null) 
                 return false;
-            if (dateTime.Day >= currentDate.Day)
-                return false;
-            return true;
+            if (entity.Country == null && entity.Region == null && entity.City == null && entity.Street?.Name == null && entity.Street?.NumberOfHouse == null)
+                return true;
+            if(entity.Country != null && entity.Region != null && entity.City != null && entity.Street?.Name != null && entity.Street?.NumberOfHouse != null) 
+                return true;
+            return false;
+        }
+
+        [HttpPost, Route("RegisterSysAdmin")]
+        public async Task<ActionResult<object>> RegisterUser(RegisterModelSysAdmin entity)
+        {
+            if(ModelState.IsValid)
+            {
+                if (await checkLogin(entity.Login))
+                    return NotFound("Пользователь с таким логином уже существует");
+                try
+                {
+                    await _adminService.CreateAsync(entity);
+                    var result = token(new LoginModel() { Login = entity.Login, Password = entity.Password });
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return BadRequest("Не удалось зарегистрировать пользователя");
+                }
+            }
+            return BadRequest("Переданы некорректные данные");
         }
 
         [HttpPost, Route("RegisterUser")]
@@ -216,22 +258,24 @@ namespace Backend.Controllers
         {
             if(ModelState.IsValid)
             {
-                if (checkLogin(registerModelUser.Login))
+                if (await checkLogin(registerModelUser.Login))
                     return NotFound("Пользователь с таким логином уже существует");
                 if (!isValidEmail(registerModelUser.Email))
                     return BadRequest("Переданы некорректные данные");
-                if (checkEmail(registerModelUser.Email, registerModelUser.Role))
+                if (await checkEmail(registerModelUser.Email, registerModelUser.Role))
                     return NotFound("Пользоатель с таким email уже существует");
                 if (!isValidPhoneNumber(registerModelUser.PhoneNumber))
                     return BadRequest("Переданны некорректые данные");
-                if (checkPhoneNumber(registerModelUser.PhoneNumber, registerModelUser.Role))
+                if (await checkPhoneNumber(registerModelUser.PhoneNumber, registerModelUser.Role))
                     return NotFound("Пользователь с таким номером телефона уже существует");
                 if (registerModelUser.Birthday != null && !isValidDate(registerModelUser.Birthday.ToString()))
                     return BadRequest("Переданы некорректные данные");
-                switch(registerModelUser.Role)
+                if(!IsValidAddress(registerModelUser))
+                    return BadRequest("Переданы некорректные данные");
+                switch (registerModelUser.Role)
                 {
                     case "patient":
-                        PatientDto patientDto = new()
+                        PatientDto patient = new()
                         {
                             Login = registerModelUser.Login,
                             Password = registerModelUser.Password,
@@ -243,11 +287,12 @@ namespace Backend.Controllers
                             Birthday = registerModelUser?.Birthday,
                             Gender = registerModelUser?.Gender
                         };
-                        PatientDto patient = patientDto;
-                        await _patientService.CreateAsync(patient);
                         try
                         {
+                            await _patientService.CreateAsync(patient);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
+                            if (patient.Email != null)
+                                SendMessage($"Логин: ${patient.Login}, Пароль:{patient.Password}", patient.Email);
                             return result;
                         }
                         catch(Exception ex)
@@ -255,9 +300,80 @@ namespace Backend.Controllers
                             Console.WriteLine(ex.Message);
                             return BadRequest("Не удалось зарегистрировать пользователя");
                         }
+                    case "medic":
+                        Medic medic = new()
+                        {
+                            Login = registerModelUser.Login,
+                            Password = registerModelUser.Password,
+                            Name = registerModelUser.Name,
+                            Surname = registerModelUser.Surname,
+                            Patronymic = registerModelUser?.Patronymic,
+                            Email = registerModelUser?.Email,
+                            DateEmployment = DateTime.Now,
+                            PhoneNumber = registerModelUser?.PhoneNumber,
+                            DateBirthday = registerModelUser?.Birthday,
+                            Gender = new Business.Enties.Gender() { Name = registerModelUser?.Gender.Name },
+                            Role = new Role() { Name = registerModelUser.RoleMedic.Name },
+                            Address = new Street()
+                            {
+                                Name = registerModelUser.Street?.Name,
+                                NumberOfHouse = registerModelUser.Street?.NumberOfHouse,
+                                City = new City()
+                                {
+                                    Name = registerModelUser.City,
+                                    Region = new Region()
+                                    {
+                                        Name = registerModelUser.Region,
+                                        Country = new Country()
+                                        {
+                                            Name = registerModelUser.Country
+                                        }
+                                    }
+                                }
+                            }
+
+                        };
+                        try
+                        {
+                            //Добавить отправку данных на почту
+                            await _medicService.CreateAsync(medic);
+                            var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
+                            return result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            return BadRequest("Не удалось зарегистрировать пользователя");
+                        }
+                       
                 }
             }
             return BadRequest("Переданы некорректные данные");
+        }
+
+        private void SendMessage(string message, string email)
+        {
+            try
+            {
+                MimeMessage msg = new();
+                msg.From.Add(new MailboxAddress("Олимп здоровья", "olympus.health.service@gmail.com"));
+                msg.To.Add(new MailboxAddress("", email));
+                msg.Subject = "Данные для авторизации";
+                msg.Body = new BodyBuilder() { HtmlBody = $"<div style=\"color: green;\">{message}</div>" }.ToMessageBody();
+                using (MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 465, true);
+                    client.Authenticate("olympus.health.service@gmail.com", "qqReflexik"); //логин-пароль от аккаунта
+                    client.Send(msg);
+
+                    client.Disconnect(true);
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         [HttpPost, Route("GetRole")]
@@ -276,6 +392,22 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpPost, Route("IsAccept")]
+        public async Task<object> IsAccept(string token)
+        {
+            if (token == null)
+                return BadRequest("Поле токен не должно быть пустым");
+            try
+            {
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+                var tmp = await _medicService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                return tmp.Accept;
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpPost, Route("Token")]
         public async Task<ActionResult<object>> Token(LoginModel model)
