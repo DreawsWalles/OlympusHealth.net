@@ -40,6 +40,7 @@ export default function MedicWorker(props){
         return date < new Date();
     }
     async function submit(){
+        props.isLoaded(false);
         let isCorrect = true;
         if(login.trim().length === 0) {
             isCorrect = false;
@@ -92,6 +93,7 @@ export default function MedicWorker(props){
         }
         if(dateBirthday.length === 0){
             hideError("error-dateBirthday", "это поле является обязательным");
+            props.isLoaded(true);
             return;
         }
         else{
@@ -112,31 +114,37 @@ export default function MedicWorker(props){
             if(region.trim().length === 0){
                 isCorrect = false;
                 hideError("error-region", "Заполните адрес полностью");
+                props.isLoaded(true);
                 return;
             }
             hideError("error-region", "");
             if(city.trim().length === 0){
                 isCorrect = false;
                 hideError("error-city", "Заполните адрес полностью");
+                props.isLoaded(true);
                 return;
             }
             hideError("error-city", "");
             if(street.trim().length === 0){
                 isCorrect = false;
                 hideError("error-street", "Заполните адрес полностью");
+                props.isLoaded(true);
                 return;
             }
             hideError("error-city", "");
             if(numberHouse.trim().length === 0){
                 isCorrect = false;
                 hideError("error-NumberHouse", "Заполните адрес полностью");
+                props.isLoaded(true);
                 return;
             }
             hideError("error-NumberHouse", "");
         }
         let roleKey = await GetIdByName(props.choice)
-        if(!isCorrect)
+        if(!isCorrect) {
+            props.isLoaded(true);
             return;
+        }
         let answer;
         let resultFetch = await RegisterUser(JSON.stringify({
             login:login,
@@ -162,6 +170,7 @@ export default function MedicWorker(props){
                 name:props.choice
             }
         }));
+        props.isLoaded(true);
         debugger
         if(resultFetch === undefined) {
             hideError("error-NumberHouse", "Невозможно зарегистрировать аккаунт. Попробуйте позже");

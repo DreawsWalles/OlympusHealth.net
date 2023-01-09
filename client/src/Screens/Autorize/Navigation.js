@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {GetRole, IsAccept} from "./Swapi/SwapiAccount";
+import {GetRole, IsAccept} from "../../Swapi/SwapiAccount";
 import {Navigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 
@@ -7,38 +7,34 @@ export default function Navigation(props) {
 
     const [isAutorize, setIsAutorize] = useState(true);
     const [cookie, setCookie] = useCookies(["user"]);
-    const [role, setRole] = useState();
-    const [accept, setAccept] = useState();
+    const [role, setRole] = useState("");
     useEffect(() =>
     {
         (async ()=> {
-            debugger
             let tmp = cookie;
-            if(tmp.user === ""){
+            debugger
+            if(document.cookie === ""){
                 setIsAutorize(false)
             }
             else {
+                debugger
                 setIsAutorize(true);
-                setRole(await GetRole(tmp.user));
-                if(role === "Medic") {
-                    setAccept(await IsAccept(cookie.user));
-                }
+                let t = await GetRole(tmp.user);
+                setRole(t);
             }
         })();
     },[]);
 
     if(isAutorize) {
+        debugger
         switch (role)
         {
             case "Patient":
-                return (<Navigate replace to={""} />);
+                return (<Navigate replace to={"/Patient"} />);
             case "Medic":
-                if(!accept){
-                    return <Navigate replace to={"/Stub"} />
-                }
-                return (<Navigate replace to={""} />)
+                return (<Navigate replace to={"/Medic"} />)
             case "SysAdmin":
-                return (<Navigate replace to={""} />);
+                return (<Navigate replace to={"/SysAdmin"} />);
         }
     }
     else {

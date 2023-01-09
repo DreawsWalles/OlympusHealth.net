@@ -5,25 +5,27 @@ import PatientForm from "../../../Components/Form/Register/PatientForm/PatientFo
 import MedicWorker from "../../../Components/Form/Register/MedicWorker/MedicWorker";
 import Loader from "../../../Components/Loader/Loader";
 import {Navigate} from "react-router-dom";
-import classes from "./Registration.module.css"
+import classesContent from "./Registration.module.css"
+import classesLoader from "../../../Components/Loader/Loader.module.css"
 import SysAdminForm from "../../../Components/Form/Register/SysAdmin/SysAdminForm";
 
 export default function Registration(props){
     const [registered, setRegistered] = useState(false);
     const [type, setType] = useState(<DefaultComponent />);
     const [isLoaded, setIsLoaded] = useState(true);
-
     useEffect(() => {
         (() => {
+            debugger
             let load = document.getElementById("load");
             let content = document.getElementById("content");
             if(isLoaded){
-                load.classList.add("none");
-                content.classList.remove("none");
+                debugger
+                load.classList.add(classesLoader.none);
+                content.classList.remove(classesContent.none);
             }
             else {
-                load.classList.remove("none");
-                content.classList.add("none");
+                load.classList.remove(classesLoader.none);
+                content.classList.add(classesContent.none);
             }
         })();
     }, [isLoaded]);
@@ -57,10 +59,10 @@ export default function Registration(props){
     }
     if(!registered) {
         return (
-            <div className={classes.content}>
-                <div className={classes.head}>
+            <div className={classesContent.content}>
+                <div className={classesContent.head}>
                     <img src={Logo}/>
-                    <select onChange={handleOnChangeSelect} className={classes.selectType}>
+                    <select onChange={handleOnChangeSelect} className={classesContent.selectType}>
                         <option>Выберите вид пользователя</option>
                         <option value={1}>Пациент</option>
                         <option value={2}>Врач</option>
@@ -71,7 +73,7 @@ export default function Registration(props){
                     </select>
                 </div>
                 <Loader/>
-                <div id={"content"} className={classes.container}>
+                <div id={"content"} className={classesContent.container}>
                     {type}
                 </div>
             </div>

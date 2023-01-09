@@ -72,17 +72,17 @@ namespace Backend.Controllers
                 if (await _adminService.IsRegisteredAsync(model) != null)
                 {
                     model.Role = "SysAdmin";
-                    return Token(new LoginModel() { Login = model.Login, Password = model.Password });
+                    return token(new LoginModel() { Login = model.Login, Password = model.Password });
                 }
                 if (await _medicService.IsRegisteredAsync(model) != null)
                 {
                     model.Role = "Medic";
-                    return Token(new LoginModel() { Login = model.Login, Password = model.Password });
+                    return token(new LoginModel() { Login = model.Login, Password = model.Password });
                 }
                 if (await _patientService.IsRegisteredAsync(model) != null)
                 {
                     model.Role = "Patient";
-                    return Token(new LoginModel() { Login = model.Login, Password = model.Password }); 
+                    return token(new LoginModel() { Login = model.Login, Password = model.Password }); 
                 }
                 return NotFound(model);
             }
@@ -260,13 +260,13 @@ namespace Backend.Controllers
             {
                 if (await checkLogin(registerModelUser.Login))
                     return NotFound("Пользователь с таким логином уже существует");
-                if (!isValidEmail(registerModelUser.Email))
+                if (registerModelUser.Email != "" && !isValidEmail(registerModelUser.Email))
                     return BadRequest("Переданы некорректные данные");
-                if (await checkEmail(registerModelUser.Email, registerModelUser.Role))
+                if (registerModelUser.Email != "" && await checkEmail(registerModelUser.Email, registerModelUser.Role))
                     return NotFound("Пользоатель с таким email уже существует");
-                if (!isValidPhoneNumber(registerModelUser.PhoneNumber))
+                if (registerModelUser.PhoneNumber != "" && !isValidPhoneNumber(registerModelUser.PhoneNumber))
                     return BadRequest("Переданны некорректые данные");
-                if (await checkPhoneNumber(registerModelUser.PhoneNumber, registerModelUser.Role))
+                if (registerModelUser.PhoneNumber != "" && await checkPhoneNumber(registerModelUser.PhoneNumber, registerModelUser.Role))
                     return NotFound("Пользователь с таким номером телефона уже существует");
                 if (registerModelUser.Birthday != null && !isValidDate(registerModelUser.Birthday.ToString()))
                     return BadRequest("Переданы некорректные данные");
@@ -281,9 +281,9 @@ namespace Backend.Controllers
                             Password = registerModelUser.Password,
                             Name = registerModelUser.Name,
                             Surname = registerModelUser.Surname,
-                            Patronymic = registerModelUser.Patronymic,
-                            Email = registerModelUser?.Email,
-                            PhoneNumber = registerModelUser?.PhoneNumber,
+                            Patronymic = registerModelUser.Patronymic.Trim() == "" ? null : registerModelUser.Patronymic,
+                            Email = registerModelUser?.Email.Trim() == "" ? null : registerModelUser.Email,
+                            PhoneNumber = registerModelUser?.PhoneNumber.Trim() == "" ? null : registerModelUser.PhoneNumber,
                             Birthday = registerModelUser?.Birthday,
                             Gender = registerModelUser?.Gender
                         };
@@ -307,10 +307,10 @@ namespace Backend.Controllers
                             Password = registerModelUser.Password,
                             Name = registerModelUser.Name,
                             Surname = registerModelUser.Surname,
-                            Patronymic = registerModelUser?.Patronymic,
-                            Email = registerModelUser?.Email,
+                            Patronymic = registerModelUser?.Patronymic.Trim() == "" ? null : registerModelUser.Patronymic,
+                            Email = registerModelUser?.Email.Trim() == "" ? null : registerModelUser.Email,
                             DateEmployment = DateTime.Now,
-                            PhoneNumber = registerModelUser?.PhoneNumber,
+                            PhoneNumber = registerModelUser?.PhoneNumber.Trim() == "" ? null : registerModelUser.PhoneNumber,
                             DateBirthday = registerModelUser?.Birthday,
                             Gender = new Business.Enties.Gender() { Name = registerModelUser?.Gender.Name },
                             Role = new Role() { Name = registerModelUser.RoleMedic.Name },
@@ -338,6 +338,8 @@ namespace Backend.Controllers
                             //Добавить отправку данных на почту
                             await _medicService.CreateAsync(medic);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
+                            if (medic.Email != null)
+                                SendMessage($"Логин: ${medic.Login}, Пароль:{medic.Password}", medic.Email);
                             return result;
                         }
                         catch (Exception ex)

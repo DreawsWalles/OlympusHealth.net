@@ -432,14 +432,24 @@ namespace Business.Service.MedicModel
                 return tmp == PasswordVerificationResult.Success ? user : null;
             }
             user = _medicRepository.Query()
-                .FirstOrDefault(element => element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(element =>
+                {
+                    if (element.PhoneNumber != null)
+                        return element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
             if (user != null)
             {
                 var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(user, user.Password, model.Password);
                 return tmp == PasswordVerificationResult.Success ? user : null;
             }
             user = _medicRepository.Query()
-                .FirstOrDefault(element => element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(element =>
+                {
+                    if (element.Email != null)
+                        return element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
             if (user != null)
             {
                 var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(user, user.Password, model.Password);
@@ -448,63 +458,41 @@ namespace Business.Service.MedicModel
             return null;
         }
 
-        public Task<Medic?> IsRegisteredAsync(LoginModel model)
+        public async Task<Medic?> IsRegisteredAsync(LoginModel model)
         {
             CheckEntity(model);
-            bool check = false;
-            Medic? user = null;
-
-            Parallel.Invoke
-                (
-                async () =>
+            var user = (await _medicRepository.QueryAsync())
+                .FirstOrDefault(element => element.Login.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(user, user.Password, model.Password);
+                return tmp == PasswordVerificationResult.Success ? user : null;
+            }
+            user = (await _medicRepository.QueryAsync())
+                .FirstOrDefault(element =>
                 {
-                    if (!check)
-                    {
-                        var usersOne = await _medicRepository.QueryAsync();
-                        var userOne = usersOne.FirstOrDefault(element => element.Login.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && usersOne != null)
-                        {
-                            var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(userOne, userOne.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userOne;
-                        }
-
-                    }
-                },
-                async () =>
-                {
-                    if (!check)
-                    {
-                        var usersTwo = await _medicRepository.QueryAsync();
-                        var userTwo = usersTwo.FirstOrDefault(element => element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && userTwo != null)
-                        {
-                            var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(userTwo, userTwo.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userTwo;
-                        }
-                    }
-                },
-                async () =>
-                {
-                    if (!check)
-                    {
-                        var usersThree = await _medicRepository.QueryAsync();
-                        var userThree = usersThree.FirstOrDefault(element => element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && userThree != null)
-                        {
-                            var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(userThree, userThree.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userThree;
-                        }
-                    }
-                }
-                );
-
-            return Task.FromResult(user);
+                    if(element.PhoneNumber != null)
+                        return element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(user, user.Password, model.Password);
+                return tmp == PasswordVerificationResult.Success ? user : null;
+            }
+            user = (await _medicRepository.QueryAsync())
+                .FirstOrDefault(element => 
+                { 
+                    if(element.Email != null)
+                        return element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase); 
+                    return false;
+                });
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Medic>().VerifyHashedPassword(user, user.Password, model.Password);
+                return tmp == PasswordVerificationResult.Success ? user : null;
+            }
+            return null;
         }
 
         #region Remove

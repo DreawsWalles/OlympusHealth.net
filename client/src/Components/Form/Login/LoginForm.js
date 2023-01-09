@@ -2,19 +2,21 @@ import {useEffect, useState} from "react";
 import LoginInput from "../../Inputs/LoginInput.css/LoginInput";
 import PasswordInput from "../../Inputs/PasswordInput/PasswordInput";
 import classes from "./LoginForm.module.css"
+import {useCookies} from "react-cookie";
 
 
 export default function LoginForm(props){
     const [loginValue, setLogin] = useState("");
     const [passwordValue, setPassword] = useState("");
+    const [cookie, setCookie] = useCookies("user")
 
     function Hint(name, message){
         let element = document.getElementById(name);
         element.innerText = message;
-        debugger
     };
 
     async function handleSubmit(event){
+        props.setIsLoaded(false);
         let isCorrect = true;
         if(loginValue.trim().length === 0){
             Hint("error-login", "Данное поле обязательно для заполнения");
@@ -28,19 +30,19 @@ export default function LoginForm(props){
             return;
         let data;
         const status = await props.handleSubmit(JSON.stringify({login: loginValue, password:passwordValue, role:"Admin"}), data);
-        debugger
-        if(status){
-
+        props.setIsLoaded(true);
+        if(status !== undefined){
+            setCookie("user",`${status.access_token}`);
+            props.setAutorize(true);
         }
         else{
-            debugger
             event.preventDefault();
             if(loginValue.trim().length !== 0 && passwordValue.trim().length !== 0)
                 Hint("error-password", "Неверный логин и/или пароль");
         }
     }
     return(
-        <div className={classes.form}>
+        <div id={"loginForm"} className={classes.form}>
             <LoginInput
                 id={"login"}
                 type={"text"}

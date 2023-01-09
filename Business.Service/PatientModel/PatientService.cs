@@ -130,14 +130,24 @@ namespace Business.Service.PatientModel
                 return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
             }
             user = _patientRepository.Query()
-                .FirstOrDefault(element => element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(element =>
+                {
+                    if (element.PhoneNumber != null)
+                        return element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
             if (user != null)
             {
                 var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
                 return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
             }
             user = _patientRepository.Query()
-                .FirstOrDefault(element => element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(element =>
+                {
+                    if (element.Email != null)
+                        return element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
             if (user != null)
             {
                 var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
@@ -183,60 +193,41 @@ namespace Business.Service.PatientModel
             return _mapper.Map<PatientDto>(list.FirstOrDefault(e => e.Id == id));
         }
 
-        public Task<PatientDto?> IsRegisteredAsync(LoginModel model)
+        public async Task<PatientDto?> IsRegisteredAsync(LoginModel model)
         {
             CheckEntity(model);
-            bool check = false;
-            Patient? user = null;
-
-            Parallel.Invoke(
-                async () =>
+            var user = (await _patientRepository.QueryAsync())
+                .FirstOrDefault(element => element.Login.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
+                return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
+            }
+            user = (await _patientRepository.QueryAsync())
+                .FirstOrDefault(element =>
                 {
-                    if (!check)
-                    {
-                        var usersOne = await _patientRepository.QueryAsync();
-                        var userLogin = usersOne.FirstOrDefault(element => element.Login.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && userLogin != null)
-                        {
-                            var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userLogin;
-                        }
-                    }
-                },
-                async () =>
+                    if(element.PhoneNumber != null)
+                        return element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
+                return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
+            }
+            user = (await _patientRepository.QueryAsync())
+                .FirstOrDefault(element =>
                 {
-                    if (!check)
-                    {
-                        var usersOne = await _patientRepository.QueryAsync();
-                        var userPhone = usersOne.FirstOrDefault(element => element.PhoneNumber.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && userPhone != null)
-                        {
-                            var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userPhone;
-                        }
-                    }
-                },
-                async () =>
-                {
-                    if (!check)
-                    {
-                        var usersOne = await _patientRepository.QueryAsync();
-                        var userPhone = usersOne.FirstOrDefault(element => element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase));
-                        if (!check && userPhone != null)
-                        {
-                            var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
-                            check = tmp == PasswordVerificationResult.Success;
-                            if (check)
-                                user = userPhone;
-                        }
-                    }
-                }
-                );
-            return user == null ? null : Task.FromResult(_mapper.Map<PatientDto>(user));
+                    if(element.Email != null)
+                        return element.Email.Contains(model.Login, System.StringComparison.InvariantCultureIgnoreCase);
+                    return false;
+                });
+            if (user != null)
+            {
+                var tmp = new PasswordHasher<Patient>().VerifyHashedPassword(user, user.Password, model.Password);
+                return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
+            }
+            return null;
         }
     }
 }

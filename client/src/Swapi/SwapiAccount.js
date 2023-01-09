@@ -12,16 +12,19 @@ export async function Login(data, answer){
     })
         .then(function(response) {
             status = response.status;
+            return response.json();
+        })
+        .then(function (json){
+            answer = json;
         })
         .catch(e => {
-            console.error(e);
+                console.error(e);
             }
         )
     if(status === 200){
-        answer = response.json();
-        return true;
+        return answer;
     }
-    return false;
+    return answer;
 }
 
 export async function CheckLogin(login){
@@ -110,7 +113,6 @@ export async function RegisterUser(data, answer){
 }
 export async function GetRole(token){
     let answer = undefined;
-    debugger
     await fetch(`${Api}${Controllers["Account"]}GetRole?token=${token}`, {
         method: "Post",
         headers:{
@@ -126,29 +128,25 @@ export async function GetRole(token){
         .catch(e => {
             console.error(e);
         });
-    return answer;
+    return answer.message;
 }
 
 export async function IsAccept(token){
     let answer = undefined;
     debugger
-    debugger
-    await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
+    let response = await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
         method: "Post",
         headers:{
             'Accept': 'text/plain',
         },
     })
         .then(function (response){
-            return response.json()
+            debugger
+            answer = response.status;
         })
-        .then(function (json){
-            answer = json
-        })
-        .catch(e => {
-            console.error(e);
-        });
-    return answer;
+    if(answer == 200)
+        return true;
+    return false;
 }
 
 export async function RegisterSysAdmin(data, answer)

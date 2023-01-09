@@ -122,6 +122,8 @@ export default function PatientForm(props){
     }
     const [cookie, setCookie] = useCookies(["user"]);
     async function submitForms(){
+        debugger
+        props.isLoaded(false);
         let isCorrect = true;
         if(!isAutoLogin){
             if(login.trim().length === 0) {
@@ -178,6 +180,7 @@ export default function PatientForm(props){
         }
         if(dateBirthday.length === 0){
             hideError("error-dateBirthday", "это поле является обязательным");
+            props.isLoaded(true);
             return;
         }else{
             if(!validDate(dateBirthday)) {
@@ -193,8 +196,10 @@ export default function PatientForm(props){
         else{
             genderObj = await GetById(gender);
         }
-        if(!isCorrect)
+        if(!isCorrect) {
+            props.isLoaded(true);
             return;
+        }
         let answer;
         let resultFetch = await RegisterUser(JSON.stringify({
             login:login,
@@ -208,11 +213,11 @@ export default function PatientForm(props){
             gender:genderObj,
             role:"patient"
         }), answer);
+        props.isLoaded(true);
         if(resultFetch === undefined) {
             hideError("error-gender", "Невозможно зарегистрировать аккаунт. Попробуйте позже");
             return;
         }
-        debugger
         let tmp = resultFetch.access_token;
         setCookie("user",`${resultFetch.access_token}`);
         props.setRegistered(true);

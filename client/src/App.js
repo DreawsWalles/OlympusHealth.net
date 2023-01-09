@@ -4,11 +4,13 @@ import {
     Routes,
     Route
 } from 'react-router-dom';
-import IsAutorize from './Navigation'
+import IsAutorize from './Screens/Autorize/Navigation'
 import Authorization from "./Screens/Autorize/Autorization/Authorization";
 import Registration from "./Screens/Autorize/Registration/Registration";
 import {useCookies} from "react-cookie";
-import {Stub} from "./Screens/Medic/Stub/Stub";
+import MedicNavigation from "./Screens/Medic/Navigation";
+import PatientNavigation from "./Screens/Patient/Navigation";
+import SysAdminNavigation from "./Screens/SysAdmin/Navigation";
 
 
 export default function App(props) {
@@ -20,7 +22,9 @@ export default function App(props) {
                 <Route path="/" element={<IsAutorize />} />
                 <Route path="/Authorization" element={<Authorization />} />
                 <Route path="/Registration" element={<Registration />} />
-                <Route path="/Stub" element={<Stub />} />
+                <Route path="/Medic" element={<MedicNavigation />} />
+                <Route path="/Patient" element={<PatientNavigation />} />
+                <Route path="/SysAdmin" element={<SysAdminNavigation />} />
             </Routes>
         </Router>
     );
