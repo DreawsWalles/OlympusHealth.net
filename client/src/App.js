@@ -10,7 +10,7 @@ import Registration from "./Screens/Autorize/Registration/Registration";
 import {useCookies} from "react-cookie";
 import MedicNavigation from "./Screens/Medic/Navigation";
 import PatientNavigation from "./Screens/Patient/Navigation";
-import SysAdminNavigation from "./Screens/SysAdmin/Navigation";
+import SysAdminLayout from "./Screens/SysAdmin/SysAdminLayout/SysAdminLayout";
 
 
 export default function App(props) {
@@ -24,7 +24,7 @@ export default function App(props) {
                 <Route path="/Registration" element={<Registration />} />
                 <Route path="/Medic" element={<MedicNavigation />} />
                 <Route path="/Patient" element={<PatientNavigation />} />
-                <Route path="/SysAdmin" element={<SysAdminNavigation />} />
+                <Route path="/SysAdmin" element={<SysAdminLayout />} />
             </Routes>
         </Router>
     );

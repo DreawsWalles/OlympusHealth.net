@@ -1,0 +1,11 @@
+.content{
+    position: fixed;
+    min-height: 100%;
+    background-color: #A72036;
+    left:0;
+    top:0;
+    min-width: 130px;
+}
+.content img{
+
+}

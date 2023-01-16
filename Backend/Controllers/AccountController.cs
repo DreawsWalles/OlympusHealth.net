@@ -33,6 +33,11 @@ namespace Backend.Controllers
     {
         public string Message { get; set; }
     }
+    public class TokenRole
+    {
+        public string Token { get; set; }
+        public string Role { get; set; }
+    }
 
     public static class AuthOptions
     {

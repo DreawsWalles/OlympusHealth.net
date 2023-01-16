@@ -1,7 +1,7 @@
 import TextInput from "../../../Inputs/TextInput/TextInput";
 import {useEffect, useState} from "react";
-import ButtonAuto from "../../../Buttons/ButtonAuto";
-import ButtonSymbol from "../../../Buttons/ButtonSymbol";
+import ButtonAuto from "../../../Buttons/ButtonAuto/ButtonAuto";
+import ButtonSymbol from "../../../Buttons/ButtonSymbol/ButtonSymbol";
 import PasswordInput from "../../../Inputs/PasswordInput/PasswordInput";
 import GenerateLogin from "../../../../Generators/GenerateLogin";
 import GeneratePassword from "../../../../Generators/GeneratePassword";

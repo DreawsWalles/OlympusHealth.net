@@ -13,6 +13,7 @@ export default function Registration(props){
     const [registered, setRegistered] = useState(false);
     const [type, setType] = useState(<DefaultComponent />);
     const [isLoaded, setIsLoaded] = useState(true);
+    const [role, setRole] = useState();
     useEffect(() => {
         (() => {
             debugger

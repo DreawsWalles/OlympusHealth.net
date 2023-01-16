@@ -1,4 +1,4 @@
-import classes from "./Buttom.module.css"
+import classes from "../ButtonAuto/Buttom.module.css"
 
 
 export default function ButtonSymbol(props){

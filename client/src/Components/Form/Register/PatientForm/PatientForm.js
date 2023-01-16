@@ -1,9 +1,9 @@
 import TextInput from "../../../Inputs/TextInput/TextInput";
 import {useEffect, useState} from "react";
-import ButtonAuto from "../../../Buttons/ButtonAuto";
+import ButtonAuto from "../../../Buttons/ButtonAuto/ButtonAuto";
 import {GetAll, GetById} from "../../../../Swapi/SwapiGender";
 import CustomSelect from "../../../Selects/CustomSelect/CustomSelect";
-import ButtonSymbol from "../../../Buttons/ButtonSymbol";
+import ButtonSymbol from "../../../Buttons/ButtonSymbol/ButtonSymbol";
 import PasswordInput from "../../../Inputs/PasswordInput/PasswordInput";
 import GenerateLogin from "../../../../Generators/GenerateLogin";
 import GeneratePassword from "../../../../Generators/GeneratePassword";

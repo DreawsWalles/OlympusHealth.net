@@ -32,6 +32,7 @@ export default function LoginForm(props){
         const status = await props.handleSubmit(JSON.stringify({login: loginValue, password:passwordValue, role:"Admin"}), data);
         props.setIsLoaded(true);
         if(status !== undefined){
+            props.setRole(status.role);
             setCookie("user",`${status.access_token}`);
             props.setAutorize(true);
         }
