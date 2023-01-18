@@ -1,8 +1,9 @@
-import classes from "./ButtonMenu.module.css";
+import classes from "./ButtonIconMenu.module.css";
 import {useState} from "react";
 
-export default function ButtonMenu(props){
+export default function ButtonIconMenu(props){
     const [icon, setIcon] = useState(props.icon);
+
     function hoverEffect(){
         setIcon(props.iconHover)
     }

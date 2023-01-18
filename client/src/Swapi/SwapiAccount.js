@@ -2,7 +2,7 @@ import {Api, Controllers} from "../Constants";
 
 export async function Login(data, answer){
     let status = 200;
-    let response = await fetch(`${Api}${Controllers["Account"]}Login`, {
+    await fetch(`${Api}${Controllers["Account"]}Login`, {
         method: 'Post',
         headers: {
             'Accept': 'text/plain',
@@ -20,7 +20,7 @@ export async function Login(data, answer){
         .catch(e => {
                 console.error(e);
             }
-        )
+        );
     if(status === 200){
         return answer;
     }
@@ -134,7 +134,7 @@ export async function GetRole(token){
 export async function IsAccept(token){
     let answer = undefined;
     debugger
-    let response = await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
+    await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
         method: "Post",
         headers:{
             'Accept': 'text/plain',
@@ -143,8 +143,8 @@ export async function IsAccept(token){
         .then(function (response){
             debugger
             answer = response.status;
-        })
-    if(answer == 200)
+        });
+    if(answer === 200)
         return true;
     return false;
 }

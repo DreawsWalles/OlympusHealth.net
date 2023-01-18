@@ -1,4 +1,4 @@
-import classes from "./NotificationMenu.module.css";
+import classes from "./NotificationIconButtonMenu.module.css";
 import {useEffect, useState} from "react";
 import {GetCount} from "../../../Swapi/SwapiNotification";
 import {useCookies} from "react-cookie";
@@ -33,7 +33,7 @@ export default function ButtonMenu(props){
                 <img onMouseEnter={hoverEffect} onMouseLeave={leaveEffect} src={icon}/>
             </div>
             <div className={"row"}>
-                <span>{props.text}</span>z
+                <span>{props.text}</span>
             </div>
         </div>)
     }else{
@@ -43,7 +43,7 @@ export default function ButtonMenu(props){
                     <img onMouseEnter={hoverEffect} onMouseLeave={leaveEffect} src={icon}/>
                 </div>
                 <div className={"row"}>
-                    <span>{props.text}</span>z
+                    <span>{props.text}</span>
                 </div>
                 <div id={classes.countNotification} className={`row ${classes.countNotification}`}>
                     <div>{props.count}</div>

@@ -99,6 +99,16 @@ namespace Business.Service
             return query.FirstOrDefault(e => e.Id == id);
         }
 
+        public SysAdmin? GetByLogin(string login)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SysAdmin?> GetByLoginAsync(string login)
+        {
+            throw new NotImplementedException();
+        }
+
         public SysAdmin? IsRegistered(LoginModel model)
         {
             checkEntity(model);

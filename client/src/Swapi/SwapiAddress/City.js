@@ -19,9 +19,9 @@ async function getCityByServer(country, region, city){
             tmp = undefined
         });
     if(tmp === undefined) {
-        return new Array();
+        return [];
     }
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.length; i++){
         result[result.length] = tmp[i].name;
     }
@@ -50,7 +50,7 @@ async function getCityByApi(city, country, region){
         .catch(e => {
             console.error(e);
         });
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.suggestions.length; i++){
         if(tmp.suggestions[i].data.country === country && tmp.suggestions[i].data.region_with_type === region && tmp.suggestions[i].data.area_type === null
             && tmp.suggestions[i].data.city !== null && tmp.suggestions[i].data.street_type_full === null) {

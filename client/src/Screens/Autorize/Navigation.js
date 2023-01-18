@@ -13,14 +13,15 @@ export default function Navigation(props) {
         (async ()=> {
             let tmp = cookie;
             debugger
-            if(document.cookie === ""){
-                setIsAutorize(false)
+            if(document.cookie !== "" && tmp.user !== ""){
+                setIsAutorize(true);
+                debugger
+                let t = await GetRole(tmp.user);
+                setRole(t);
             }
             else {
                 debugger
-                setIsAutorize(true);
-                let t = await GetRole(tmp.user);
-                setRole(t);
+                setIsAutorize(false);
             }
         })();
     },[]);
