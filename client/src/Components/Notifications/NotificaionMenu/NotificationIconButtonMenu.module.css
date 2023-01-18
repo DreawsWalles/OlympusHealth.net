@@ -1,0 +1,51 @@
+.component{
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.component img{
+    width: 90px;
+    height: 90px;
+}
+.component span{
+    font-family: 'Century Gothic';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+
+    color: #FFFFFF;
+    position: relative;
+    top:-18px;
+}
+.countNotification{
+    position: relative;
+    top:-104px;
+    left: 28px;
+    font-family: MyArchive;
+    color:#FF002A;
+    display: flex;
+    background-color: white;
+    border-radius: 50%;
+    min-width: 34px;
+    max-width: 34px;
+    min-height: 34px;
+    max-height: 34px;
+    align-items: center;
+    align-content: center;
+
+}
+.countNotification div{
+    margin-left: auto;
+    margin-right: auto;
+}
+.shadow{
+    box-shadow: 0px 0px 20px white;
+}

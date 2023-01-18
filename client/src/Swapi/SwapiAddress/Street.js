@@ -19,9 +19,9 @@ async function getStreetByServer(country, region, city, street){
             tmp = undefined
         });
     if(tmp === undefined) {
-        return new Array();
+        return [];
     }
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.length; i++){
         result[result.length] = tmp[i].name;
     }
@@ -29,7 +29,7 @@ async function getStreetByServer(country, region, city, street){
 }
 
 async function getStreetByApi(country, region, city, street){
-    let result = new Array();
+    let result = [];
     debugger
     let locations = [{region: region.toString().split(' ')[0], city: city.toString().split(' ')[1]}];
     let tmp;

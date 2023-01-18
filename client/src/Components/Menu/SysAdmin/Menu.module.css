@@ -1,0 +1,29 @@
+.content{
+    position: fixed;
+    min-height: 100%;
+    background-color: #A72036;
+    left:0;
+    top:0;
+    min-width: 130px;
+    transition: margin .5s;
+    margin: 0 0 0 -133px;
+}
+.is_nav_open{
+    margin-left: 0;
+}
+.menuColumn{
+    display: flex;
+    flex-direction: column;
+}
+.icon_margin{
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+.menu{
+    position: relative;
+    top:10vh;
+    width: auto;
+}
+.content img{
+
+}

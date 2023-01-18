@@ -1,0 +1,10 @@
+.element{
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+}
+
+.content{
+    position: relative;
+    top: 10vh;
+    left: auto;
+}

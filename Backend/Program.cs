@@ -17,7 +17,6 @@ using Business.Service.PatientModel;
 using Business.Service.PatientModel.DescriptionModel;
 using Business.Service.PatientModel.DescriptionModel.DescriptionOfSignsModel;
 using Business.Service.PatientModel.DescriptionModel.IllnessModel;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -260,7 +259,8 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder.WithOrigins("http://localhost:3000", "http://localhost:5001", "http://localhost:5000")
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .WithMethods("PUT", "POST", "GET", "DELETE");
+            .WithMethods("PUT", "POST", "GET", "DELETE")
+            .AllowCredentials();
         }));
 builder.Services.AddMvc();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -283,6 +283,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 options.LoginPath = new PathString("/Authorization");
             });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -304,6 +305,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("CorsPolicy");
+
+
 
 app.UseAuthentication();  
 app.UseAuthorization();

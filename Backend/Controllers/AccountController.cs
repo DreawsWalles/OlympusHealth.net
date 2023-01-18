@@ -26,12 +26,19 @@ using Business.Enties.Address;
 using MimeKit;
 using System.Net.Mail;
 using Microsoft.Extensions.Logging;
+using Business.Enties;
+using Business.Enties.PatientModel;
 
 namespace Backend.Controllers
 {
     public class Answer
     {
         public string Message { get; set; }
+    }
+    public class TokenRole
+    {
+        public string Token { get; set; }
+        public string Role { get; set; }
     }
 
     public static class AuthOptions
@@ -55,12 +62,14 @@ namespace Backend.Controllers
         private readonly ISysAdminService _adminService;
         private readonly IMedicService _medicService;
         private readonly IPatientService _patientService;
+        private readonly IHistoryNodeService _notification;
 
-        public AccountController(ISysAdminService adminService, IMedicService medicService, IPatientService patientService)
+        public AccountController(ISysAdminService adminService, IMedicService medicService, IPatientService patientService, IHistoryNodeService historyNodeService)
         {
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
             _medicService = medicService ?? throw new ArgumentNullException(nameof(medicService));
             _patientService = patientService ?? throw new ArgumentNullException(nameof(patientService));
+            _notification = historyNodeService ?? throw new ArgumentNullException(nameof(historyNodeService));
         }
 
         
@@ -69,19 +78,41 @@ namespace Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _adminService.IsRegisteredAsync(model) != null)
+                SysAdmin admin;
+                Medic medic;
+                PatientDto patient;
+                if ((admin = await _adminService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "SysAdmin";
+                    await _notification.CreateAsync(new HistoryNode()
+                    {
+                        Text = $"Пользователь {admin.Login} авторизовался в приложении",
+                        SysAdmin = admin
+                    }, IHistoryNodeService.Action.Auntification);
                     return token(new LoginModel() { Login = model.Login, Password = model.Password });
                 }
-                if (await _medicService.IsRegisteredAsync(model) != null)
+                if ((medic = await _medicService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "Medic";
+                    await _notification.CreateAsync(new HistoryNode()
+                    {
+                        Text = $"Пользователь {medic.Login} авторизовался в приложении",
+                        Medic = medic
+                    }, IHistoryNodeService.Action.Auntification);
                     return token(new LoginModel() { Login = model.Login, Password = model.Password });
                 }
-                if (await _patientService.IsRegisteredAsync(model) != null)
+                if ((patient = await _patientService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "Patient";
+                    model.Role = "Medic";
+                    await _notification.CreateAsync(new HistoryNode()
+                    {
+                        Text = $"Пользователь {patient.Login} авторизовался в приложении",
+                        Patient = new Patient()
+                        {
+                            Id = patient.Id
+                        }
+                    }, IHistoryNodeService.Action.Auntification);
                     return token(new LoginModel() { Login = model.Login, Password = model.Password }); 
                 }
                 return NotFound(model);
@@ -240,7 +271,12 @@ namespace Backend.Controllers
                     return NotFound("Пользователь с таким логином уже существует");
                 try
                 {
-                    await _adminService.CreateAsync(entity);
+                    var user = await _adminService.CreateAsync(entity);
+                    await _notification.CreateAsync(new HistoryNode()
+                    {
+                        Text = $"Зарегистритован пользователь {user.Login}",
+                        SysAdmin = user
+                    }, IHistoryNodeService.Action.Create);
                     var result = token(new LoginModel() { Login = entity.Login, Password = entity.Password });
                     return result;
                 }
@@ -289,8 +325,16 @@ namespace Backend.Controllers
                         };
                         try
                         {
-                            await _patientService.CreateAsync(patient);
+                            var user = await _patientService.CreateAsync(patient);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
+                            await _notification.CreateAsync(new HistoryNode()
+                            {
+                                Text = $"Зарегистрирован пользователь {user.Login}",
+                                Patient = new Patient()
+                                {
+                                    Id = user.Id
+                                }
+                            }, IHistoryNodeService.Action.Create);
                             if (patient.Email != null)
                                 SendMessage($"Логин: ${patient.Login}, Пароль:{patient.Password}", patient.Email);
                             return result;
@@ -335,9 +379,13 @@ namespace Backend.Controllers
                         };
                         try
                         {
-                            //Добавить отправку данных на почту
-                            await _medicService.CreateAsync(medic);
+                            var user = await _medicService.CreateAsync(medic);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
+                            await _notification.CreateAsync(new HistoryNode()
+                            {
+                                Text = $"Зарегистрирован пользователь {user.Login}",
+                                Medic = user
+                            }, IHistoryNodeService.Action.Create);
                             if (medic.Email != null)
                                 SendMessage($"Логин: ${medic.Login}, Пароль:{medic.Password}", medic.Email);
                             return result;

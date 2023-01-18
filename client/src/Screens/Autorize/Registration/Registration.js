@@ -10,6 +10,7 @@ import classesLoader from "../../../Components/Loader/Loader.module.css"
 import SysAdminForm from "../../../Components/Form/Register/SysAdmin/SysAdminForm";
 
 export default function Registration(props){
+    document.title = "Регистрация";
     const [registered, setRegistered] = useState(false);
     const [type, setType] = useState(<DefaultComponent />);
     const [isLoaded, setIsLoaded] = useState(true);

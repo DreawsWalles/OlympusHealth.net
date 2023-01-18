@@ -20,9 +20,9 @@ async function getCountryByNameByServer(country){
             tmp = undefined
         });
     if(tmp === undefined) {
-        return new Array();
+        return [];
     }
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.length; i++){
         result[result.length] = tmp[i].name;
     }
@@ -47,12 +47,13 @@ async function getCountryByNameByApi(country){
         .then(function (json){
             tmp = json;
         });
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.suggestions.length; i++){
         result[result.length] = tmp.suggestions[i].value;
     }
     return result;
 }
+// eslint-disable-next-line no-extend-native
 Array.prototype.unique = function (){
     let a = this.concat();
     for(let i=0; i<a.length; ++i) {

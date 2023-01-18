@@ -19,9 +19,9 @@ async function getNumberHouseByServer(country, region, city, street, numberHouse
             tmp = undefined
         });
     if(tmp === undefined) {
-        return new Array();
+        return [];
     }
-    let result = new Array();
+    let result = [];
     for(let i = 0; i < tmp.length; i++){
         result[result.length] = tmp[i].name;
     }
@@ -29,7 +29,7 @@ async function getNumberHouseByServer(country, region, city, street, numberHouse
 }
 
 async function getNumberHouseByApi(country, region, city, street, numberHouse){
-    let result = new Array();
+    let result = [];
     let locations = [{country:country, region: region.toString().split(' ')[0],
                 city: city.toString().split(' ')[1], street: street.toString().split(' ')[1]}];
     let tmp;
