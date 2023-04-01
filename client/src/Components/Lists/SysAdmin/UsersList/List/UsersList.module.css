@@ -1,9 +1,12 @@
+.content{
+    max-height: 70%;
+}
 .element{
     min-height: 26px;
     min-width: 1168px;
     background-color: rebeccapurple;
 }
-.buttons{
+.buttons_close{
     display: flex;
     margin-top: 2vh;
 }
@@ -16,5 +19,12 @@
     justify-content: flex-start;
 }
 .list{
-  min-height: 66vh;
+    min-height: 57vh;
+    max-height: 57vh;
+    min-width: 90%;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
 }

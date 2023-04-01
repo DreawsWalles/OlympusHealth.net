@@ -74,7 +74,6 @@ export default function SysAdminForm(props){
         let span = document.getElementById(element);
         span.innerText = error;
     }
-    const [cookie, setCookie] = useCookies(["user"]);
     async function submitForms(){
         let isCorrect = true;
         if(!isAutoLogin){
@@ -98,20 +97,15 @@ export default function SysAdminForm(props){
         }
         if(!isCorrect)
             return;
-        let answer;
-        let resultFetch = await RegisterSysAdmin(JSON.stringify({
+        let result = props.registration(JSON.stringify({
             login:login,
             password:password,
-        }), answer);
-        if(resultFetch === undefined) {
+        }));
+        if(!result) {
             hideError("error-gender", "Невозможно зарегистрировать аккаунт. Попробуйте позже");
             return;
         }
         debugger
-        let tmp = resultFetch.access_token;
-        setCookie("user",`${resultFetch.access_token}`);
-        props.setRegistered(true);
-
     }
     return(
         <div className={classes.containerSysAdmin}>

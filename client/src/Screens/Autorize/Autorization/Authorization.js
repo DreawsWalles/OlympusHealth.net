@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import classes from './Autorize.module.css';
-import Logo from '../../Images/logo.svg';
+import Logo from '../../../Images/logo.svg';
 import {Login} from "../../../Swapi/SwapiAccount";
 import LoginForm from "../../../Components/Form/Login/LoginForm";
 import classesLoader from "../../../Components/Loader/Loader.module.css";

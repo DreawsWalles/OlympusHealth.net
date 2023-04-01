@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -10,6 +10,7 @@ import Registration from "./Screens/Autorize/Registration/Registration";
 import MedicNavigation from "./Screens/Medic/Navigation";
 import PatientNavigation from "./Screens/Patient/Navigation";
 import SysAdminLayout from "./Screens/SysAdmin/SysAdminLayout/SysAdminLayout";
+import {useCookies} from "react-cookie";
 
 
 export default function App(props) {

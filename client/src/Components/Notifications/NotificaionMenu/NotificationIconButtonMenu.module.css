@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 }
 .component img{
     width: 90px;
@@ -43,9 +44,16 @@
 
 }
 .countNotification div{
+    width: auto;
     margin-left: auto;
     margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
 }
 .shadow{
     box-shadow: 0px 0px 20px white;
+}
+.text{
+
 }

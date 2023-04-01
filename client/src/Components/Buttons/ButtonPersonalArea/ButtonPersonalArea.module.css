@@ -1,0 +1,33 @@
+.content{
+    width: 265px;
+    position: fixed;
+    top:108px;
+    right: 4vw;
+    cursor: pointer;
+}
+.icon{
+    display: flex;
+    align-items: flex-start;
+    align-self: center;
+}
+.text{
+    display: flex;
+    align-items: flex-start;
+    align-self: center;
+    font-family: "Century Gothic";
+    word-wrap: normal;
+    font-size: 24px;
+    transition: background-color 1.4s ease-in-out;
+}
+.content:hover .text{
+    background: radial-gradient(50% 50% at 50% 50%, #A72036 0%, rgba(255, 255, 255, 0) 100%);
+    background-position: 0 100%;
+    background-size: 100% 2px;
+    background-repeat: repeat-x;
+}
+.text_select{
+    background: radial-gradient(50% 50% at 50% 50%, #A72036 0%, rgba(255, 255, 255, 0) 100%);
+    background-position: 0 100%;
+    background-size: 100% 2px;
+    background-repeat: repeat-x;
+}

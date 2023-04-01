@@ -28,6 +28,8 @@ using System.Net.Mail;
 using Microsoft.Extensions.Logging;
 using Business.Enties;
 using Business.Enties.PatientModel;
+using Business.Interop;
+using AutoMapper;
 
 namespace Backend.Controllers
 {
@@ -63,13 +65,15 @@ namespace Backend.Controllers
         private readonly IMedicService _medicService;
         private readonly IPatientService _patientService;
         private readonly IHistoryNodeService _notification;
+        private readonly IMapper _mapper;
 
-        public AccountController(ISysAdminService adminService, IMedicService medicService, IPatientService patientService, IHistoryNodeService historyNodeService)
+        public AccountController(ISysAdminService adminService, IMedicService medicService, IPatientService patientService, IHistoryNodeService historyNodeService, IMapper mapper)
         {
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
             _medicService = medicService ?? throw new ArgumentNullException(nameof(medicService));
             _patientService = patientService ?? throw new ArgumentNullException(nameof(patientService));
             _notification = historyNodeService ?? throw new ArgumentNullException(nameof(historyNodeService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         
@@ -78,17 +82,24 @@ namespace Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                SysAdmin admin;
+                SysAdminDto admin;
                 Medic medic;
                 PatientDto patient;
                 if ((admin = await _adminService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "SysAdmin";
-                    await _notification.CreateAsync(new HistoryNode()
+                    try
                     {
-                        Text = $"Пользователь {admin.Login} авторизовался в приложении",
-                        SysAdmin = admin
-                    }, IHistoryNodeService.Action.Auntification);
+                        await _notification.CreateAsync(new HistoryNode()
+                        {
+                            Text = $"Пользователь {admin.Login} авторизовался в приложении",
+                            SysAdmin = _mapper.Map<SysAdmin>(admin)
+                        }, IHistoryNodeService.Action.Auntification);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                     return token(new LoginModel() { Login = model.Login, Password = model.Password });
                 }
                 if ((medic = await _medicService.IsRegisteredAsync(model)) != null)
@@ -104,7 +115,6 @@ namespace Backend.Controllers
                 if ((patient = await _patientService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "Patient";
-                    model.Role = "Medic";
                     await _notification.CreateAsync(new HistoryNode()
                     {
                         Text = $"Пользователь {patient.Login} авторизовался в приложении",
@@ -275,7 +285,7 @@ namespace Backend.Controllers
                     await _notification.CreateAsync(new HistoryNode()
                     {
                         Text = $"Зарегистритован пользователь {user.Login}",
-                        SysAdmin = user
+                        SysAdmin = _mapper.Map<SysAdmin>(user)
                     }, IHistoryNodeService.Action.Create);
                     var result = token(new LoginModel() { Login = entity.Login, Password = entity.Password });
                     return result;
@@ -311,21 +321,9 @@ namespace Backend.Controllers
                 switch (registerModelUser.Role)
                 {
                     case "patient":
-                        PatientDto patient = new()
-                        {
-                            Login = registerModelUser.Login,
-                            Password = registerModelUser.Password,
-                            Name = registerModelUser.Name,
-                            Surname = registerModelUser.Surname,
-                            Patronymic = registerModelUser.Patronymic.Trim() == "" ? null : registerModelUser.Patronymic,
-                            Email = registerModelUser?.Email.Trim() == "" ? null : registerModelUser.Email,
-                            PhoneNumber = registerModelUser?.PhoneNumber.Trim() == "" ? null : registerModelUser.PhoneNumber,
-                            Birthday = registerModelUser?.Birthday,
-                            Gender = registerModelUser?.Gender
-                        };
                         try
                         {
-                            var user = await _patientService.CreateAsync(patient);
+                            var user = await _patientService.CreateAsync(registerModelUser);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
                             await _notification.CreateAsync(new HistoryNode()
                             {
@@ -335,8 +333,8 @@ namespace Backend.Controllers
                                     Id = user.Id
                                 }
                             }, IHistoryNodeService.Action.Create);
-                            if (patient.Email != null)
-                                SendMessage($"Логин: ${patient.Login}, Пароль:{patient.Password}", patient.Email);
+                            if (registerModelUser.Email != null)
+                                SendMessage($"Логин: ${registerModelUser.Login}, Пароль:{registerModelUser.Password}", registerModelUser.Email);
                             return result;
                         }
                         catch(Exception ex)
@@ -345,49 +343,17 @@ namespace Backend.Controllers
                             return BadRequest("Не удалось зарегистрировать пользователя");
                         }
                     case "medic":
-                        Medic medic = new()
-                        {
-                            Login = registerModelUser.Login,
-                            Password = registerModelUser.Password,
-                            Name = registerModelUser.Name,
-                            Surname = registerModelUser.Surname,
-                            Patronymic = registerModelUser?.Patronymic.Trim() == "" ? null : registerModelUser.Patronymic,
-                            Email = registerModelUser?.Email.Trim() == "" ? null : registerModelUser.Email,
-                            DateEmployment = DateTime.Now,
-                            PhoneNumber = registerModelUser?.PhoneNumber.Trim() == "" ? null : registerModelUser.PhoneNumber,
-                            DateBirthday = registerModelUser?.Birthday,
-                            Gender = new Business.Enties.Gender() { Name = registerModelUser?.Gender.Name },
-                            Role = new Role() { Name = registerModelUser.RoleMedic.Name },
-                            Address = new Street()
-                            {
-                                Name = registerModelUser.Street?.Name,
-                                NumberOfHouse = registerModelUser.Street?.NumberOfHouse,
-                                City = new City()
-                                {
-                                    Name = registerModelUser.City,
-                                    Region = new Region()
-                                    {
-                                        Name = registerModelUser.Region,
-                                        Country = new Country()
-                                        {
-                                            Name = registerModelUser.Country
-                                        }
-                                    }
-                                }
-                            }
-
-                        };
                         try
                         {
-                            var user = await _medicService.CreateAsync(medic);
+                            var user = await _medicService.CreateAsync(registerModelUser);
                             var result = token(new LoginModel() { Login = registerModelUser.Login, Password = registerModelUser.Password });
                             await _notification.CreateAsync(new HistoryNode()
                             {
                                 Text = $"Зарегистрирован пользователь {user.Login}",
                                 Medic = user
                             }, IHistoryNodeService.Action.Create);
-                            if (medic.Email != null)
-                                SendMessage($"Логин: ${medic.Login}, Пароль:{medic.Password}", medic.Email);
+                            if (registerModelUser.Email != null)
+                                SendMessage($"Логин: ${registerModelUser.Login}, Пароль:{registerModelUser.Password}", registerModelUser.Email);
                             return result;
                         }
                         catch (Exception ex)
@@ -450,13 +416,67 @@ namespace Backend.Controllers
             try
             {
                 var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-                var tmp = await _medicService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
-                return tmp.Accept;
+                
+                switch(jwt.Claims.ToList()[1].Value)
+                {
+                    case "SysAdmin":
+                        {
+                            var tmp = await _adminService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                            return tmp.Accept;
+                        }
+                    case "Medic":
+                        {
+                            var tmp = await _medicService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                            return tmp.Accept;
+                        }
+                    case "Patient":
+                        return true;
+                    default:
+                        return BadRequest();
+                }
+                
             }
             catch
             {
                 return BadRequest();
             }
+        }
+
+        [HttpPost, Route("CheckToken")]
+        public async Task<ActionResult<object>> CheckToken(string token)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+                    switch (jwt.Claims.ToList()[1].Value)
+                    {
+                        case "SysAdmin":
+                            {
+                                var tmp = await _adminService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                                return tmp != null ? true : BadRequest();
+                            }
+                        case "Medic":
+                            {
+                                var tmp = await _medicService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                                return tmp != null ? true : BadRequest();
+                            }
+                        case "Patient":
+                            {
+                                var tmp = await _patientService.FindByLoginAsync(jwt.Claims.ToList()[0].Value);
+                                return tmp != null ? true : BadRequest();
+                            }
+                        default:
+                            return BadRequest();
+                    }
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+            return BadRequest("Передана некорректная модель данных");
         }
 
         [HttpPost, Route("Token")]
@@ -465,6 +485,43 @@ namespace Backend.Controllers
             if(ModelState.IsValid)
                 return token(model);
             return BadRequest("Передана некорректная модель данных");
+        }
+        [HttpPost, Route("Confirm")]
+        public async Task<ActionResult<object>> Confirm(string token, string password)
+        {
+            if(token == null)
+                return BadRequest("Поле токен не должно быть пустым");
+            if (password == null)
+                return BadRequest("Поле пароль не должно быть пустым");
+            try
+            {
+                var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+                switch (jwt.Claims.ToList()[1].Value)
+                {
+                    case "SysAdmin":
+                        {
+                            var tmp = await _adminService.IsRegisteredAsync(new LoginModel() { Login = jwt.Claims.ToList()[0].Value, Password = password });
+                            return tmp == null ? BadRequest() : true;
+                        }
+                    case "Medic":
+                        {
+                            var tmp = await _medicService.IsRegisteredAsync(new LoginModel() { Login = jwt.Claims.ToList()[0].Value, Password = password });
+                            return tmp == null ? BadRequest() : true;
+                        }
+                    case "Patient":
+                        {
+                            var tmp = await _patientService.IsRegisteredAsync(new LoginModel() { Login = jwt.Claims.ToList()[0].Value, Password = password });
+                            return tmp == null ? BadRequest() : true;
+                        }
+                    default:
+                        return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest(); 
+            }
+
         }
         private object token(LoginModel model)
         {

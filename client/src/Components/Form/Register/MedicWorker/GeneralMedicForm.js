@@ -91,7 +91,10 @@ export default function GeneralMedicForm(props){
         (() => {
             if(genders !== undefined) {
                 props.isLoaded(true);
-                setGendersElement(<CustomSelect idSpan={"error-gender"} genders={genders} onChange ={props.setGender} />);
+                setGendersElement(<CustomSelect idSpan={"error-gender"}
+                                                elements={genders}
+                                                onChange ={props.setGender}
+                                                FirstElement={"Выберите пол"}/>);
             }
         })();
     }, [genders]);

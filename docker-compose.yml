@@ -21,7 +21,7 @@ services:
     networks:
       - olympus-health  
   backend:
-    image: ${DOCKER_REGISTRY-}backend
+    image: backend
     build:
       context: .
       dockerfile: Backend/Dockerfile

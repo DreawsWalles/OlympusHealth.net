@@ -15,9 +15,5 @@ namespace Business.Interop
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<ChiefOfMedicine>? ChiefOfMedicines { get; set; }
-        public ICollection<Doctor> Doctors { get; set; }
-        public ICollection<HeadOfDepartment> HeadOfDepartments { get; set; }
-        public ICollection<MedicRegistrator> MedicRegistrators { get; set; }
     }
 }

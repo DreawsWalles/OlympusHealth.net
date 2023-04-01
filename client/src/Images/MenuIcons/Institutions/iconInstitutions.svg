@@ -1,13 +1,9 @@
-<svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_15_252)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M44.4534 35.0133C48.1067 37.4933 50.6667 40.8533 50.6667 45.3333V53.3333H61.3334V45.3333C61.3334 39.52 51.8134 36.08 44.4534 35.0133Z" fill="white"/>
-<path d="M24 32C29.8911 32 34.6667 27.2244 34.6667 21.3333C34.6667 15.4423 29.8911 10.6667 24 10.6667C18.109 10.6667 13.3334 15.4423 13.3334 21.3333C13.3334 27.2244 18.109 32 24 32Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M40 32C45.8934 32 50.6667 27.2267 50.6667 21.3333C50.6667 15.44 45.8934 10.6667 40 10.6667C38.7467 10.6667 37.5734 10.9333 36.4534 11.3067C38.6667 14.0533 40 17.5467 40 21.3333C40 25.12 38.6667 28.6133 36.4534 31.36C37.5734 31.7333 38.7467 32 40 32Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M24 34.6667C16.88 34.6667 2.66669 38.24 2.66669 45.3333V53.3333H45.3334V45.3333C45.3334 38.24 31.12 34.6667 24 34.6667Z" fill="white"/>
-</g>
+<svg width="73" height="73" viewBox="0 0 73 73" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="73" height="73" fill="url(#pattern0)"/>
 <defs>
-<clipPath id="clip0_15_252">
-<rect width="60" height="60" fill="white"/>
-</clipPath>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="10" height="10">
+<use xlink:href="#image0_1009_6" transform="scale(0.0104167)"/>
+</pattern>
+<image id="image0_1009_6" width="86" height="96" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAADuUlEQVR4nO3cu2sVQRTH8YnkpYgIioiKpEphFAtF1EZQwcLGNOnEiIViJ6iV/gViMMZHmRSxECxUEEVNKi0kBov4KDSIlQgqJPGBmPiVgRGbkN2b2bPz4HwgkGLntztz9u69e+/MGqOUUkoppZRSSimlVEWAzcAl4CXwjfh9c8dqj3lzsicC0ApcBeZI1ywwYPtiEhz8EfLxOKkiuDM/N5dNQtd8+9LNzSzQZWIH9JOvPhM74BX5mjCxA2bI17SJHZkzsSNzJnZkzsSOzJnYkTkTOzJnYkfmTOzInImddAcRbu+bH5x0BxFu75sfnHQHEW7vmx+cdAcRbu+bH5x0BxFu75sfnHQHEW7vmx+cdAcRbu+bH5x0BxFu75sfHJkzsSNzJnZkzsSOzJnYEY8vwBDQC2wDVgMtQDuwFtgOHAduAFMl5wWNmtgR3jjQ08hUQleUw8CbefI+AeeANSYFhD3jjwJNHse+xE3G/ePO+AvACpOSQIM/BmyssA/7gT0mRb4jaRrPt7Owl9fTuwTUXIAxHfxwBfgKdPicLFmqsQC99fQoMTUVYLzspx1gi5sy/2+NmtcasKrzUi1AT4nt2oBrBWvU7EfNK2XuGarOS7kAn4s66AZrtIHdjiyUWXWeKDyZ4vyhEttcX8SuB+rKE4W83hLX6Lmq1oBVnScOedsE16j1SeeJQ94qwTVqE9J54pDXKrhGbVo6TxzylhXsf9oje0o6TxzyOgr2r5cgYTsKCmDvSKt8E640TxzyTgg9KsG22SSdJw5Ppjj/Volt7NcBjeqvK08Unkxxvv3psa3E43LsI2bKemR/sK8rTxSeTLn8YyW2a3W/7y50+Zh1N1otdeelXoDXDXwd3WXfDO1NkftMP+P+v7iYa3TVeakWwDpZT48SgydTPv870FlPrxJSUwH+AHeBrfX0KiE1FOBeFNfaXAuwgI9Ad+j+RY8EZr5lTWDwbyf1zM7QKh78+0V3vUquAO+BlYs4AewMhn3AWWAQeAZMuq8wfgG/3ay6D8ATt80ZYCfQPE9eM7DLbWO3ferafnVZv1z2pNvXoNv33iCv3IoGfw7Y3eC08m7gjucvWLbtMHDA/Q1XkGcvoYfsMcqO/P/BqMLNkvtqcmsC7NkXu3fAEZ/1C3UWoKvEfjYAD0nPA2BdzAV4XnLw7RmVqrfA+lgLcL4gf2kmj0e2E3rbYyzAwYL80+TjVIwF6CzIf0E+xqMrgCnO/0k+fqRYgKxoAQLTAuRWAKWUUkoppZRSSillYvUXVtjM/ogZBwAAAAAASUVORK5CYII="/>
 </defs>
 </svg>

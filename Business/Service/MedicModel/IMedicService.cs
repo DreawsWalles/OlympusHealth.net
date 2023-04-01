@@ -19,24 +19,21 @@ namespace Business.Service.MedicModel
         public ICollection<Medic> FindByFullName(string Name);
         public ICollection<Medic> GetAll();
         public Medic? FindById(Guid id);
+        public void Accept(Guid id);
 
-        public Medic Create(Medic entity);
+        public Medic Create(RegisterModelUser entity);
         public Medic Update(Medic entity);
         public void Remove(Medic entity);
 
-        public ChiefOfMedicine Create(ChiefOfMedicine entity);
         public ChiefOfMedicine Update(ChiefOfMedicine entity);
         public void Remove(ChiefOfMedicine entity);
 
-        public Doctor Create(Doctor entity);
         public Doctor Update(Doctor entity);
         public void Remove(Doctor entity);
 
-        public HeadOfDepartment Create(HeadOfDepartment entity);
         public HeadOfDepartment Update(HeadOfDepartment entity);
         public void Remove(HeadOfDepartment entity);
 
-        public MedicRegistrator Create(MedicRegistrator entity);
         public MedicRegistrator Update(MedicRegistrator entity);
         public void Remove(MedicRegistrator entity);
 
@@ -45,22 +42,19 @@ namespace Business.Service.MedicModel
         public Task<Medic?> FindByLoginAsync(string login);
         public Task<ICollection<Medic>> FindByFullNameAsync(string Name);
 
-        public Task<Medic> CreateAsync(Medic entity);
+        public Task<Medic> CreateAsync(RegisterModelUser entity);
         public Task<Medic> UpdateAsync(Medic entity);
 
-        public Task<ChiefOfMedicine> CreateAsync(ChiefOfMedicine entity);
         public Task<ChiefOfMedicine> UpdateAsync(ChiefOfMedicine entity);
 
-        public Task<Doctor> CreateAsync(Doctor entity);
         public Task<Doctor> UpdateAsync(Doctor entity);
 
-        public Task<HeadOfDepartment> CreateAsync(HeadOfDepartment entity);
         public Task<HeadOfDepartment> UpdateAsync(HeadOfDepartment entity);
 
-        public Task<MedicRegistrator> CreateAsync(MedicRegistrator entity);
         public Task<MedicRegistrator> UpdateAsync(MedicRegistrator entity);
 
         public Task<ICollection<Medic>> GetAllAsync();
         public Task<Medic?> FindByIdAsync(Guid id);
+        public Task AcceptAsync(Guid id);
     }
 }

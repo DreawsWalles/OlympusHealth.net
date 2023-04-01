@@ -1,10 +1,10 @@
 import classes from "./ButtonCross.module.css";
-import classesTip from "../../Hint/Hint.module.css";
-import iconUnable from "../../../Images/Icons/IconCross/CrossUnable.svg";
-import iconActive from "../../../Images/Icons/IconCross/CrossActive.svg";
-import iconHover from "../../../Images/Icons/IconCross/CrossHover.png";
+import classesTip from "../../../Hint/Hint.module.css";
+import iconUnable from "../../../../Images/Icons/IconCross/BlackVersion/CrossUnable.svg";
+import iconActive from "../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
+import iconHover from "../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
 import {useEffect, useState} from "react";
-import Hint from "../../Hint/Hint";
+import Hint from "../../../Hint/Hint";
 export default function ButtonCross(props){
     const [icon, setIcon] = useState(iconActive);
     function mouseEnter(){
@@ -14,19 +14,8 @@ export default function ButtonCross(props){
         setIcon(iconActive);
     }
     function onClick(){
-        if(props.isNeedBlur) {
-            props.onClick();
-            props.setStateMsgBox("active");
-        }
-        else{
-            props.setStateMsgBox("disabled");
-        }
+        props.onClick();
     }
-    useEffect(() =>{
-        (() => {
-
-        })()
-    }, []);
     if(props.isActive === "unable"){
         return (
             <div id={props.id} className={`${classes.content}`}>

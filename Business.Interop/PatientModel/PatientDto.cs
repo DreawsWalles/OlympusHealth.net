@@ -11,7 +11,6 @@ namespace Business.Interop.PatientModel
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string? Patronymic { get; set; }
@@ -22,5 +21,6 @@ namespace Business.Interop.PatientModel
         public virtual GenderDto Gender { get; set; }
         public virtual ICollection<OutpatientCardDto>? OutpatientCards { get; set; }
         public virtual ICollection<ResearchAreaDto>? ResearchAreas { get; set; }
+        public bool Accept { get; set; } = true;
     }
 }

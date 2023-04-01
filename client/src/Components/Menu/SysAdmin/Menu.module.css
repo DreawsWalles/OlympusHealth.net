@@ -4,9 +4,9 @@
     background-color: #A72036;
     left:0;
     top:0;
-    min-width: 130px;
+    min-width: 160px;
     transition: margin .5s;
-    margin: 0 0 0 -133px;
+    margin: 0 0 0 -160px;
 }
 .is_nav_open{
     margin-left: 0;
@@ -19,10 +19,23 @@
     margin-top: 3vh;
     margin-bottom: 3vh;
 }
+.margin_notification{
+    margin-top: 6vh!important;
+    margin-bottom: 4vh !important;
+}
 .menu{
     position: relative;
-    top:10vh;
+    top:17vh;
     width: auto;
+}
+.position_Research_text{
+    margin-top: 6px !important;
+}
+.position_Institutions_text{
+    margin-top: 2px !important;
+}
+.position_Notifications_text{
+    margin-top: -2px !important;
 }
 .content img{
 

@@ -12,7 +12,8 @@ namespace Business.Service
         public enum Action
         {
             Auntification = 0,
-            Create = 1
+            Create = 1,
+            Remove = 2
         }
         public HistoryNode Create(HistoryNode entity, Action action);
         public HistoryNode Update(HistoryNode updateEntity);

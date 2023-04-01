@@ -14,7 +14,6 @@ namespace Business.Interop.DoctorModel
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
         public string Name { get; set; }
         public string Surnane { get; set; }
         public string? Patronymic { get; set; }
@@ -31,5 +30,6 @@ namespace Business.Interop.DoctorModel
         public virtual DepartmentDto? Doctors { get; set; }
         public virtual ICollection<DescriptionDto>? Descriptions { get; set; }
         public virtual ICollection<AccessDto> AccessRights { get; set; }
+        public bool Accept { get; set; }
     }
 }

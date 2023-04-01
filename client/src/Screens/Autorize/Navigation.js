@@ -8,6 +8,7 @@ export default function Navigation(props) {
     const [isAutorize, setIsAutorize] = useState(true);
     const [cookie, setCookie] = useCookies(["user"]);
     const [role, setRole] = useState("");
+
     useEffect(() =>
     {
         (async ()=> {

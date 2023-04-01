@@ -2,6 +2,7 @@
 using Business.Enties;
 using Business.Enties.MedicModel;
 using Business.Enties.PatientModel;
+using Business.Interop;
 using Business.Interop.Autefication;
 using Business.Interop.PatientModel;
 using Business.Repository.DataRepository;
@@ -43,8 +44,6 @@ namespace Business.Service.PatientModel
                 throw new ArgumentNullException(nameof(entity));
             if (entity.Login == null || entity.Login.Trim() == "")
                 throw new ArgumentNullException(nameof(entity.Login));
-            if (entity.Password == null || entity.Password.Trim() == "")
-                throw new ArgumentNullException(nameof(entity.Password));
             if (entity.Name == null || entity.Name.Trim() == "")
                 throw new ArgumentNullException(nameof(entity.Name));
             if (entity.Surname == null || entity.Surname.Trim() == "")
@@ -74,12 +73,57 @@ namespace Business.Service.PatientModel
             if(entity.Gender == null)
                 throw new ArgumentNullException(nameof(entity.Gender));
         }
+        private static void CheckEntity(RegisterModelUser entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            if (entity.Login == null || entity.Login.Trim() == "")
+                throw new ArgumentNullException(nameof(entity.Login));
+            if (entity.Name == null || entity.Name.Trim() == "")
+                throw new ArgumentNullException(nameof(entity.Name));
+            if (entity.Surname == null || entity.Surname.Trim() == "")
+                throw new ArgumentNullException(nameof(entity.Surname));
+            try
+            {
+                if (entity.Email != null && entity.Email.Trim() != "")
+                {
+                    var Address = new System.Net.Mail.MailAddress(entity.Email);
+                    if (Address.Address != entity.Email)
+                        throw new ArgumentException(nameof(entity.Email));
+                }
+            }
+            catch
+            {
+                throw new ArgumentException(nameof(entity.Email));
+            }
+            if (entity.Birthday != null)
+            {
+                DateTime birthday = (DateTime)entity.Birthday;
+                if (birthday.CompareTo(DateTime.Now) >= 0)
+                    throw new ArgumentException(nameof(entity.Birthday));
+            }
+            Regex validatePhoneNumberValid = new("^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$");
+            if (entity.PhoneNumber != null && entity.PhoneNumber != "" && !validatePhoneNumberValid.IsMatch(entity.PhoneNumber))
+                throw new ArgumentException(nameof(entity.PhoneNumber));
+            if (entity.Gender == null)
+                throw new ArgumentNullException(nameof(entity.Gender));
+        }
 
-        public PatientDto Create(PatientDto entity)
+        public PatientDto Create(RegisterModelUser entity)
         {
             CheckEntity(entity);
-            Patient patient = _mapper.Map<Patient>(entity);
-            Gender? gender = _genderRepository.Query().FirstOrDefault(e => e.Id == patient.Gender.Id);
+            Patient patient = new()
+            {
+                Login = entity.Login,
+                Password = entity.Password,
+                Name = entity.Name,
+                Surname = entity.Surname,
+                Patronymic = entity.Patronymic.Trim() == "" ? null : entity.Patronymic,
+                Email = entity?.Email.Trim() == "" ? null : entity.Email,
+                PhoneNumber = entity?.PhoneNumber.Trim() == "" ? null : entity.PhoneNumber,
+                Birthday = entity?.Birthday,
+            };
+            Gender? gender = _genderRepository.Query().FirstOrDefault(e => e.Id == entity.Gender.Id);
             if (gender == null)
                 return null;
             patient.Gender = gender; 
@@ -156,12 +200,21 @@ namespace Business.Service.PatientModel
             return null;
         }
 
-        public async Task<PatientDto> CreateAsync(PatientDto entity)
+        public async Task<PatientDto> CreateAsync(RegisterModelUser entity)
         {
             CheckEntity(entity);
-            Patient patient = _mapper.Map<Patient>(entity);
-            var tmp = await _genderRepository.QueryAsync();
-            Gender? gender = tmp.FirstOrDefault(e => e.Id == patient.Gender.Id);
+            Patient patient = new()
+            {
+                Login = entity.Login,
+                Password = entity.Password,
+                Name = entity.Name,
+                Surname = entity.Surname,
+                Patronymic = entity.Patronymic.Trim() == "" ? null : entity.Patronymic,
+                Email = entity?.Email.Trim() == "" ? null : entity.Email,
+                PhoneNumber = entity?.PhoneNumber.Trim() == "" ? null : entity.PhoneNumber,
+                Birthday = entity?.Birthday,
+            };
+            Gender? gender = (await _genderRepository.QueryAsync()).FirstOrDefault(e => e.Id == entity.Gender.Id);
             if (gender == null)
                 return null;
             patient.Gender = gender;
@@ -189,7 +242,7 @@ namespace Business.Service.PatientModel
         {
             if (id.CompareTo(new Guid()) == 0)
                 throw new ArithmeticException(nameof(id));
-            var list = await _genderRepository.QueryAsync();
+            var list = await _patientRepository.QueryAsync();
             return _mapper.Map<PatientDto>(list.FirstOrDefault(e => e.Id == id));
         }
 
@@ -228,6 +281,24 @@ namespace Business.Service.PatientModel
                 return _mapper.Map<PatientDto>(tmp == PasswordVerificationResult.Success ? user : null);
             }
             return null;
+        }
+
+        public PatientDto? FindByLogin(string login)
+        {
+            if (login == null)
+                throw new ArgumentNullException(nameof(login));
+            if (login.Trim() == "")
+                return null;
+            return _mapper.Map<PatientDto>(_patientRepository.Query().FirstOrDefault(element => element.Login.Contains(login, StringComparison.InvariantCultureIgnoreCase)));
+        }
+
+        public async Task<PatientDto?> FindByLoginAsync(string login)
+        {
+            if (login == null)
+                throw new ArgumentNullException(nameof(login));
+            if (login.Trim() == "")
+                return null;
+            return _mapper.Map<PatientDto>((await _patientRepository.QueryAsync()).FirstOrDefault(element => element.Login.Contains(login, StringComparison.InvariantCultureIgnoreCase)));
         }
     }
 }

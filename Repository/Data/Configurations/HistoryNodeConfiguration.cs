@@ -20,17 +20,17 @@ namespace Repository.Data.Configurations
 
             builder.HasOne(e => e.SysAdmin)
                 .WithMany(e => e.HistoryNodes)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey("sys_admin_id");
 
             builder.HasOne(e => e.Patient)
                 .WithMany(e => e.HistoryNodes)
-                .OnDelete(DeleteBehavior.SetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey("patient_id");
 
             builder.HasOne(e => e.Medic)
                 .WithMany(e => e.HistoryNodes)
-                .OnDelete(DeleteBehavior.SetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey("medic_id");
         }
     }

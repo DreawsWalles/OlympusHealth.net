@@ -33,7 +33,10 @@ export default function PatientForm(props){
         (() => {
             if(genders !== undefined) {
                 props.isLoaded(true);
-                setGendersElement(<CustomSelect idSpan={"error-gender"} genders={genders} onChange ={setGender} />);
+                setGendersElement(<CustomSelect idSpan={"error-gender"}
+                                                elements={genders}
+                                                onChange ={setGender}
+                                                FirstElement={"Выберите пол"}/>);
             }
         })();
     }, [genders]);
@@ -120,7 +123,6 @@ export default function PatientForm(props){
         let date = new Date(e);
         return date < new Date();
     }
-    const [cookie, setCookie] = useCookies(["user"]);
     async function submitForms(){
         debugger
         props.isLoaded(false);
@@ -200,8 +202,8 @@ export default function PatientForm(props){
             props.isLoaded(true);
             return;
         }
-        let answer;
-        let resultFetch = await RegisterUser(JSON.stringify({
+        debugger
+        let result = await props.registration(JSON.stringify({
             login:login,
             password:password,
             name:name,
@@ -212,16 +214,12 @@ export default function PatientForm(props){
             birthday:dateBirthday,
             gender:genderObj,
             role:"patient"
-        }), answer);
+        }));
         props.isLoaded(true);
-        if(resultFetch === undefined) {
+        if(!result) {
             hideError("error-gender", "Невозможно зарегистрировать аккаунт. Попробуйте позже");
             return;
         }
-        let tmp = resultFetch.access_token;
-        setCookie("user",`${resultFetch.access_token}`);
-        props.setRegistered(true);
-
     }
     return(
         <div className={classes.containerPatient}>

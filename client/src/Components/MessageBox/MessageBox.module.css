@@ -1,0 +1,57 @@
+.content{
+    position: absolute;
+    top: 35vh;
+    left: 37vw;
+    border: 1px solid #A72036;
+    z-index: 10;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 15px;
+    box-shadow: 0 0 31px #A72036;
+}
+.none{
+    display: none;
+}
+.attribute{
+    width: 19px;
+    height: auto;
+}
+.positionBtnCross{
+    display: flex;
+    justify-content: end;
+}
+.positionBtnTitle{
+    display: flex;
+    justify-content: start;
+}
+.attributeHintCross{
+    width: 65px !important;
+    margin-left: -32px !important;
+}
+.title{
+    font-size: 23px;
+}
+.text{
+    max-width: 85%;
+}
+.positionText{
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 5px !important;
+    text-align: center;
+}
+.positionBtn{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px !important;
+}
+.btn{
+}
+.btnOne{
+    position: relative;
+    right: -36px;
+}
+.btnTwo{
+    position: relative;
+    left: -44px;
+}

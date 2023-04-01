@@ -8,6 +8,18 @@ export default function ButtonGlobal(props){
                 <div onClick={props.onClick} className={`${classes.content} ${classes.colorWhite}`}>
                     <div className={classes.text}>{props.text}</div>
                 </div>
+            );
+        case "accept":
+            return (
+                <div onClick={props.onClick} className={`${classes.content} ${classes.colorGreen} ${props.size}`}>
+                    <div className={classes.text}>{props.text}</div>
+                </div>
+            )
+        case "cancel":
+            return (
+                <div onClick={props.onClick} className={`${classes.content} ${classes.colorRed} ${props.size}`}>
+                    <div className={classes.text}>{props.text}</div>
+                </div>
             )
     }
 

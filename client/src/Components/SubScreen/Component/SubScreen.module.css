@@ -1,0 +1,90 @@
+.subScreen{
+    background-color: white;
+    z-index: 2;
+    min-height: 83vh;
+    min-width: 70vw;
+    max-height: 83vh;
+    max-width: 70vw;
+    position: absolute;
+    top:9vh;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #A72036;
+    border-radius: 15px;
+}
+.buttons_close{
+    display: flex;
+    justify-content: end;
+    position: relative;
+    top:-25px;
+    left: 25px;
+}
+.buttons_GoBack{
+    display: flex;
+    width: 70px;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top:-20px;
+    left: 12px;
+}
+.buttons_GoUp{
+    display: flex;
+    width: 70px;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom:29px;
+    left: 12px;
+}
+.none{
+    display: none;
+    transition: all 0.2s ease-in-out;
+}
+.content{
+    position: absolute !important;
+    left:8%;
+    top:71px;
+    min-height: 85%;
+    max-height: 85%;
+    min-width: 85%;
+    max-width: 85%;
+}
+.showGoUpOn{
+    transition: 1s;
+    animation: showGoUpOn 0.5s 1;
+    animation-fill-mode: forwards;
+}
+.showGoUpOff{
+    transition: 1s;
+    animation: showGoUpOff 0.5s 1;
+    animation-fill-mode: forwards;
+}
+@keyframes showGoUpOff {
+    0%{
+        opacity: 100;
+    }
+    100%{
+        opacity: 0;
+        display: none;
+    }
+}
+@keyframes showGoUpOn {
+    0%{
+        opacity: 0;
+        display: flex;
+    }
+    100%{
+        opacity: 100;
+    }
+}
+.scrollThumb{
+    background-color: #A72036 !important;
+}
+.scrollTrack{
+    background-color: transparent !important;
+    transition: background-color 0.2s ease-in-out;
+}
+.scrollTrack:hover{
+    background-color:rgba(167, 32, 54, 0.2) !important;
+}

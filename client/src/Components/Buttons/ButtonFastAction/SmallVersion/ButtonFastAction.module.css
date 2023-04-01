@@ -1,15 +1,18 @@
 .content{
     background-color: #A72036;
     font-family: MyArchive;
-    font-size: 32px;
+    font-size: 18px;
     color: white;
-    min-width: 550px;
-    min-height: 100px;
+    min-width: 335px;
+    min-height: 35px;
     display: flex;
     align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 15px;
+    padding-left: 30px !important;
+    padding-right: 15px !important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 .content:hover{
     transition: .2s;
@@ -18,6 +21,10 @@
 .element{
     display: flex;
     align-items: center;
+}
+.element img{
+    width: 26px;
+    height: auto;
 }
 .flex_start{
     justify-content: flex-start;

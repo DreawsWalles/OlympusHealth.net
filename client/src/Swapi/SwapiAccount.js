@@ -133,7 +133,6 @@ export async function GetRole(token){
 
 export async function IsAccept(token){
     let answer = undefined;
-    debugger
     await fetch(`${Api}${Controllers["Account"]}IsAccept?token=${token}`, {
         method: "Post",
         headers:{
@@ -176,4 +175,43 @@ export async function RegisterSysAdmin(data, answer)
         return answer;
     }
     return answer;
+}
+export async function CheckToken(token){
+    let status = 200;
+    await fetch(`${Api}${Controllers["Account"]}CheckToken?token=${token}`, {
+        method:"Post",
+        headers:{
+            'Accept': 'text/plain',
+        },
+    })
+        .then(function (response) {
+            status = response.status;
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    if(status === 200)
+        return true;
+    return false;
+}
+export async function ConfirmAction(token, password){
+    let status = 200;
+    await fetch(`${Api}${Controllers["Account"]}Confirm?token=${token}&password=${password}`, {
+        method:"Post",
+        headers:{
+            'Accept': 'text/plain',
+        },
+    })
+        .then(function(response) {
+            status = response.status;
+            return response.json();
+        })
+        .catch(e => {
+                console.error(e);
+            }
+        )
+    if(status === 200){
+        return true;
+    }
+    return false;
 }

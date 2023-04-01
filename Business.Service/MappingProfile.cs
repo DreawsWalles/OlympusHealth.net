@@ -36,6 +36,9 @@ namespace Business.Service
             CreateMap<Gender, GenderDto>();
             CreateMap<GenderDto, Gender>();
 
+            CreateMap<SysAdmin, SysAdminDto>();
+            CreateMap<SysAdminDto, SysAdmin>();     
+
             #region Address
             CreateMap<Street, StreetDto>();
             CreateMap<StreetDto, Street>();

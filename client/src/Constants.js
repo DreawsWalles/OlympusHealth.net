@@ -6,5 +6,6 @@ export const Controllers =
         Address : "Address/",
         Gender : "Gender/",
         RoleMedic: "RoleMedic/",
-        Notifications: "Notification/"
-    }
+        Notifications: "Notification/",
+        SysAdmin: "SysAdmin/"
+    };

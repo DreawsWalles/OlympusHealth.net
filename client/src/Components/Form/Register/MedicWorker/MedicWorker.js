@@ -6,8 +6,6 @@ import {GetById} from "../../../../Swapi/SwapiGender";
 import {GetIdByName} from "../../../../Swapi/SwapiRoleMedic";
 
 export default function MedicWorker(props){
-    const [cookie, setCookie] = useCookies(["user"]);
-
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState(" ");
@@ -145,8 +143,8 @@ export default function MedicWorker(props){
             props.isLoaded(true);
             return;
         }
-        let answer;
-        let resultFetch = await RegisterUser(JSON.stringify({
+        debugger
+        let result = await props.registration(JSON.stringify({
             login:login,
             password:password,
             name:name,
@@ -156,8 +154,7 @@ export default function MedicWorker(props){
             phoneNumber:phoneNumber,
             birthday:dateBirthday,
             gender:genderObj,
-            street:
-                {
+            street:{
                     name:street,
                     numberOfHouse:numberHouse
                 },
@@ -166,19 +163,15 @@ export default function MedicWorker(props){
             country: country,
             role:"medic",
             roleMedic:{
-                id:roleKey,
-                name:props.choice
+                id: roleKey,
+                name: props.choice
             }
         }));
         props.isLoaded(true);
-        debugger
-        if(resultFetch === undefined) {
+        if(!result) {
             hideError("error-NumberHouse", "Невозможно зарегистрировать аккаунт. Попробуйте позже");
             return;
         }
-        debugger
-        setCookie("user",`${resultFetch.access_token}`);
-        props.setRegistered(true);
     }
     return(<GeneralMedicForm isLoaded={props.isLoaded} setRegistered={props.setRegistered} textButton={props.textButton}
                              login={login} password={password} setLogin={setLogin} setPassword={setPassword} setName={setName}

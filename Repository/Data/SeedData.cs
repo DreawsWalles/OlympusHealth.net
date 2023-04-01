@@ -23,7 +23,8 @@ namespace Repository.Data
                     SysAdmin tmp = new SysAdmin()
                     {
                         Login = "admin",
-                        Password = "admin"
+                        Password = "admin",
+                        Accept = true
                     };
                     tmp.Password = new Microsoft.AspNetCore.Identity.PasswordHasher<SysAdmin>().HashPassword(tmp, "admin");
                     contex.Add(tmp);

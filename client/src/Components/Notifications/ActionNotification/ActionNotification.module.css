@@ -1,0 +1,101 @@
+.content{
+    z-index: 2;
+    border-radius: 7px;
+    position: absolute;
+    top:90%;
+    left: 50%;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 6px;
+    min-width: 530px;
+    max-width: 600px;
+    margin-left: -265px !important;
+    color: white;
+    opacity: 0;
+}
+.icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon img{
+    width: 40px;
+    height: 40px;
+}
+.text{
+    display: block;
+}
+.title{
+    font-family: MyArchive;
+    font-size: 26px;
+}
+.message{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    margin-top: -10px !important;
+    max-width: 400px;
+}
+.attributeCross{
+    width: 21px !important;
+    height: auto !important;
+}
+.attributeHintCross{
+    width: 65px !important;
+    margin-left: -32px !important;
+}
+.btnCross{
+    display: flex;
+    align-items: center;
+}
+.error{
+    box-shadow: 0 0 20px #A72036;
+    background-color: #A72036;
+}
+.success{
+    box-shadow: 0 0 20px #06C02F;
+    background-color: #025D0B;
+}
+.show{
+    transition: 1s;
+    animation: show 1s 1;
+    animation-fill-mode: forwards;
+}
+.fastShow{
+    transition: 1s;
+    animation: fastShow .5s 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fastShow {
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes show {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.hide{
+    animation-delay: 1s;
+    opacity: 0;
+    transition: 2s;
+    animation: hide 3s 1;
+    animation-fill-mode: forwards;
+}
+.none{
+    display: none !important;
+}
+@keyframes hide {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}

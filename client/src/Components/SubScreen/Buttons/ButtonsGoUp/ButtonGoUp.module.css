@@ -1,0 +1,24 @@
+.content{
+    border-radius: 50%;
+    transition: all 0.1s ease-in-out;
+}
+.content:hover .iconColorBack{
+    fill: #A72036;
+    box-shadow: 0 0 25px #A72036;
+}
+.content:hover{
+    cursor: pointer;
+    box-shadow: 0 0 5px #A72036;
+}
+.iconColorMain{
+    box-shadow: 10px 10px 25px #A72036;
+}
+.iconColorBack{
+    transition: all 0.15s ease-in-out;
+    fill: rgba(167, 32, 54, 0.8);
+    box-shadow: 10px 10px 25px #A72036;
+}
+.iconSize{
+    width: 40px;
+    height: 40px;
+}

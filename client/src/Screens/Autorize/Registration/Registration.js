@@ -1,4 +1,4 @@
-import Logo from "../../Images/logo.svg";
+import Logo from "../../../Images/logo.svg";
 import {useEffect, useState} from "react";
 import DefaultComponent from "../../../Components/Form/Register/DefaultComponent/DefaultComponent";
 import PatientForm from "../../../Components/Form/Register/PatientForm/PatientForm";
@@ -8,50 +8,64 @@ import {Navigate} from "react-router-dom";
 import classesContent from "./Registration.module.css"
 import classesLoader from "../../../Components/Loader/Loader.module.css"
 import SysAdminForm from "../../../Components/Form/Register/SysAdmin/SysAdminForm";
+import {RegisterUser} from "../../../Swapi/SwapiAccount";
+import {useCookies} from "react-cookie";
+import CustomSelect from "../../../Components/Selects/CustomSelect/CustomSelect";
 
 export default function Registration(props){
     document.title = "Регистрация";
     const [registered, setRegistered] = useState(false);
     const [type, setType] = useState(<DefaultComponent />);
     const [isLoaded, setIsLoaded] = useState(true);
+    const [cookie, setCookie] = useCookies(["user"]);
     useEffect(() => {
         (() => {
             debugger
             let load = document.getElementById("load");
             let content = document.getElementById("content");
-            if(isLoaded){
-                debugger
-                load.classList.add(classesLoader.none);
-                content.classList.remove(classesContent.none);
-            }
-            else {
-                load.classList.remove(classesLoader.none);
-                content.classList.add(classesContent.none);
+            if(load !== null && content !== null) {
+                if (isLoaded) {
+                    debugger
+                    load.classList.add(classesLoader.none);
+                    content.classList.remove(classesContent.none);
+                } else {
+                    load.classList.remove(classesLoader.none);
+                    content.classList.add(classesContent.none);
+                }
             }
         })();
     }, [isLoaded]);
+    async function registrationUser(body){
+        debugger
+        let resultFetch = await RegisterUser(body);
+        if(resultFetch === undefined){
+            return false;
+        }
+        setCookie("user",`${resultFetch.access_token}`);
+        setRegistered(true);
+    }
     function handleOnChangeSelect(e){
         console.log(e.target.value);
         debugger
         switch (e.target.value)
         {
             case '1':
-                setType(<PatientForm isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}  />)
+                setType(<PatientForm isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}  />)
                 break;
             case '2':
-                setType(<MedicWorker choice={'Doctor'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                setType(<MedicWorker choice={'Doctor'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
                 break;
             case '3':
-                setType(<MedicWorker choice={'Chief of medical'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                setType(<MedicWorker choice={'Chief of medical'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
                 break;
             case '4':
-                setType(<MedicWorker choice={'HeadOfDepartment'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                setType(<MedicWorker choice={'HeadOfDepartment'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
                 break;
             case '5':
-                setType(<MedicWorker choice={'MedicRegistrator'} isLoaded={setIsLoaded} setRegistered={setRegistered} textButton={"Добавить"}/>)
+                setType(<MedicWorker choice={'MedicRegistrator'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
                 break;
             case '6':
-                setType(<SysAdminForm choice={"SysAdmin"} setRegistered={setRegistered} textButton={"Добавить"} />)
+                setType(<SysAdminForm choice={"SysAdmin"} registration={registrationUser} textButton={"Зарегестрироваться"} />)
                 break;
             default:
                 setIsLoaded(true);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Enties;
+using Business.Interop;
 using Business.Interop.Autefication;
 using Business.Repository.DataRepository;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +16,13 @@ namespace Business.Service
     public class SysAdminService : ISysAdminService 
     {
         private readonly ISysAdminRepository _sysAdminRepository;
-
-        public SysAdminService(ISysAdminRepository sysAdminRepository)
+        private readonly IHistoryNodeRepository _historyNodeRepository;
+        private readonly IMapper _mapper;
+        public SysAdminService(ISysAdminRepository sysAdminRepository, IHistoryNodeRepository historyNodeRepository, IMapper mapper)
         {
             _sysAdminRepository = sysAdminRepository ?? throw new ArgumentNullException(nameof(sysAdminRepository));
+            _historyNodeRepository = historyNodeRepository ?? throw new ArgumentNullException(nameof(historyNodeRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         private static void CheckEntity(SysAdmin sysAdmin)
@@ -48,7 +52,30 @@ namespace Business.Service
             if (entity.Password == null || entity.Password.Trim() == "" )
                 throw new ArgumentNullException(nameof(entity.Password));
         }
-        public SysAdmin Create(RegisterModelSysAdmin entity)
+
+        public void Accept(Guid id)
+        {
+            if(id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(id));
+            var entity = _sysAdminRepository.Query().FirstOrDefault(x => x.Id == id);
+            if(entity == null)
+                throw new ArgumentException(nameof(id));
+            entity.Accept = true;
+            _sysAdminRepository.Update(entity);
+        }
+
+        public async Task AcceptAsync(Guid id)
+        {
+            if (id.CompareTo(new Guid()) == 0)
+                throw new ArgumentException(nameof(id));
+            var entity = (await _sysAdminRepository.QueryAsync()).FirstOrDefault(x => x.Id == id);
+            if (entity == null)
+                throw new ArgumentException(nameof(id));
+            entity.Accept = true;
+            await _sysAdminRepository.CreateOrUpdateAsync(entity);
+        }
+
+        public SysAdminDto Create(RegisterModelSysAdmin entity)
         {
             checkEntity(entity);
             SysAdmin sysAdmin = new()
@@ -58,10 +85,10 @@ namespace Business.Service
             };
             sysAdmin.Password = new PasswordHasher<SysAdmin>().HashPassword(sysAdmin, entity.Password);
             _sysAdminRepository.Create(sysAdmin);
-            return sysAdmin;
+            return _mapper.Map<SysAdminDto>(sysAdmin);
         }
 
-        public async Task<SysAdmin> CreateAsync(RegisterModelSysAdmin entity)
+        public async Task<SysAdminDto> CreateAsync(RegisterModelSysAdmin entity)
         {
             checkEntity(entity);
             SysAdmin sysAdmin = new()
@@ -71,55 +98,63 @@ namespace Business.Service
             };
             sysAdmin.Password = new PasswordHasher<SysAdmin>().HashPassword(sysAdmin, entity.Password);
             await _sysAdminRepository.CreateAsync(sysAdmin);
-            return sysAdmin;
+            return _mapper.Map<SysAdminDto>(sysAdmin);
         }
 
-        public ICollection<SysAdmin> GetAll()
+        public SysAdminDto? FindByLogin(string login)
         {
-            return _sysAdminRepository.Query();
+            if (login == null)
+                throw new ArgumentNullException(nameof(login));
+            if (login.Trim() == "")
+                return null;
+            return _mapper.Map<SysAdminDto>(_sysAdminRepository.Query().FirstOrDefault(element => element.Login.Contains(login, StringComparison.InvariantCultureIgnoreCase)));
         }
 
-        public async Task<ICollection<SysAdmin>> GetAllAsync()
+        public async Task<SysAdminDto?> FindByLoginAsync(string login)
         {
-            return await _sysAdminRepository.QueryAsync();
+            if (login == null)
+                throw new ArgumentNullException(nameof(login));
+            if (login.Trim() == "")
+                return null;
+            return _mapper.Map<SysAdminDto>((await _sysAdminRepository.QueryAsync()).FirstOrDefault(element => element.Login.Contains(login, StringComparison.InvariantCultureIgnoreCase)));
         }
 
-        public SysAdmin? GetById(Guid id)
+        public ICollection<SysAdminDto> GetAll()
+        {
+            return _mapper.Map<ICollection<SysAdmin>, ICollection<SysAdminDto>>(_sysAdminRepository.Query());
+        }
+
+        public async Task<ICollection<SysAdminDto>> GetAllAsync()
+        {
+            return _mapper.Map<ICollection<SysAdmin>, ICollection<SysAdminDto>>(await _sysAdminRepository.QueryAsync());
+        }
+
+        public SysAdminDto? GetById(Guid id)
         {
             if (id.CompareTo(new Guid()) == 0)
                 throw new ArgumentException("id");
-            return _sysAdminRepository.Query().FirstOrDefault(e => e.Id == id); 
+            return _mapper.Map<SysAdminDto>(_sysAdminRepository.Query().FirstOrDefault(e => e.Id == id)); 
         }
 
-        public async Task<SysAdmin?> GetByIdAsync(Guid id)
+        public async Task<SysAdminDto?> GetByIdAsync(Guid id)
         {
             if (id.CompareTo(new Guid()) == 0)
                 throw new ArgumentException("id");
             var query = await _sysAdminRepository.QueryAsync();
-            return query.FirstOrDefault(e => e.Id == id);
+            return _mapper.Map<SysAdminDto>(query.FirstOrDefault(e => e.Id == id));
         }
 
-        public SysAdmin? GetByLogin(string login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<SysAdmin?> GetByLoginAsync(string login)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SysAdmin? IsRegistered(LoginModel model)
+        public SysAdminDto? IsRegistered(LoginModel model)
         {
             checkEntity(model);
             SysAdmin sysAdmin = _sysAdminRepository.Query().FirstOrDefault(e => e.Login.Contains(model.Login, StringComparison.InvariantCultureIgnoreCase));
             if (sysAdmin == null)
                 return null;
             var tmp = new PasswordHasher<SysAdmin>().VerifyHashedPassword(sysAdmin, sysAdmin.Password, model.Password);
-            return tmp == PasswordVerificationResult.Success ? sysAdmin : null;
+            return tmp == PasswordVerificationResult.Success ? _mapper.Map<SysAdminDto>(sysAdmin) : null;
         }
 
-        public async Task<SysAdmin?> IsRegisteredAsync(LoginModel model)
+        public async Task<SysAdminDto?> IsRegisteredAsync(LoginModel model)
         {
             checkEntity(model);
             var query = await _sysAdminRepository.QueryAsync();
@@ -127,33 +162,38 @@ namespace Business.Service
             if (sysAdmin == null)
                 return null;
             var tmp = new PasswordHasher<SysAdmin>().VerifyHashedPassword(sysAdmin, sysAdmin.Password, model.Password);
-            return tmp == PasswordVerificationResult.Success ? sysAdmin : null;
+            return tmp == PasswordVerificationResult.Success ? _mapper.Map<SysAdminDto>(sysAdmin) : null;
         }
 
-        public void Remove(SysAdmin sysAdmin)
+        public void Remove(SysAdminDto sysAdmin)
         {
-            CheckEntity(sysAdmin);
             if (sysAdmin.Id.CompareTo(new Guid()) == 0)
                 throw new ArgumentNullException(nameof(sysAdmin.Id));
-            _sysAdminRepository.Delete(sysAdmin);
+            var user = _sysAdminRepository.Query().FirstOrDefault(e => e.Id == sysAdmin.Id);
+            //var histories = _historyNodeRepository.Query().Where(e => e.SysAdmin.Id == user.Id);
+            //foreach (var node in histories)
+            //    _historyNodeRepository.Delete(node);
+            _sysAdminRepository.Delete(user);
         }
 
-        public SysAdmin Update(SysAdmin updateEntity)
+        public SysAdminDto Update(SysAdminDto updateEntity)
         {
-            CheckEntity(updateEntity);
-            if (updateEntity.Id.CompareTo(new Guid()) == 0)
-                throw new ArgumentNullException(nameof(updateEntity.Id));
-            _sysAdminRepository.Update(updateEntity);
-            return updateEntity;
+            var user = _mapper.Map<SysAdmin>(updateEntity);
+            CheckEntity(user);
+            if (user.Id.CompareTo(new Guid()) == 0)
+                throw new ArgumentNullException(nameof(user.Id));
+            _sysAdminRepository.Update(user);
+            return _mapper.Map<SysAdminDto>(user);
         }
 
-        public async Task<SysAdmin> UpdateAsync(SysAdmin updateEntity)
+        public async Task<SysAdminDto> UpdateAsync(SysAdminDto updateEntity)
         {
-            CheckEntity(updateEntity);
-            if (updateEntity.Id.CompareTo(new Guid()) == 0)
-                throw new ArgumentNullException(nameof(updateEntity.Id));
-            await _sysAdminRepository.CreateOrUpdateAsync(updateEntity);
-            return updateEntity;
+            var user = _mapper.Map<SysAdmin>(updateEntity);
+            CheckEntity(user);
+            if (user.Id.CompareTo(new Guid()) == 0)
+                throw new ArgumentNullException(nameof(user.Id));
+            await _sysAdminRepository.CreateOrUpdateAsync(user);
+            return _mapper.Map<SysAdminDto>(user);
         }
     }
 }
