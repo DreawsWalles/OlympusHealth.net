@@ -1,0 +1,52 @@
+.content{
+    min-width: 90%;
+    font-family: "Century Gothic";
+}
+.title{
+    font-size: 28px;
+}
+.flex_end{
+    display: flex;
+    justify-content: flex-end;
+}
+.flex_center{
+    display: flex;
+    justify-content: center;
+}
+.flex_start{
+    display: flex;
+    justify-content: flex-start;
+}
+.align_center{
+    display: flex;
+    align-content: center;
+}
+.padding_right_null{
+    padding-right: 0;
+}
+.row{
+    margin-top: 0.3vh;
+    margin-bottom: 0.3vh;
+}
+.line{
+    width: 100%;
+    border: 1px solid #A72036;
+    margin-top: -0.7vh !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.border{
+    border: 1px solid black;
+}
+
+.sizeCheckBox{
+    width: 2em;
+    height: 2em;
+}
+.attributeHintCross{
+    width: 180px !important;
+    margin-left: -91px !important;
+}
+.none{
+    display: none;
+}

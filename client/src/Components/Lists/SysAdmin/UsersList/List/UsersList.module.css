@@ -1,0 +1,20 @@
+.element{
+    min-height: 26px;
+    min-width: 1168px;
+    background-color: rebeccapurple;
+}
+.buttons{
+    display: flex;
+    margin-top: 2vh;
+}
+.buttonBack{
+    display: flex;
+    justify-content: flex-end;
+}
+.buttonNext{
+    display: flex;
+    justify-content: flex-start;
+}
+.list{
+  min-height: 66vh;
+}

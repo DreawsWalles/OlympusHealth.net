@@ -1,0 +1,27 @@
+.content{
+    width: 96px !important;
+    height: 37px;
+    position: relative;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+.colorWhite{
+    background-color: white;
+    border: 1px solid #A72036;
+    color: black;
+}
+.colorWhite:hover{
+    box-shadow: 0 0 10px #A72036;
+}
+.colorGreen{
+    background-color: #31DB16;
+    color:white;
+    border: 1px solid #06C02F;
+}
