@@ -1,4 +1,4 @@
-import {CheckLogin} from "../Swapi/SwapiAccount";
+import {CheckLogin} from "../Swapi/SwapiAccount/SwapiAccount";
 
 export default async function GenerateLogin(){
     let rug = require('random-username-generator');

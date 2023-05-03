@@ -82,9 +82,9 @@ namespace Backend.Controllers
         {
             if (ModelState.IsValid)
             {
-                SysAdminDto admin;
-                Medic medic;
-                PatientDto patient;
+                SysAdminDto? admin;
+                Medic? medic;
+                PatientDto? patient;
                 if ((admin = await _adminService.IsRegisteredAsync(model)) != null)
                 {
                     model.Role = "SysAdmin";

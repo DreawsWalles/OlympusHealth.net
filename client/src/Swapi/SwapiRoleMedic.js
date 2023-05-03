@@ -1,8 +1,8 @@
 import {Api, Controllers} from "../Constants";
 
-export async function GetIdByName(name){
+export async function GetIdByName(name: string): Promise<string | null>{
     let result;
-    debugger
+    let status;
     await fetch(`${Api}${Controllers["RoleMedic"]}GetRole?name=${name}`,{
         method: "Post",
         headers:{
@@ -10,10 +10,11 @@ export async function GetIdByName(name){
         }
     })
         .then(function (response){
+            status = response.status;
             return response.json()
         })
         .then(function (json){
             result = json;
         });
-    return result;
+    return status === 200 ?  result : null;
 }

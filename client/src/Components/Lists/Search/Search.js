@@ -1,9 +1,6 @@
 import classes from "./Search.module.css";
-import iconWhite from "../../../Images/Icons/IconSearch/iconSearchWhite.svg";
-import iconDarkred from "../../../Images/Icons/IconSearch/iconSearchDarkred.svg";
-import arrow from "../../../Images/MenuIcons/Arrow/ArrowUp.svg"
-import {useState} from "react";
-export default function Search(props){
+import {ISearchProps} from "./ISearchProps";
+export default function Search(props: ISearchProps){
     function expand() {
         let search = document.getElementById(classes.search);
         let input = document.getElementById(classes.input);
@@ -22,7 +19,7 @@ export default function Search(props){
         props.onChange(value);
     }
     return(
-        <div className={`${classes.content}`}>
+        <div id={props.id} className={`${classes.content}`}>
             <input type="text" onChange={onChange} name="input" id={classes.input} className={classes.input} />
             <button onClick={expand} type="reset" id={classes.search} className={`${classes.search}`}></button>
         </div>

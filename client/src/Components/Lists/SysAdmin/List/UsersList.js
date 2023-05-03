@@ -1,13 +1,11 @@
 import {useEffect, useState} from "react";
 import classes from "./UsersList.module.css";
 
-import classesButtonBack from "../../../../Buttons/ButtonsList/ButtonBack/ButtonBack.module.css";
 import Row from "../Row/Row";
 import {IUserListProps} from "./IUserListProps";
 import {EntityRow} from "../EntityRow";
-import {AllUsers} from "../../../../../Swapi/SwapiSysAdmin/Entities";
-import Button from "../../../../Buttons/Button/Button";
-import {element} from "prop-types";
+import {AllUsers} from "../../../../Swapi/SwapiSysAdmin/Entities";
+import Button from "../../../Buttons/Button/Button";
 
 export default function UsersList(props: IUserListProps){
     const ids = {

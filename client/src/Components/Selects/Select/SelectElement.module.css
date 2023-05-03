@@ -1,0 +1,17 @@
+.content{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background-color 0.2s ease-in-out;
+    cursor: pointer;
+}
+.content:hover{
+    background-color: rgba(212, 127, 141, 0.2);;
+}
+.text{
+    font-size: 22px;
+    font-family: "Century Gothic" !important;
+    margin-right: 10px;
+}

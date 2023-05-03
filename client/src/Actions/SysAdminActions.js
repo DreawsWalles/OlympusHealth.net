@@ -1,4 +1,4 @@
-import {AcceptUser, RemoveAllUsers, RemoveUser, RemoveUsers} from "../Swapi/SwapiSysAdmin";
+import {AcceptUser, RemoveAllUsers, RemoveUser, RemoveUsers} from "../Swapi/SwapiSysAdmin/SwapiSysAdmin";
 
 export async function Actions(action)
 {

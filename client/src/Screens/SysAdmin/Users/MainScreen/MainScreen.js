@@ -1,112 +1,87 @@
-import ButtonFastAction from "../../../../Components/Buttons/ButtonFastAction/SmallVersion/ButtonFastAction";
 import iconAddPerson from "../../../../Images/MenuIcons/AddPerson/iconAddPerson.svg";
 import classes from "./MainScreen.module.css";
-import ButtonCross from "../../../../Components/Buttons/ButtonCross/ButtonCrossBlackVersion/ButtonCross";
-import GlobalCheckbox from "../../../../Components/Checkboxes/GlobalCheckbox/GlobalCheckbox";
 import {useEffect, useState} from "react";
-import {GetAllUsers} from "../../../../Swapi/SwapiSysAdmin";
+import {GetAllUsers} from "../../../../Swapi/SwapiSysAdmin/SwapiSysAdmin";
 import {useCookies} from "react-cookie";
-import UsersList from "../../../../Components/Lists/SysAdmin/UsersList/List/UsersList";
+import UsersList from "../../../../Components/Lists/SysAdmin/List/UsersList";
 import MessageBox from "../../../../Components/MessageBox/MessageBox";
 import Search from "../../../../Components/Lists/Search/Search";
-import SearchUsersList from "../../../../Components/Lists/SysAdmin/SearchUsersList/List/SearchUsersList";
-import SubScreen from "../../../../Components/SubScreen/Component/SubScreen";
+import {TwoComponentButton} from "../../../../Components/Buttons/TwoComponentButton/TwoComponentButton";
+import ButtonWithHintAndIcon from "../../../../Components/Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
+import iconCrossActive from "../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
+import iconCrossHover from "../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
+import iconCrossDisable from "../../../../Images/Icons/IconCross/BlackVersion/CrossDisable.svg";
+import {AttributeIcon} from "../../../../Components/Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
+import {AttributeHint} from "../../../../Components/Hint/AttributeHint";
+import {AllUsers} from "../../../../Swapi/SwapiSysAdmin/Entities";
+import type {IMainScreenProps} from "./IMainScreenProps";
+import Checkbox from "../../../../Components/Checkboxes/Checkbox/Checkbox";
 
-export default function MainScreen(props){
+export default function MainScreen(props: IMainScreenProps){
+    const ids = {
+        globalCheckBox: "global-checkBox",
+        subCheckBoxes: "list-checkBox",
+        idList: "user-list",
+        search: "search"
+    }
+    const buttonCrossDisable =  <ButtonWithHintAndIcon id={"global-cross"}
+                                                       width={15}
+                                                       iconEnable={iconCrossActive}
+                                                       iconHover={iconCrossHover}
+                                                       iconDisable={iconCrossDisable}
+                                                       attributeIcon={new AttributeIcon(17, "auto")}
+                                                       status={"NotActive"}
+                                                       isNeedHint={false}
+                                                       attributeHint={new AttributeHint(0, 0 , "")}
+                                                       onClick={() => {}} />
+
+    const buttonCrossEnable = <ButtonWithHintAndIcon id={"global-cross"}
+                                                     width={15}
+                                                     iconEnable={iconCrossActive}
+                                                     iconDisable={iconCrossDisable}
+                                                     iconHover={iconCrossHover}
+                                                     attributeIcon={new AttributeIcon(17, "auto")}
+                                                     status={"Active"}
+                                                     isNeedHint={true}
+                                                     attributeHint={new AttributeHint(180, -91, "Удалить всех пользователей")}
+                                                     onClick={() => {clickRemoveUsers(); }} />;
     document.title = "Пользователи";
-    const [currentUsers, setCurrentUsers] = useState(undefined);
-    const [oldUsers, setOldUsers] = useState(undefined);
+    const [currentUsers: AllUsers, setCurrentUsers] = useState(null);
+    const [oldUsers: AllUsers, setOldUsers] = useState(null);
     const [cookie, setCookie] = useCookies("user");
-    const [list, setList] =useState();
+    const [list, setList] = useState();
     const [countUsers, setCountUsers] = useState(0);
-    const [globalClick, setGlobalClick] = useState(false);
-    const [buttonCross, setButtonCross] = useState(<ButtonCross id={"global-cross"} isActive={"unable"}/>);
+    const [globalCheckBox, setGlobalCheckBox] = useState(false);
+    const [buttonCross, setButtonCross] = useState(buttonCrossDisable);
     const [filter, setFilter] = useState("");
 
     useEffect(() => {
         (async () => {
-            debugger
-            props.setIsLoaded(false);
+            props.changeIsLoaded(false);
             let users = await GetAllUsers(cookie.user);
             setCurrentUsers(users);
-            let count = users.chiefsOfMedicine.length + users.doctors.length + users.headOfDepartments.length + users.medicRegistrations.length
-            count += users.patients.length + users.sysAdmins.length;
-            setCountUsers(count);
         })();
     }, []);
 
-    function CheckOnAccept(oldUsers, newUsers){
-        for(let i = 0; i < newUsers.sysAdmins.length; i++){
-            if(oldUsers.sysAdmins[i].Accept === newUsers.sysAdmins[i].Accept){
-                return true;
-            }
-        }
-        for(let i = 0; i < newUsers.chiefsOfMedicine.length; i++){
-            if(oldUsers.chiefsOfMedicine[i].Accept === newUsers.chiefsOfMedicine[i].Accept){
-                return true;
-            }
-        }
-        for(let i = 0; i < newUsers.doctors.length; i++){
-            if(oldUsers.doctors[i].Accept === newUsers.doctors[i].Accept){
-                return true;
-            }
-        }
-        for(let i = 0; i < newUsers.headOfDepartments.length; i++){
-            if(oldUsers.headOfDepartments[i].Accept === newUsers.headOfDepartments[i].Accept){
-                return true;
-            }
-        }
-        for(let i = 0; i < newUsers.medicRegistrations.length; i++){
-            if(oldUsers.medicRegistrations[i].Accept === newUsers.medicRegistrations[i].Accept){
-                return true;
-            }
-        }
-        for(let i = 0; i < newUsers.patients.length; i++){
-            if(oldUsers.patients[i].Accept === newUsers.patients[i].Accept){
-                return true;
-            }
-        }
-        return false;
-    }
-    function SearchUsers(list, filter){
-        let sysAdmins = list.sysAdmins.filter(element => element.login.search(filter) === 0);
-        let chiefsOfMedicine = list.chiefsOfMedicine.filter(element => element.login.search(filter) === 0);
-        let doctors = list.doctors.filter(element => element.login.search(filter) === 0);
-        let headOfDepartments = list.headOfDepartments.filter(element => element.login.search(filter) === 0);
-        let medicRegistrations = list.medicRegistrations.filter(element => element.login.search(filter) === 0);
-        let patients = list.patients.filter(element => element.login.search(filter) === 0);
-        return {
-            sysAdmins: sysAdmins,
-            chiefsOfMedicine: chiefsOfMedicine,
-            doctors: doctors,
-            headOfDepartments: headOfDepartments,
-            medicRegistrations: medicRegistrations,
-            patients: patients
-        };
-
-    }
     useEffect(() => {
         (() => {
-            if(currentUsers !== undefined){
-                props.setIsLoaded(true);
+            if(currentUsers !== null){
+                props.changeIsLoaded(true);
                 if(filter !== undefined && filter !== ""){
-                    let searchList = SearchUsers(currentUsers,  filter);
-                    setList(<SearchUsersList onClickCheckBox={clickCheckBox}
-                                             data={searchList}
-                                             styleProperties={{
-                                                 blurNone: classes.none
-                                             }}
-                                             functionsMsgBox={props.functionsMsgBox}
-                                             onShowConfirm={props.functionsConfirm.show} />);
+                    let searchList = currentUsers.filter(filter);
+                    setList(<UsersList id={ids.idList}
+                                       idGlobalCheckBox={ids.globalCheckBox}
+                                       actionGlobalClick={actionGlobalCheckBox}
+                                       currentData={searchList}
+                                       actionMessageBox={props.actionMessageBox}
+                                       actionConfirm={props.actionConfirm}  />);
                 }else {
-                    setList(<UsersList onClickCheckBox={clickCheckBox}
-                                       data={currentUsers}
-                                       oldList={oldUsers}
-                                       styleProperties={{
-                                           blurNone: classes.none
-                                       }}
-                                       functionsMsgBox={props.functionsMsgBox}
-                                       onShowConfirm={props.functionsConfirm.show} />)
+                    setList(<UsersList id={ids.idList}
+                                       idGlobalCheckBox={ids.globalCheckBox}
+                                       actionGlobalClick={actionGlobalCheckBox}
+                                       currentData={currentUsers}
+                                       actionMessageBox={props.actionMessageBox}
+                                       actionConfirm={props.actionConfirm}  />);
                 }
             }
         })();
@@ -114,93 +89,16 @@ export default function MainScreen(props){
     useEffect(() =>{
         (async () =>{
             let newUsers = await GetAllUsers(cookie.user);
-            let newCount = newUsers.chiefsOfMedicine.length + newUsers.doctors.length + newUsers.headOfDepartments.length + newUsers.medicRegistrations.length
-            newCount += newUsers.patients.length + newUsers.sysAdmins.length;
-            debugger
-            if(countUsers !== newCount){
-                setCountUsers(newCount);
-                setOldUsers(currentUsers);
-                setCurrentUsers(newUsers);
-                checkCheckBoxes(countUsers < newCount);
-            }else{
-                debugger
-                if(CheckOnAccept(currentUsers, newUsers)){
-                    setCurrentUsers(newUsers);
-                }
-                setOldUsers(currentUsers);
-            }
+            setCurrentUsers(newUsers);
         })();
-    },[props.count]);
-    function checkCheckBoxes(isMore){
-        let checkBoxes = document.querySelectorAll('input[type=checkbox]');
-        if(checkBoxes.length < 2){
-            return;
-        }
-        let count = 2;
-        for(let i = 0; i < checkBoxes.length; i++){
-            if(checkBoxes.item(i).attributes[0].nodeValue !== "global" && checkBoxes[i].checked){
-                count++;
-            }
-        }
-        debugger
-        if(checkBoxes.length !== 2) {
-            if (isMore) {
-                checkBoxes.item(0).checked = checkBoxes.length === count;
-            } else {
-                checkBoxes.item(0).checked = checkBoxes.length - 1 === count;
-            }
-            setButtonCross(checkBoxes.item(0).checked ? <ButtonCross id={"global-cross"} isActive={"active"}
-                                                                     toolText={"Удалить всех пользователей"} attributeHint={classes.attributeHintCross}
-                                                                     onClick={clickRemoveUsers} classNone={classes.none}/> :
-                                                                    <ButtonCross id={"global-cross"} isActive={"unable"}/>);
-        }
-    }
-    useEffect(() => {
-        (() => {
-            debugger
-            setButtonCross(globalClick ? <ButtonCross id={"global-cross"} isActive={"active"}
-                                                      toolText={"Удалить всех пользователей"} attributeHint={classes.attributeHintCross}
-                                                      onClick={clickRemoveUsers} classNone={classes.none}/> :
-                                                <ButtonCross id={"global-cross"} isActive={"unable"}/>);
-            let checkboxes = document.querySelectorAll('input[type=checkbox]');
-            let count = 2;
-            for(let i = 0; i < checkboxes.length; i++){
-                if(checkboxes.item(i).attributes[0].nodeValue !== "global" && checkboxes[i].checked){
-                    count++;
-                }
-            }
-            setButtonCross(count > 2 ? <ButtonCross id={"global-cross"} isActive={"active"}
-                                                    toolText={"Удалить всех пользователей"} attributeHint={classes.attributeHintCross}
-                                                    onClick={clickRemoveUsers} classNone={classes.none}/> :
-                                            <ButtonCross id={"global-cross"} isActive={"unable"}/>);
-        })();
-    },[globalClick]);
+    },[props.countNotification]);
 
-    function clickCheckBox(){
-        let checkboxes = document.querySelectorAll('input[type=checkbox]');
-        let count = 2;
-        for(let i = 0; i < checkboxes.length; i++){
-            if(checkboxes.item(i).attributes[0].nodeValue !== "global" && checkboxes[i].checked){
-               count++;
-            }
-        }
-        if(checkboxes.length === count) {
-            setGlobalClick(true);
-            document.getElementById("global").checked = true;
-        }else{
-            setGlobalClick(false);
-            document.getElementById("global").checked = false;
-        }
-        setButtonCross(count > 2 ? <ButtonCross id={"global-cross"} isActive={"active"}
-                                                toolText={"Удалить всех пользователей"} attributeHint={classes.attributeHintCross}
-                                                onClick={clickRemoveUsers} classNone={classes.none}/> :
-                                        <ButtonCross id={"global-cross"} isActive={"unable"}/>);
-    }
+
     function clickRemoveUsers(){
         let keys = [];
         let checkboxes = document.querySelectorAll('input[type=checkbox]');
         for(let i = 0; i < checkboxes.length - 1; i++){
-            if(checkboxes.item(i).attributes[0].nodeValue !== "global" && checkboxes.item(i).checked){
+            if(checkboxes.item(i).attributes[0].nodeValue !== ids.globalCheckBox && checkboxes.item(i).checked){
                 checkboxes.item(i).checked = false;
                 keys[keys.length] = checkboxes[i].attributes.id.nodeValue;
             }
@@ -211,23 +109,50 @@ export default function MainScreen(props){
             body: keys
         }));
         console.log(localStorage.getItem("action"));
-        props.functionsMsgBox.set(<MessageBox title={"Уведомление"} text={"Вы действительно хотите удалить всех пользователей?"}
-                                        buttons={"YesNo"} onShow={props.functionsMsgBox.show} onHide={props.functionsMsgBox.hide}
-                                        isNeedConfirm={true} onShowConfirm={props.onShowConfirm}/>);
-        props.functionsMsgBox.show();
+        props.actionMessageBox.set(<MessageBox id={props.actionMessageBox.idBox}
+                                               title={"Уведомление"}
+                                               text={"Вы действительно хотите удалить всех пользователей?"}
+                                               buttons={"YesNo"}
+                                               actions={props.actionMessageBox}
+                                               actionConfirm={props.actionConfirm}/>);
+        props.actionMessageBox.onShow();
+    }
+    function clickOnAddUser(){
 
+    }
+    const actionGlobalCheckBox = (e) => {
+        setButtonCross(e ? buttonCrossEnable : buttonCrossDisable);
+    }
+    const clickOnGlobalCheckBox = (e) => {
+        e.checked = !e.checked;
+        actionGlobalCheckBox(!e.checked);
+        let checkBoxes=  document.getElementById(ids.idList).querySelectorAll('input[type=checkbox]');
+        checkBoxes.forEach((element) => {
+            element.checked = e.checked;
+        })
     }
     return(
         <div id={props.id} className={`${classes.content}`}>
             <div className={`row ${classes.margin_btn_fastAction}`}>
                 <div className={`col-3 `}>
-                    <ButtonFastAction text={"добавить пользователя"} icon={iconAddPerson}/>
+                    <TwoComponentButton size={"m"}
+                                        icon={iconAddPerson}
+                                        text={"добавить пользователя"}
+                                        theme={"Red"}
+                                        onClick={clickOnAddUser}/>
                 </div>
             </div>
             <div className={`row ${classes.row}`}>
-                <div className={`col-1 ${classes.align_center} ${classes.flex_end} ${classes.padding_right_null}`}>
-                    <GlobalCheckbox id={"global"} size={classes.sizeCheckBox}
-                                    setGlobalClick={setGlobalClick} />
+                <div className={`col-1`}>
+                    <div className={`row ${classes.rowCheckBox}`}>
+                        <div className={`col-6`}>
+                        </div>
+                        <div className={`col-6 ${classes.checkBox}`}>
+                            <Checkbox id={ids.globalCheckBox}
+                                      size={"auto"}
+                                      onClick={(e) => { clickOnGlobalCheckBox(e);}} />
+                        </div>
+                    </div>
                 </div>
                 <div className={`col-11 ${classes.title}`}>
                     <div className={`row`}>
@@ -240,7 +165,8 @@ export default function MainScreen(props){
                         <div className={`col-4 ${classes.flex_end}`}>
                             <div className={`row`}>
                                 <div className={`col-11`}>
-                                    <Search onChange={setFilter}/>
+                                    <Search id={ids.search}
+                                            onChange={setFilter}/>
                                 </div>
                                 <div className={`col-1`}>
                                     {buttonCross}

@@ -1,8 +1,7 @@
 import type {IInputProps} from "./IInputProps";
 import classes from "./Input.module.css";
-import {Hint} from "../Functions";
+import {Hint} from "../../Functions";
 import {ToggleSwitch} from "../../ToggleSwitch/ToggleSwitch";
-import {useEffect} from "react";
 export function Input(props: IInputProps){
     function onChange(e){
         props.setValue(e.target.value);
@@ -10,6 +9,9 @@ export function Input(props: IInputProps){
     }
     function clickOnSwitch(e){
         debugger
+        if(props.type !== "password"){
+            return;
+        }
         if(e.target.checked) {
             let element = document.getElementById(props.id);
             element.type = "text";

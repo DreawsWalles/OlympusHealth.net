@@ -1,9 +1,14 @@
 import classes from "./ActionNotification.module.css";
 import iconFail from "../../../Images/Icons/IconResult/iconFail.png";
 import iconSuccess from "../../../Images/Icons/IconResult/iconSuccess.svg";
-import ButtonCross from "../../Buttons/ButtonCross/ButtonCrossWhiteVersion/ButtonCross";
+import iconActive from "../../../Images/Icons/IconCross/WhiteVersion/CrossActive.svg";
+import iconHover from "../../../Images/Icons/IconCross/WhiteVersion/CrossHover.png";
 import {useEffect, useState} from "react";
-export default function ActionNotification(props){
+import ButtonWithHintAndIcon from "../../Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
+import {AttributeIcon} from "../../Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
+import {AttributeHint} from "../../Hint/AttributeHint";
+import type {IActionNotificationProps} from "./IActionNotificationProps";
+export default function ActionNotification(props: IActionNotificationProps){
     const [title, setTitle] = useState("");
     const [classColor, setClassColor] = useState();
     const [icon, setIcon] = useState();
@@ -100,9 +105,14 @@ export default function ActionNotification(props){
                 </div>
             </div>
             <div className={`col-1 ${classes.btnCross}`}>
-                <ButtonCross isActive={"active"} toolText={"Закрыть"}
-                             attributeHint={classes.attributeHintCross} attribute={classes.attributeCross}
-                             classNone={props.blurNone} isNeedBlur={false} onClick={onClose}/>
+                <ButtonWithHintAndIcon width={15}
+                                       iconEnable={iconActive}
+                                       iconHover={iconHover}
+                                       attributeIcon={new AttributeIcon(21, "auto")}
+                                       status={"Active"}
+                                       isNeedHint={true}
+                                       attributeHint={new AttributeHint(65, -32, "Закрыть")}
+                                       onClick={() => {onClose();}} />
             </div>
         </div>)
 }

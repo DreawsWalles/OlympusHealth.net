@@ -1,4 +1,4 @@
-export interface IButtonIconMenuProps{
+export interface IButtonProps {
     Icon : string,
     HoverIcon : string,
     Text : string,

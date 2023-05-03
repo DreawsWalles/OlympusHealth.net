@@ -1,4 +1,3 @@
-import Logo from "../../../Images/logo.svg";
 import {useEffect, useState} from "react";
 import DefaultComponent from "../../../Components/Form/Register/DefaultComponent/DefaultComponent";
 import PatientForm from "../../../Components/Form/Register/PatientForm/PatientForm";
@@ -8,24 +7,35 @@ import {Navigate} from "react-router-dom";
 import classesContent from "./Registration.module.css"
 import classesLoader from "../../../Components/Loader/Loader.module.css"
 import SysAdminForm from "../../../Components/Form/Register/SysAdmin/SysAdminForm";
-import {RegisterUser} from "../../../Swapi/SwapiAccount";
+import {RegisterSysAdmin, RegisterUser} from "../../../Swapi/SwapiAccount/SwapiAccount";
 import {useCookies} from "react-cookie";
-import CustomSelect from "../../../Components/Selects/CustomSelect/CustomSelect";
+import type {IRegistrationProps} from "./IRegistrationProps";
+import {Logo} from "../../../Components/Logo/Logo";
+import Select from "../../../Components/Selects/Select/Select";
+import {ItemProps} from "../../../Components/Selects/Select/ISelectProps";
+import {RegisterModelSysAdmin} from "../../../Entities/AutorizeModel/RegisterModelSysAdmin";
+import {RegistrationModelPerson} from "../../../Entities/AutorizeModel/RegistrationModelPerson";
 
-export default function Registration(props){
+
+const ids = {
+    loader: "load",
+    content: "content",
+    select: "main-select"
+}
+
+export default function Registration(props: IRegistrationProps){
     document.title = "Регистрация";
     const [registered, setRegistered] = useState(false);
     const [type, setType] = useState(<DefaultComponent />);
     const [isLoaded, setIsLoaded] = useState(true);
     const [cookie, setCookie] = useCookies(["user"]);
+
     useEffect(() => {
         (() => {
-            debugger
-            let load = document.getElementById("load");
-            let content = document.getElementById("content");
+            let load = document.getElementById(ids.loader);
+            let content = document.getElementById(ids.content);
             if(load !== null && content !== null) {
                 if (isLoaded) {
-                    debugger
                     load.classList.add(classesLoader.none);
                     content.classList.remove(classesContent.none);
                 } else {
@@ -35,60 +45,145 @@ export default function Registration(props){
             }
         })();
     }, [isLoaded]);
-    async function registrationUser(body){
+    function getEntity(entity: RegistrationModelPerson | RegisterModelSysAdmin): {fetch: string, role: "patient" | "medic" | "sysAdmin"} | null
+    {
+        let role = entity.GetRole();
+        switch (entity.GetRole())
+        {
+            case "sysAdmin":
+                return {
+                    fetch: JSON.stringify({login: entity.login, password: entity.password}),
+                    role: role};
+            case "patient":
+                return {
+                    fetch: JSON.stringify({
+                        login: entity.login,
+                        password: entity.password,
+                        name: entity.name,
+                        surname: entity.surname,
+                        patronymic: entity.patronymic,
+                        email: entity.email,
+                        phoneNumber: entity.phoneNumber,
+                        birthday: entity.birthday,
+                        gender: entity.gender,
+                        role: entity.role
+                    }), role: role
+                }
+            case "medic":
+                return {
+                    fetch: JSON.stringify({
+                        login: entity.login,
+                        password: entity.password,
+                        name: entity.name,
+                        surname: entity.surname,
+                        patronymic: entity.patronymic,
+                        email: entity.email,
+                        phoneNumber: entity.phoneNumber,
+                        birthday: entity.birthday,
+                        gender: entity.gender,
+                        street: {
+                            name: entity.street.name,
+                            numberOfHouse: entity.street.numberOfHouse
+                        },
+                        city: entity.city.name,
+                        region: entity.region.name,
+                        country: entity.country.name,
+                        role: entity.role,
+                        roleMedic: entity.roleMedic
+                    }), role: role
+                }
+            default:
+                return null;
+        }
+    }
+    async function registrationUser(entity: RegisterModelSysAdmin){
         debugger
-        let resultFetch = await RegisterUser(body);
-        if(resultFetch === undefined){
+        let fetchEntity = getEntity(entity);
+        if(fetchEntity === null){
             return false;
         }
-        setCookie("user",`${resultFetch.access_token}`);
+        let resultFetch = fetchEntity.role === "sysAdmin" ?
+            await RegisterSysAdmin(fetchEntity.fetch) :
+            await  RegisterUser(fetchEntity.fetch);
+        if(resultFetch.status !== 200){
+            return false;
+        }
+        setCookie("user",`${resultFetch.token}`);
         setRegistered(true);
     }
     function handleOnChangeSelect(e){
-        console.log(e.target.value);
-        debugger
-        switch (e.target.value)
+        let choice = Number(e);
+        let role: string;
+        switch (choice)
         {
-            case '1':
-                setType(<PatientForm isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}  />)
+            case 2:
+                role = "Doctor";
                 break;
-            case '2':
-                setType(<MedicWorker choice={'Doctor'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
+            case 3:
+                role = "Chief of medical";
+                break
+            case 4:
+                role = "HeadOfDepartment";
                 break;
-            case '3':
-                setType(<MedicWorker choice={'Chief of medical'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
+            case 5:
+                role = "MedicRegistrator";
                 break;
-            case '4':
-                setType(<MedicWorker choice={'HeadOfDepartment'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
+        }
+        switch (choice)
+        {
+            case 1:
+                setType(<PatientForm textButton={"Зарегистрироваться"}
+                                     isLoaded={setIsLoaded}
+                                     onSubmit={async(e) => {await registrationUser(e); }}   />)
                 break;
-            case '5':
-                setType(<MedicWorker choice={'MedicRegistrator'} isLoaded={setIsLoaded} registration={registrationUser} textButton={"Зарегестрироваться"}/>)
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                setType(<MedicWorker textButton={"Зарегистрироваться"}
+                                     choice={role}
+                                     onSubmit={async(e) => {await registrationUser(e); }}
+                                     isLoaded={setIsLoaded} />)
                 break;
-            case '6':
-                setType(<SysAdminForm choice={"SysAdmin"} registration={registrationUser} textButton={"Зарегестрироваться"} />)
+            case 6:
+                setType(<SysAdminForm textButton={"Зарегистрироваться"}
+                                      onSubmit={async(e) => {await registrationUser(e); }} />)
                 break;
             default:
                 setIsLoaded(true);
-                setType(<DefaultComponent isLoaded={setIsLoaded} />)
+                setType(<DefaultComponent isLoaded={setIsLoaded} />);
+                break;
+
         }
     }
     if(!registered) {
         return (
             <div className={classesContent.content}>
-                <div className={classesContent.head}>
-                    <img src={Logo}/>
-                    <select onChange={handleOnChangeSelect} className={classesContent.selectType}>
-                        <option>Выберите вид пользователя</option>
-                        <option value={1}>Пациент</option>
-                        <option value={2}>Врач</option>
-                        <option value={3}>Главврач</option>
-                        <option value={4}>Заведующий отделением</option>
-                        <option value={5}>Медицинский регистратор</option>
-                        <option value={6}>Системный администратор</option>
-                    </select>
+                <div className={classesContent.logo}>
+                    <Logo width={"auto"} height={"auto"} />
                 </div>
-                <Loader/>
-                <div id={"content"} className={classesContent.container}>
+                <div className={`row ${classesContent.select}`}>
+                    <div style={{ padding: 0}} className={`col-3`}></div>
+                    <div className={`col-6`}>
+                        <Select id={ids.select}
+                                height={50}
+                                alignment={"end"}
+                                idError={"Error-main-choice"}
+                                title={"Выберите тип пользователя"}
+                                list={[
+                                    new ItemProps(1, "Пациент"),
+                                    new ItemProps(2, "Врач"),
+                                    new ItemProps(3, "Главврач"),
+                                    new ItemProps(4, "Заведующий отделением"),
+                                    new ItemProps(5, "Медицинский регистратор"),
+                                    new ItemProps(6, "Системный администратор")]}
+                                onChange={handleOnChangeSelect}
+                                fontSize={null}/>
+                    </div>
+                    <div className={`col-3`}></div>
+                </div>
+                <Loader id={ids.loader}/>
+                <div id={ids.content} className={classesContent.container}>
                     {type}
                 </div>
             </div>

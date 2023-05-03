@@ -6,7 +6,7 @@
     z-index: 10;
     background-color: white;
     border-radius: 10px;
-    padding: 10px 15px;
+    padding: 15px 15px;
     box-shadow: 0 0 31px #A72036;
 }
 .none{
@@ -37,21 +37,22 @@
 .positionText{
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-top: 5px !important;
+    margin-top: 10px !important;
     text-align: center;
 }
 .positionBtn{
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 22px !important;
+    width: 85% !important;
 }
 .btn{
 }
 .btnOne{
-    position: relative;
-    right: -36px;
+    display: flex;
+    justify-content: flex-end;
 }
 .btnTwo{
-    position: relative;
-    left: -44px;
+    display: flex;
+    justify-content: flex-start;
 }

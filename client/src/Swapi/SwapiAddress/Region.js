@@ -1,6 +1,6 @@
 import {AddressToken, Api, Controllers} from "../../Constants";
 
-async function getRegionsByServer(region, country){
+async function getRegionsByServer(region: string, country: string): Promise<string[]>{
     let tmp;
     await fetch(`${Api}${Controllers["Address"]}Region?name=${region}&country=${country}`, {
         method:"Post",
@@ -28,7 +28,7 @@ async function getRegionsByServer(region, country){
     return result;
 }
 
-async function getRegionByApi(region, country){
+async function getRegionByApi(region: string, country: string): Promise<string[]>{
     let tmp;
     let locations = [{country: country}]
     await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", {
@@ -58,8 +58,14 @@ async function getRegionByApi(region, country){
     }
     return result;
 }
-export async function GetRegionMatchName(region, props){
-    let serverData = await getRegionsByServer(region, props.country);
-    let apiData = await getRegionByApi(region, props.country);
-    return serverData.concat(apiData).unique();
+export async function GetRegionMatchName(region: string, country: string): Promise<[]>{
+    let serverData = await getRegionsByServer(region, country);
+    let apiData = await getRegionByApi(region, country);
+    let result = new Set();
+    apiData.forEach(element => serverData.push(element));
+    serverData.forEach(element => {
+        if (!result.has(element)){
+            result.add(element);
+        }});
+    return Array.from(result);
 }

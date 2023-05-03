@@ -1,9 +1,13 @@
 .content{
-    width: 265px;
+    width: 275px;
     position: fixed;
     top:108px;
     right: 4vw;
     cursor: pointer;
+    border: none;
+    background-color: transparent;
+    padding: 10px 5px;
+    border-radius: 10px;
 }
 .icon{
     display: flex;
@@ -14,7 +18,7 @@
     display: flex;
     align-items: flex-start;
     align-self: center;
-    font-family: "Century Gothic";
+    font-family: "Century Gothic" !important;
     word-wrap: normal;
     font-size: 24px;
     transition: background-color 1.4s ease-in-out;
@@ -24,6 +28,9 @@
     background-position: 0 100%;
     background-size: 100% 2px;
     background-repeat: repeat-x;
+}
+.content:active{
+    border: 1px solid #A72036;
 }
 .text_select{
     background: radial-gradient(50% 50% at 50% 50%, #A72036 0%, rgba(255, 255, 255, 0) 100%);

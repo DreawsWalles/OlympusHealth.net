@@ -1,69 +1,92 @@
 import {useState} from "react";
-import LoginInput from "../../Inputs/LoginInput.css/LoginInput";
-import PasswordInput from "../../Inputs/PasswordInput/PasswordInput";
 import classes from "./LoginForm.module.css"
-import {useCookies} from "react-cookie";
+import type {ILoginFormProps} from "./ILoginFormProps";
+import {LoginModel} from "../../../Entities/AutorizeModel/LoginModel";
+import {Input} from "../../Inputs/Input/Input";
+import {ErrorAttribute, LabelAttribute, ToggleSwitchAttributes} from "../../Inputs/Input/IInputProps";
+import Button from "../../Buttons/Button/Button";
+import {check, checkOnLength} from "../FunctionValidates";
+import {Hint} from "../../Functions";
 
 
-export default function LoginForm(props){
+const ids = {
+    login:{
+        input: "login",
+        error: "error-login",
+    },
+    password:{
+        input: "password",
+        error: "error-password"
+    },
+    buttons:{
+        autorize:"btn-autorize",
+        registration: "btn-registration"
+    }
+}
+export default function LoginForm(props: ILoginFormProps){
     const [loginValue, setLogin] = useState("");
     const [passwordValue, setPassword] = useState("");
-    const [cookie, setCookie] = useCookies("user")
 
-    function Hint(name, message){
-        let element = document.getElementById(name);
-        element.innerText = message;
-    };
+
 
     async function handleSubmit(event){
         props.setIsLoaded(false);
-        let isCorrect = true;
-        if(loginValue.trim().length === 0){
-            Hint("error-login", "Данное поле обязательно для заполнения");
-            isCorrect = false;
-        }
-        if(passwordValue.trim().length === 0){
-            Hint("error-password", "Данное поле обязательно для заполнения");
-            isCorrect = false;
-        }
-        if(!isCorrect)
+        let isCorrect = new Set();
+        isCorrect.add(await check(
+            loginValue,
+            ids.login.error,
+            ["Данное поле обязательно для заполнения"],
+            [checkOnLength]));
+        isCorrect.add(await check(
+            passwordValue,
+            ids.password.error,
+            ["Данное поле обязательно для заполнения"],
+            [checkOnLength]));
+        if(isCorrect.has(false)) {
+            props.setIsLoaded(true);
             return;
-        let data;
-        const status = await props.handleSubmit(JSON.stringify({login: loginValue, password:passwordValue, role:"Admin"}), data);
-        props.setIsLoaded(true);
-        if(status !== undefined){
-            debugger
-            props.setRole(status.role);
-            setCookie("user",`${status.access_token}`);
-            props.setAutorize(true);
         }
-        else{
+        let answer = props.submit(new LoginModel(loginValue, passwordValue));
+        if(!answer){
             event.preventDefault();
-            if(loginValue.trim().length !== 0 && passwordValue.trim().length !== 0)
-                Hint("error-password", "Неверный логин и/или пароль");
+            Hint(ids.password.error, "Неверный логин и/или пароль");
         }
     }
     return(
-        <div id={"loginForm"} className={classes.form}>
-            <LoginInput
-                id={"login"}
-                type={"text"}
-                placeholder={"Введите ваш логин, email или номер телефона..."}
-                labelText={"Логин, email или номер телефона"}
-                onChange={setLogin}
-                idSpan={"error-login"}
-                required
-            />
-            <PasswordInput
-                id={"password"}
-                placeholder={"Введите пароль..."}
-                idSpan={"error-password"}
-                onChange={setPassword}
-                required
-            />
+        <div id={props.id} className={classes.form}>
+            <Input id={ids.login.input}
+                   placeholder={"Введите ваш логин, email или номер телефона..."}
+                   type={"text"}
+                   setValue={setLogin}
+                   toggleSwitchAttribute={null}
+                   errorAttribute={new ErrorAttribute(ids.login.error)}
+                   labelAttribute={new LabelAttribute("Логин, email или номер телефона")} />
+            <Input id={ids.password.input}
+                   placeholder={"Введите пароль..."}
+                   type={"password"}
+                   setValue={setPassword}
+                   toggleSwitchAttribute={new ToggleSwitchAttributes("Показать пароль")}
+                   errorAttribute={new ErrorAttribute(ids.password.error)}
+                   labelAttribute={new LabelAttribute("Пароль")}/>
             <div className={classes.button}>
-                <button onClick={handleSubmit} className={classes.btnIn}>Войти</button>
-                <a href={"/Registration"} className={classes.btnReg}>Регистрация</a>
+                <div className={`col-7 ${classes.btn}`}>
+                    <Button id={ids.buttons.autorize}
+                            size={"m"}
+                            text={"Войти"}
+                            theme={"Red"}
+                            isDisplay={true}
+                            onClick={async () =>{await handleSubmit();}} />
+                </div>
+                <div className={`col-1`}></div>
+                <div className={`col-4 ${classes.btn}`}>
+                    <Button id={ids.buttons.registration}
+                            size={"m"}
+                            text={"Регистрация"}
+                            theme={"Grey"}
+                            isDisplay={true}
+                            onClick={() => {document.location='/Registration'}} />
+                </div>
+
             </div>
         </div>
     );

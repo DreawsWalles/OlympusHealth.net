@@ -1,4 +1,9 @@
 import classes from "./Hint.module.css";
-export default function Hint(props){
-    return(<span className={`${props.attribute} ${classes.tip}`}>{props.text}</span>)
+import type {AttributeHint} from "./AttributeHint";
+
+export default function Hint(props: AttributeHint){
+    return(
+        <span style={{width: `${props.attributes.width}px`, marginLeft: `${props.attributes.marginLeft}px`}} className={`${classes.tip} ${classes.tooltip}`}>
+            {props.attributes.text}
+        </span>)
 }

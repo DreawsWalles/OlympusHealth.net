@@ -1,5 +1,5 @@
-import {ActionMessageBox} from "../../../../MessageBox/ActionMessageBox";
-import {ActionConfirm} from "../../../../Confirm/ActionConfirm";
+import {ActionMessageBox} from "../../../MessageBox/ActionMessageBox";
+import {ActionConfirm} from "../../../Confirm/ActionConfirm";
 import {EntityRow} from "../EntityRow";
 
 export interface IRowProps

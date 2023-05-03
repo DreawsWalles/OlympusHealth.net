@@ -1,0 +1,13 @@
+.content{
+    background-color: rgba(212, 127, 141, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+.text{
+    padding-left: 0;
+    display: block;
+    height: auto;
+}

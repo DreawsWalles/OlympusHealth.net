@@ -2,14 +2,13 @@ import type {IButtonNotificationMenuProps} from "./IButtonNotificationMenuProps"
 import {useEffect, useState} from "react";
 import {useCookies} from "react-cookie";
 import classes from "./ButtonNotificationMenu.module.css";
-import {GetCount} from "../../../Swapi/SwapiNotification";
+import {GetCount} from "../../../../Swapi/SwapiNotification";
 
 export function ButtonNotificationMenu(props: IButtonNotificationMenuProps){
     const [icon, setIcon] = useState(props.Icon);
     const [cookie, setCookie] = useCookies("user");
     useEffect(() => {
         (() => {
-            debugger
             let element = document.getElementById(classes.countNotification);
             if(props.State === "Select"){
                 setIcon(props.HoverIcon);
@@ -41,21 +40,19 @@ export function ButtonNotificationMenu(props: IButtonNotificationMenuProps){
 
     useEffect(() => {
         (async () => {
-            debugger
             await countNotification();
         })();
     }, []);
     async function countNotification(){
-        let tmp = await GetCount(cookie.user);
+        let tmp = await props.getValue(cookie.user);
         props.setValue(tmp);
     }
-    setInterval(() => {
-        countNotification();
+    setInterval(async () => {
+        await countNotification();
         console.log(props.value)
     }, 5000);
 
     if(props.value === 0){
-        debugger
         return(
             <div className={`${classes.component}`}>
                 <div className={`row`}>

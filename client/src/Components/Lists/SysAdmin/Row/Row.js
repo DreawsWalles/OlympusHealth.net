@@ -1,17 +1,17 @@
 import classes from "./Row.module.css";
-import Checkbox from "../../../../Checkboxes/Checkbox/Checkbox";
-import iconHistory from "../../../../../Images/Icons/IconHistoryUser/iconHistory.svg";
-import iconHistoryHover from "../../../../../Images/Icons/IconHistoryUser/iconHistoryHover.png";
-import iconInformationUser from "../../../../../Images/Icons/IconUserInformation/iconActive.svg";
-import iconInformationUserHover from "../../../../../Images/Icons/IconUserInformation/iconHover.png";
-import iconFail from "../../../../../Images/Icons/IconAccept/iconFail.svg";
+import Checkbox from "../../../Checkboxes/Checkbox/Checkbox";
+import iconHistory from "../../../../Images/Icons/IconHistoryUser/iconHistory.svg";
+import iconHistoryHover from "../../../../Images/Icons/IconHistoryUser/iconHistoryHover.png";
+import iconInformationUser from "../../../../Images/Icons/IconUserInformation/iconActive.svg";
+import iconInformationUserHover from "../../../../Images/Icons/IconUserInformation/iconHover.png";
+import iconFail from "../../../../Images/Icons/IconAccept/iconFail.svg";
 import {useEffect, useState} from "react";
-import MessageBox from "../../../../MessageBox/MessageBox";
-import iconActive from "../../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
-import iconHover from "../../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
-import ButtonWithHintAndIcon from "../../../../Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
-import {AttributeIcon} from "../../../../Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
-import {AttributeHint} from "../../../../Hint/AttributeHint";
+import MessageBox from "../../../MessageBox/MessageBox";
+import iconActive from "../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
+import iconHover from "../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
+import ButtonWithHintAndIcon from "../../../Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
+import {AttributeIcon} from "../../../Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
+import {AttributeHint} from "../../../Hint/AttributeHint";
 import type {IRowProps} from "./IRowProps";
 
 export default function Row(props : IRowProps){

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import classes from "./SysAdminLayout.module.css";
 import classesActionNotification from "../../../Components/Notifications/ActionNotification/ActionNotification.module.css"
-import Logo from "../../../Images/logo.svg";
 import Menu from "../../../Components/Menu/SysAdmin/Menu";
 import StartScreen from "../StartScreen/StartScreen";
 import Loader from "../../../Components/Loader/Loader";
@@ -11,18 +10,33 @@ import {Actions} from "../../../Actions/SysAdminActions";
 import Token from "../../../Components/Token";
 import ButtonPersonalArea from "../../../Components/Buttons/ButtonPersonalArea/ButtonPersonalArea";
 import SubScreen from "../../../Components/SubScreen/Component/SubScreen";
+import {Logo} from "../../../Components/Logo/Logo";
+import {ActionConfirm} from "../../../Components/Confirm/ActionConfirm";
+import {ActionMessageBox} from "../../../Components/MessageBox/ActionMessageBox";
 
-
+const ids = {
+    mainScreen: "mainScreen",
+    blur: "blur",
+    loader: "load",
+    confirm: "confirm",
+    mainMenu: "mainMenu",
+    messageBox: "message-box",
+    actionNotification: "notification"
+}
 
 export default function SysAdminLayout(){
-    const [content, setContent] = useState(<StartScreen />);
     const [choice, setChoice] = useState(0)
     const [isLoaded, setIsLoaded] = useState(true);
     const [messageBox,setMessageBox] = useState();
-    const [checkToken, setCheckToken] = useState(<Token />);
+    const checkToken = <Token />;
     const [actionNotification, setActionNotification] = useState(null);
-    const [confirm, setConfirm] = useState(<Confirm className={classes.none} onFail={onFailConfirm} onSuccess={onAcceptConfirm}
-                                                    onShow={onShowConfirm} onHide={onHideConfirm}/>);
+    const confirm = <Confirm id={ids.confirm}
+                                     none={classes.none}
+                                     action={new ActionConfirm(ids.confirm,
+                                         ids.blur,
+                                         classes.none,
+                                         onShowActionNotification,
+                                         onShowActionNotification)}/>;
     let subScreens = [];
     const [subScreen, setSubScreen] = useState();
     const SubScreenParameters = {
@@ -33,15 +47,17 @@ export default function SysAdminLayout(){
                 Add: AddSubScreen
             }
     };
+    const [content, setContent] = useState(<StartScreen id={ids.mainScreen}
+                                                        subScreenParameters={SubScreenParameters}/>);
     useEffect(() =>{
         (() =>{
-            document.getElementById('load').classList.add(classes.none);
+            document.getElementById(ids.loader).classList.add(classes.none);
         })();
     }, []);
     useEffect(() => {
         (() => {
-            let loader = document.getElementById('load');
-            let content = document.getElementById('mainContent');
+            let loader = document.getElementById(ids.loader);
+            let content = document.getElementById(ids.mainScreen);
             if(loader !== null && content !== null) {
                 if (isLoaded) {
                     loader.classList.add(classes.none);
@@ -55,53 +71,22 @@ export default function SysAdminLayout(){
     }, [isLoaded]);
     function clickOnLogo(){
         setIsLoaded(true);
-        setContent(<StartScreen setContent={setContent} subScreenParameters={SubScreenParameters}/>);
+        debugger
+        setContent(<StartScreen id={ids.mainScreen}
+                                subScreenParameters={SubScreenParameters}/>);
         setChoice(0);
     }
-    function onShowMessageBox(){
-        let box = document.getElementById("message-box");
-        let blur = document.getElementById("blur");
-        blur.classList.remove(classes.none);
-        box.classList.remove(classes.none);
-    }
-    function onHideMessageBox(){
-        let box = document.getElementById("message-box");
-        let blur = document.getElementById("blur");
-        blur.classList.add(classes.none);
-        box.classList.add(classes.none);
-    }
-    function onShowConfirm(){
-        let confirm = document.getElementById("confirm");
-        let blur = document.getElementById("blur");
-        blur.classList.remove(classes.none);
-        confirm.classList.remove(classes.none);
-    }
-    function onHideConfirm(){
-        let confirm = document.getElementById("confirm");
-        let blur = document.getElementById("blur");
-        blur.classList.add(classes.none);
-        confirm.classList.add(classes.none);
-    }
-    function onFailConfirm(){
-        onShowActionNotification("Введен некорректный пароль", "fail");
-    }
-    async function onAcceptConfirm(){
-        let result = await Actions(JSON.parse(localStorage.getItem("action")));
-        if(result.result){
-            onShowActionNotification(result.Message, "success");
-        }else {
-            onShowActionNotification(result.Message, "fail");
-        }
-    }
     function onShowActionNotification(text, type){
-        let el = document.getElementById("notification");
-        setActionNotification(<ActionNotification text={text} type={type}/>);
+        let el = document.getElementById(ids.actionNotification);
+        setActionNotification(<ActionNotification id={ids.actionNotification}
+                                                  text={text}
+                                                  type={type}/>);
         el.classList.remove(classesActionNotification.none);
         el.classList.add(classesActionNotification.show);
         el.classList.add(classesActionNotification.hide);
     }
     function ViewSubScreens(){
-        let blur = document.getElementById("blur");
+        let blur = document.getElementById(ids.blur);
         if(subScreens.length === 0) {
             setSubScreen(null);
             blur.classList.add(classes.none);
@@ -125,25 +110,24 @@ export default function SysAdminLayout(){
     return (
         <div className={classes.content}>
             <div onClick={clickOnLogo} className={classes.head}>
-                <img src={Logo}/>
+                <Logo height={"auto"}
+                      width={"auto"}/>
             </div>
             <div>
-                <ButtonPersonalArea isSelect={false}/>
+                <ButtonPersonalArea state={"NotSelect"}
+                                    onClick={() => {}}/>
             </div>
-            <Menu setContent={setContent} choice={choice}
-                  functionsMsgBox={{
-                    set: setMessageBox,
-                    show: onShowMessageBox,
-                    hide: onHideMessageBox }}
-                  functionsConfirm={{
-                      show: onShowConfirm,
-                      hide: onHideConfirm
-                  }}
+            <Menu id={ids.mainMenu}
+                  idContent={ids.mainScreen}
+                  setContent={setContent}
+                  choice={choice}
+                  actionConfirm={new ActionConfirm(ids.confirm, ids.blur, classes.none, null, null)}
+                  actionMessageBox={new ActionMessageBox(ids.messageBox, ids.blur, classes.none, setMessageBox)}
                   setChoice={setChoice} setIsLoaded={setIsLoaded}
                   SubScreenParameters={SubScreenParameters}/>
-            <Loader />
+            <Loader id={ids.loader}/>
             {content}
-            <div id={"blur"} className={`${classes.blur} ${classes.none}`}></div>
+            <div id={ids.blur} className={`${classes.blur} ${classes.none}`}></div>
             {messageBox}
             {confirm}
             {actionNotification}

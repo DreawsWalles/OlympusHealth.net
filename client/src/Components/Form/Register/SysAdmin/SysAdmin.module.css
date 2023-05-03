@@ -1,22 +1,17 @@
-.containerSysAdmin{
+.container{
     margin-top:14vh;
-    width:89%;
-    /*margin-top: 12em;*/
 }
 .content{
-    margin-top:12vh;
-    display: flex;
-    align-items: center;
-    flex-direction:column;
+    margin-top:14vh;
 }
 
-.rowSysAdmin{
+.row{
     align-items: flex-start;
 }
 .text{
     display: flex;
     justify-content: flex-end;
-    font-family: "Century Gothic";
+    font-family: "Century Gothic" !important;
     font-size: 24px;
     font-weight: 400;
     margin-top:8px;
@@ -28,10 +23,6 @@
 .errorButton{
     display:block;
     color:red;
-}
-
-.btnAuto{
-    margin-right: -8px;
 }
 
 .btnAuto button{

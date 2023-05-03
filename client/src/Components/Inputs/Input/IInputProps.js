@@ -8,9 +8,9 @@ export class ToggleSwitchAttributes
 }
 export class ErrorAttribute
 {
-    id: number;
+    id: string;
     text: string | null;
-    constructor(id: number, text?: string) {
+    constructor(id: string, text?: string) {
         this.id = id;
         this.text = text;
     }
@@ -25,7 +25,7 @@ export class LabelAttribute
 export interface IInputProps {
     id: string,
     placeholder: string,
-    type: "text" | "password",
+    type: "text" | "password" | "email" | "tel" | "date",
     setValue(): () => {},
 
     toggleSwitchAttribute: ToggleSwitchAttributes | null,

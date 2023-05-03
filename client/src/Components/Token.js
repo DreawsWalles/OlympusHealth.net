@@ -1,6 +1,6 @@
 import {Navigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {CheckToken} from "../Swapi/SwapiAccount";
+import {CheckToken} from "../Swapi/SwapiAccount/SwapiAccount";
 
 export default function Token(){
     const [cookie, setCookie] = useState(document.cookie.toString().substring(5));

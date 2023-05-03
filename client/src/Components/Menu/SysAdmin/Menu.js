@@ -9,12 +9,14 @@ import iconNotifications from "../../../Images/MenuIcons/Notifications/iconNotif
 import iconNotificationsHover from "../../../Images/MenuIcons/Notifications/iconNotificationsHover.svg";
 import iconArrowUp from "../../../Images/MenuIcons/Arrow/ArrowUp.svg";
 import iconArrowDown from "../../../Images/MenuIcons/Arrow/ArrowDown.svg";
-import ButtonIconMenu from "../../Buttons/ButtonMenu/ButtonIconMenu";
-import NotificationMenu from "../../Notifications/NotificaionMenu/NotificationIconButtonMenu"
-import ButtonFolding from "../../Buttons/ButtonFolding/ButtonFolding";
-import {useEffect, useRef, useState} from "react";
+import Button from "../Buttons/Button/Button";
+import ButtonFoldingMenu from "../Buttons/ButtonFoldingMenu/ButtonFoldingMenu";
+import {useEffect, useState} from "react";
 import MainScreen from "../../../Screens/SysAdmin/Users/MainScreen/MainScreen";
-export default function Menu(props){
+import {ButtonNotificationMenu} from "../Buttons/ButtonNotificationMenu/ButtonNotificationMenu";
+import {GetCount} from "../../../Swapi/SwapiNotification";
+import type {IMenuProps} from "./IMenuProps";
+export default function Menu(props: IMenuProps){
     const [countNotification, setCountNotification] = useState(0);
     const [isChoicePerson, setIsChoicePerson] = useState(false);
     const [isChoiceResearch, setIsChoiceResearch] = useState(false);
@@ -82,10 +84,11 @@ export default function Menu(props){
         })();
     }, [props.choice]);
     function clickOnPerson(){
-        props.setContent(<MainScreen id={"mainContent"} setIsLoaded={props.setIsLoaded}
-                                     count={countNotification}
-                                     functionsConfirm={props.functionsConfirm}
-                                     functionsMsgBox={props.functionsMsgBox}
+        props.setContent(<MainScreen id={props.idContent}
+                                     changeIsLoaded={props.setIsLoaded}
+                                     countNotification={countNotification}
+                                     actionConfirm={props.actionConfirm}
+                                     actionMessageBox={props.actionMessageBox}
                                      SubScreenParameters={props.SubScreenParameters}/>);
         props.setChoice(1);
     }
@@ -98,31 +101,49 @@ export default function Menu(props){
         props.setChoice(3);
     }
     function clickOnNotification(){
+        debugger
         props.setContent(<div>А вот тут уведомления</div>)
         props.setChoice(4);
     }
-    return(<div id={classes.content} className={classes.content}>
-        <div className={`${classes.menu}`}>
-            <div onClick={clickOnPerson} className={`${classes.icon_margin}`}>
-                <ButtonIconMenu icon={iconPerson} iconHover={iconPersonHover} text={"пользователи"} isChoice={isChoicePerson}/>
-            </div>
-            <div onClick={clickOnResearch} className={`${classes.icon_margin}`}>
-                <ButtonIconMenu positionText={classes.position_Research_text} icon={iconResearch} iconHover={iconResearchHover} text={"исследования"} isChoice={isChoiceResearch}/>
-            </div>
-            <div className={"row"}>
-                <ButtonFolding classNameMenu={classes.content} classNameNavOpen={classes.is_nav_open} iconFolding={iconArrowUp} iconUnFolding={iconArrowDown}/>
-            </div>
-            <div onClick={clickOnInstitution} className={`${classes.icon_margin}`}>
-                <ButtonIconMenu positionText={classes.position_Institutions_text} icon={iconInstitutions} iconHover={iconInstitutionsHover} text={"учреждения"} isChoice={isChoiceInstitution}/>
-            </div>
-            <div onClick={clickOnNotification} className={`${classes.icon_margin} ${classes.margin_notification}`}>
-                <NotificationMenu count={countNotification}
-                                  setCount={setCountNotification}
-                                  icon={iconNotifications}
-                                  iconHover={iconNotificationsHover}
-                                  text={"уведомления"}
-                                  isChoice={isChoiceNotification} positionText={classes.position_Notifications_text}/>
+    return(
+        <div id={classes.content} className={classes.content}>
+            <div className={`${classes.menu}`}>
+                <div className={`${classes.icon_margin}`}>
+                    <Button Icon={iconPerson}
+                            HoverIcon={iconPersonHover}
+                            State={isChoicePerson ? "Select" : "NotSelect"}
+                            Text={"пользователи"} onClick={() => {clickOnPerson() }}/>
+                </div>
+                <div className={`${classes.icon_margin}`}>
+                    <Button Icon={iconResearch}
+                            HoverIcon={iconResearchHover}
+                            Text={"исследования"}
+                            State={isChoiceResearch ? "Select" : "NotSelect"}
+                            MarginTopText={6}
+                            onClick={() => {clickOnResearch(); }} />
+                </div>
+                <div className={"row"}>
+                    <ButtonFoldingMenu IconFolding={iconArrowUp}
+                                       IconUnFolding={iconArrowDown}
+                                       classMenu={classes.content}
+                                       classMenuOpen={classes.is_nav_open} />
+                </div>
+                <div className={`${classes.icon_margin}`}>
+                    <Button Icon={iconInstitutions}
+                            HoverIcon={iconInstitutionsHover}
+                            Text={"учреждения"}
+                            State={isChoiceInstitution ? "Select" : "NotSelect"}
+                            MarginTopText={2}
+                            onClick={() => {clickOnInstitution();}} />
+                </div>
+                <div className={`${classes.icon_margin} ${classes.margin_notification}`}>
+                    <ButtonNotificationMenu Icon={iconNotifications}
+                                            HoverIcon={iconNotificationsHover}
+                                            State={isChoiceNotification ? "Select" : "NotSelect"}
+                                            onClick={() => {clickOnNotification();}}
+                                            value={countNotification}
+                                            setValue={setCountNotification} getValue={GetCount}/>
+                </div>
             </div>
         </div>
-    </div>)
-}
+    )}

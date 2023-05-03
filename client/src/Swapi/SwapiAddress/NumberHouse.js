@@ -1,6 +1,10 @@
 import {AddressToken, Api, Controllers} from "../../Constants";
 
-async function getNumberHouseByServer(country, region, city, street, numberHouse){
+async function getNumberHouseByServer(country: string,
+                                      region: string,
+                                      city: string,
+                                      street: string,
+                                      numberHouse: string): Promise<string[]>{
     let tmp;
     await fetch(`${Api}${Controllers["Address"]}House?name=${numberHouse}&country=${country}&region=${region}&city=${city}&street=${street}`, {
         method:"Post",
@@ -28,7 +32,11 @@ async function getNumberHouseByServer(country, region, city, street, numberHouse
     return result;
 }
 
-async function getNumberHouseByApi(country, region, city, street, numberHouse){
+async function getNumberHouseByApi(country: string,
+                                   region: string,
+                                   city: string,
+                                   street: string,
+                                   numberHouse: string): Promise<string[]>{
     let result = [];
     let locations = [{country:country, region: region.toString().split(' ')[0],
                 city: city.toString().split(' ')[1], street: street.toString().split(' ')[1]}];
@@ -61,8 +69,14 @@ async function getNumberHouseByApi(country, region, city, street, numberHouse){
     }
     return result;
 }
-export async function GetNumberHouseMatchName(numberHouse, props){
-    let serverData = await getNumberHouseByServer(props.country, props.region, props.city, props.street, numberHouse);
-    let apiData = await getNumberHouseByApi(props.country, props.region, props.city, props.street,numberHouse);
-    return serverData.concat(apiData).unique();
+export async function GetNumberHouseMatchName(numberHouse: string, country: string, region: string, city: string, street: string): Promise<[]>{
+    let serverData = await getNumberHouseByServer(country, region, city, street, numberHouse);
+    let apiData = await getNumberHouseByApi(country, region, city, street, numberHouse);
+    let result = new Set();
+    apiData.forEach(element => serverData.push(element));
+    serverData.forEach(element => {
+        if (!result.has(element)){
+            result.add(element);
+        }});
+    return Array.from(result);
 }

@@ -8,22 +8,24 @@
     margin-right: auto;
 }
 
-.head img{
+.logo{
     width: 240px;
     height: 101px;
     position: fixed;
     top:20px;
     right:50px;
 }
-.head select{
-    border: 1.5px solid #A72036;
-    width: 450px;
-    text-align: right;
+.select{
     margin-left: auto;
     margin-right: auto;
-    font-family: "Century Gothic";
-    font-size: 20px;
-    margin-top: 70px;
+    width: 89%;
+    display: flex;
+    z-index: 2;
+    background: radial-gradient(50% 50% at 50% 50%, #A72036 0%, rgba(255, 255, 255, 0) 100%);
+    background-position: 0 100%;
+    background-size: 100% 4px;
+    background-repeat: repeat-x;
+    padding-bottom: 15px;
 }
 .container{
     width: 89%;
@@ -32,19 +34,6 @@
     margin-right: auto;
 }
 
-.selectType {
-    --radius: 10px;
-    --baseFg: #A72036;
-    --baseBg: #A72036;
-    --accentFg: #A72036;
-    --accentBg: #A72036;
-    --a:0px;
-    --b: 30px;
-    --c: 38px;
-    --d: 30px;
-    --e: 38px;
-    --f: 30px;
-}
 
 .none{
     display:none;

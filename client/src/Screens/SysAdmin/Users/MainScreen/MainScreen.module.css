@@ -30,8 +30,8 @@
 .row{
     margin-top: 0.3vh;
     margin-bottom: 0.3vh;
-    margin-left: 0 !important;
-    margin-right: 13px !important;
+    margin-left: 2px !important;
+    margin-right: 26px !important;
 }
 .line{
     width: 100%;
@@ -41,13 +41,17 @@
     margin-right: 0 !important;
     margin-bottom: 1.5vh!important;
 }
+
 .border{
     border: 1px solid black;
 }
-
-.sizeCheckBox{
-    width: 2em;
-    height: 2em;
+.rowCheckBox{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 10px !important;
+}
+.checkBox{
 }
 .attributeHintCross{
     width: 180px !important;

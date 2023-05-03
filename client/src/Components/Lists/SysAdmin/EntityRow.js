@@ -1,9 +1,9 @@
-import type {ChiefOfMedicineModel} from "../../../../Entities/PersonalModel/ChiefOfMedicineModel";
-import type {DoctorModel} from "../../../../Entities/PersonalModel/DoctorModel";
-import type {HeadOfDepartmentModel} from "../../../../Entities/PersonalModel/HeadOfDepartmentModel";
-import type {MedicRegistrationModel} from "../../../../Entities/PersonalModel/MedicRegistratorModel";
-import type {PatientModel} from "../../../../Entities/PersonalModel/PatientModel";
-import type {SysAdminModel} from "../../../../Entities/PersonalModel/SysAdminModel";
+import type {ChiefOfMedicineModel} from "../../../Entities/PersonalModel/ChiefOfMedicineModel";
+import type {DoctorModel} from "../../../Entities/PersonalModel/DoctorModel";
+import type {HeadOfDepartmentModel} from "../../../Entities/PersonalModel/HeadOfDepartmentModel";
+import type {MedicRegistrationModel} from "../../../Entities/PersonalModel/MedicRegistratorModel";
+import type {PatientModel} from "../../../Entities/PersonalModel/PatientModel";
+import type {SysAdminModel} from "../../../Entities/PersonalModel/SysAdminModel";
 
 export class EntityRow
 {

@@ -1,10 +1,10 @@
 import {IChoiceElementProps} from "./IChoiceElementProps";
 import classes from "./ChoiceElement.module.css";
-import ButtonWithHintAndIcon from "../../../Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
-import icon from "../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
-import iconHover from "../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
-import {AttributeIcon} from "../../../Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
-import {AttributeHint} from "../../../Hint/AttributeHint";
+import ButtonWithHintAndIcon from "../../../../Buttons/ButtonWithHintAndIcon/ButtonWithHintAndIcon";
+import icon from "../../../../../Images/Icons/IconCross/BlackVersion/CrossActive.svg";
+import iconHover from "../../../../../Images/Icons/IconCross/BlackVersion/CrossHover.png";
+import {AttributeIcon} from "../../../../Buttons/ButtonWithHintAndIcon/IButtonWithHintAndIconProps";
+import {AttributeHint} from "../../../../Hint/AttributeHint";
 
 export function ChoiceElement(props: IChoiceElementProps ){
     return (
@@ -24,7 +24,8 @@ export function ChoiceElement(props: IChoiceElementProps ){
                                            attributeIcon={new AttributeIcon(15, "auto")}
                                            attributeHint={new AttributeHint(70, -35, "Удалить")}
                                            status={"Active"}
-                                           isNeedHint={true} onClick={() => {props.onClick(`${props.id}-choice-element-text`);}} />
+                                           isNeedHint={true}
+                                           onClick={() => {props.onClick(`${props.id}-choice-element-text`);}} />
                 </div>
             </div>
         </div>

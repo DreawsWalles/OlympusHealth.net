@@ -1,7 +1,7 @@
 import type {GenderModel} from "./GenderModel";
 import type {StreetModel} from "../AddressModel/StreetModel";
 
-export class ChiefOfMedicine
+export class ChiefOfMedicineModel
 {
     id: string;
     login: string;
@@ -57,5 +57,8 @@ export class ChiefOfMedicine
         this.descriptionHeadOfDepartment = descriptionHeadOfDepartment;
         this.accessRights = accessRights;
         this.accept = accept ?? Error("Not correct parameter accept");
+    }
+    Type(): string {
+        return "ChiefOfMedicineModel";
     }
 }

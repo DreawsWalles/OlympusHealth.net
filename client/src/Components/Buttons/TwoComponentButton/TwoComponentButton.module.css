@@ -1,0 +1,50 @@
+.content{
+    font-family: MyArchive !important;
+    display: flex;
+    align-items: center;
+    border: none;
+    transition: all .5ms ease-in-out;
+    cursor: pointer;
+}
+.m{
+    font-size: 18px;
+    min-width: 335px;
+    min-height: 35px;
+    padding-left: 30px !important;
+    padding-right: 15px !important;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 8px;
+}
+.L{
+    min-width: 620px;
+    min-height: 90px;
+    font-size: 32px;
+    padding-left: 45px !important;
+    padding-right: 45px !important;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-radius: 15px;
+}
+.Red{
+    background-color: #A72036;
+    color: white;
+}
+.Red:hover{
+    transition: .2s;
+    background-color: darkred !important;
+}
+.element{
+    display: flex;
+    align-items: center;
+}
+.m img{
+    width: 26px;
+    height: auto;
+}
+.flex_start{
+    justify-content: flex-start;
+}
+.flex_end{
+    justify-content: flex-end;
+}

@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {GetRole, IsAccept} from "../../Swapi/SwapiAccount";
+import {GetRole, IsAccept} from "../../Swapi/SwapiAccount/SwapiAccount";
 import {Navigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 

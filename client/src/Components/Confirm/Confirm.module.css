@@ -6,7 +6,7 @@
     z-index: 10;
     background-color: white;
     border-radius: 10px;
-    padding: 10px 15px;
+    padding: 15px 15px;
     box-shadow: 0 0 31px #A72036;
     width: 500px;
     margin-left: -250px;
@@ -36,14 +36,15 @@
     margin-top: 10px !important;
 }
 .positionBtn{
+    width: 85%;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 .btnOne{
-    position: relative;
-    right: -36px;
+    display: flex;
+    justify-content: flex-end;
 }
 .btnTwo{
-    position: relative;
-    left: -44px;
+    display: flex;
+    justify-content: flex-start;
 }

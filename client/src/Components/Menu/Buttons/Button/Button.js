@@ -1,8 +1,8 @@
-import classes from "./ButtonIconMenu.module.css";
+import classes from "./Button.module.css";
 import {useEffect, useState} from "react";
-import type {IButtonIconMenuProps} from "./IButtonIconMenuProps";
+import type {IButtonProps} from "./IButtonProps";
 
-export default function ButtonIconMenu(props:IButtonIconMenuProps){
+export default function Button(props:IButtonProps){
     const [icon, setIcon] = useState(props.Icon);
 
     useEffect(() => {

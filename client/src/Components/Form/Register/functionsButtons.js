@@ -8,7 +8,6 @@ export function clickOnButtonAuto(
     styleNone: string,
     setOnClick: (value: boolean) => void){
     let element = document.getElementById(idButton);
-    debugger
     if(element === null){
         return;
     }
@@ -32,12 +31,12 @@ export function clickOnButtonAuto(
         element.classList.remove("btn-success");
         element.classList.add("btn-outline-success");
         let input = document.getElementById(idInput);
-        if(typeof input === null){
+        if(input === null){
             return;
         }
         input.value = oldData;
         let refresh = document.getElementById(idRefresh);
-        if(typeof refresh === null){
+        if(refresh === null){
             return;
         }
         refresh.classList.add(styleNone);

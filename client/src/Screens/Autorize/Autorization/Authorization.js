@@ -1,25 +1,32 @@
 import {useEffect, useState} from "react";
 import classes from './Autorize.module.css';
-import Logo from '../../../Images/logo.svg';
-import {Login} from "../../../Swapi/SwapiAccount";
+import {Login} from "../../../Swapi/SwapiAccount/SwapiAccount";
 import LoginForm from "../../../Components/Form/Login/LoginForm";
 import classesLoader from "../../../Components/Loader/Loader.module.css";
 import Loader from "../../../Components/Loader/Loader";
 import {Navigate} from "react-router-dom";
+import {Logo} from "../../../Components/Logo/Logo";
+import type {IAuthorizationProps} from "./IAuthorizationProps";
+import type {LoginModel} from "../../../Entities/AutorizeModel/LoginModel";
+import {useCookies} from "react-cookie";
+import type {AnswerAutorize} from "../../../Swapi/SwapiAccount/Entities";
 
+const Ids = {
+    loader: "load",
+    form: "loginForm"
+}
 
-
-
-export default function Authorization(props) {
+export default function Authorization(props: IAuthorizationProps) {
     const [autorize, setAutorize] = useState(false);
-    const [role, setRole] = useState();
+    const [role: string, setRole] = useState();
+    const [cookie, setCookie] = useCookies("user")
 
     document.title = "Авторизация";
     const [isLoaded, setIsLoaded] = useState(true);
     useEffect(() => {
         (() => {
-            let load = document.getElementById("load");
-            let content = document.getElementById("loginForm");
+            let load = document.getElementById(Ids.loader);
+            let content = document.getElementById(Ids.form);
             if(load !== null && content !== null){
                 if(isLoaded){
                     load.classList.add(classesLoader.none);
@@ -41,13 +48,31 @@ export default function Authorization(props) {
                 return (<Navigate replace to={"/Medic"} />)
             case "SysAdmin":
                 return (<Navigate replace to={"/SysAdmin"} />);
+            default:
+                console.error("При авторизации произошла ошибка. Некорректная роль");
+                return( DOMException("При авторизации произошла ошибка. Некорректная роль", "Autorize.Error.Role"));
+
         }
+    }
+    async function Autorize(entity: LoginModel) {
+        let response: AnswerAutorize = await Login(JSON.stringify({login: entity.login, password: entity.password, role: "tmp"}));
+        debugger
+        if(response.status !== 400){
+            debugger
+            setRole(response.role);
+            setCookie("user", `${response.token}`);
+            setAutorize(true);
+            return true;
+        }
+        return false;
     }
     return(
         <div className={classes.content}>
-            <img className={classes.imageLogin} width={"400"} height={"140"} src={Logo} />
-            <Loader />
-            <LoginForm handleSubmit={Login} setAutorize={setAutorize} setIsLoaded={setIsLoaded} setRole={setRole}/>
+            <div className={classes.imageLogin}>
+                <Logo width={400} height={140} />
+            </div>
+            <Loader id={Ids.loader}/>
+            <LoginForm id={Ids.form} submit={Autorize} setIsLoaded={setIsLoaded}/>
         </div>
     )
 

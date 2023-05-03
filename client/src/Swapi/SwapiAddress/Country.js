@@ -1,8 +1,7 @@
 import {AddressToken, Api, Controllers} from "../../Constants";
 
-async function getCountryByNameByServer(country){
+async function getCountryByNameByServer(country: string): Promise<string[]>{
     let tmp;
-    debugger
     await fetch(`${Api}${Controllers["Address"]}Country?name=${country}`, {
         method:"Post",
         headers:{
@@ -29,7 +28,7 @@ async function getCountryByNameByServer(country){
     return result;
 }
 
-async function getCountryByNameByApi(country){
+async function getCountryByNameByApi(country: string): Promise<string[]>{
     let tmp;
     await fetch(`https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/country`, {
         method: "Post",
@@ -56,7 +55,7 @@ async function getCountryByNameByApi(country){
 // eslint-disable-next-line no-extend-native
 Array.prototype.unique = function (){
     let a = this.concat();
-    for(let i=0; i<a.length; ++i) {
+    for(let i=0; i < a.length; ++i) {
         for(let j=i+1; j<a.length; ++j) {
             if(a[i] === a[j])
                 a.splice(j--, 1);
@@ -65,8 +64,15 @@ Array.prototype.unique = function (){
     return a;
 }
 
-export async function GetCountryMatchName(country){
-    let serverData = await getCountryByNameByServer(country);
-    let apiData = await getCountryByNameByApi(country);
-    return serverData.concat(apiData).unique();
+export async function GetCountryMatchName(country: string): Promise<[]>{
+    let serverData: string[] = await getCountryByNameByServer(country);
+    let apiData: string[] = await getCountryByNameByApi(country);
+    let result = new Set();
+    apiData.forEach(element => serverData.push(element));
+    serverData.forEach(element => {
+        if (!result.has(element)){
+            result.add(element);
+    }});
+    return Array.from(result);
+
 }

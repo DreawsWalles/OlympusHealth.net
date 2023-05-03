@@ -15,7 +15,7 @@ namespace Business.Interop.ChiefOfMedicineModel
         public Guid Id { get; set; }
         public string Login { get; set; }
         public string Name { get; set; }
-        public string Surnane { get; set; }
+        public string Surname { get; set; }
         public string? Patronymic { get; set; }
         public string? Email { get; set; }
         public DateTime DateEmployment { get; set; }
@@ -27,7 +27,7 @@ namespace Business.Interop.ChiefOfMedicineModel
         public virtual StreetDto? Address { get; set; }
         public virtual ICollection<Files>? Files { get; set; }
         public virtual ICollection<PlaceOfStudyDto>? PlaceOfStudies { get; set; }
-        public virtual ICollection<DescriptionDto>? DesctioptionHeadOfDepartment { get; set; }
+        public virtual ICollection<DescriptionDto>? DescriptionHeadOfDepartment { get; set; }
         public virtual ICollection<AccessDto> AccessRights { get; set; }
         public bool Accept { get; set; }
     }

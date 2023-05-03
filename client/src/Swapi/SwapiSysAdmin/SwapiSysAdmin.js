@@ -1,24 +1,16 @@
-import {Api, Controllers} from "../Constants";
-import {json} from "react-router-dom";
-import {ChiefOfMedicineModel} from "../Entities/PersonalModel/ChiefOfMedicineModel";
-import type {DoctorModel} from "../Entities/PersonalModel/DoctorModel";
-import type {HeadOfDepartmentModel} from "../Entities/PersonalModel/HeadOfDepartmentModel";
-import type {MedicRegistrationModel} from "../Entities/PersonalModel/MedicRegistratorModel";
-import type {PatientModel} from "../Entities/PersonalModel/PatientModel";
-import type {SysAdminModel} from "../Entities/PersonalModel/SysAdminModel";
+import {Api, Controllers} from "../../Constants";
+import {AllUsers} from "./Entities";
+import {ChiefOfMedicineModel} from "../../Entities/PersonalModel/ChiefOfMedicineModel";
+import {DoctorModel} from "../../Entities/PersonalModel/DoctorModel";
+import {HeadOfDepartmentModel} from "../../Entities/PersonalModel/HeadOfDepartmentModel";
+import {MedicRegistrationModel} from "../../Entities/PersonalModel/MedicRegistratorModel";
+import {PatientModel} from "../../Entities/PersonalModel/PatientModel";
+import {SysAdminModel} from "../../Entities/PersonalModel/SysAdminModel";
 
-export class AllUsers {
-    chiefsOfMedicine: ChiefOfMedicineModel[];
-    doctors: DoctorModel[];
-    headOfDepartments: HeadOfDepartmentModel[];
-    medicRegistrations: MedicRegistrationModel[];
-    patients: PatientModel[];
-    sysAdmins: SysAdminModel[];
 
-    constructor() {
-    }
-}
+
 export async function GetAllUsers(token): Promise<AllUsers>{
+    let answer;
     let result: AllUsers;
     await fetch(`${Api}${Controllers["SysAdmin"]}GetUsers?token=${token}`, {
         method:"Post",
@@ -30,13 +22,61 @@ export async function GetAllUsers(token): Promise<AllUsers>{
             return response.json()
         })
         .then(function (json){
-            result = json;
+            answer = json;
         })
         .catch(e => {
             console.error(e);
         });
-    debugger
-
+    let chiefsOfMedicine: ChiefOfMedicineModel[] = [];
+    answer.chiefsOfMedicine.forEach(element => {chiefsOfMedicine.push(
+        new ChiefOfMedicineModel(
+            element.id, element.login, element.name,
+            element.surname, element.patronymic, element.email,
+            element.dateEmployment, element.dateDismissal,
+            element.phoneNumber, element.dateBirthday, element.gender,
+            element.Address, element.files, element.placeOfStudies,
+            element.descriptionHeadOfDepartment, element.accessRights, element.Accept ))});
+    let doctors: DoctorModel[] = [];
+    answer.doctors.forEach(element => {doctors.push(
+        new DoctorModel(element.id, element.login, element.name,
+            element.surname, element.patronymic, element.email,
+            element.dateEmployment, element.dateDismissal,
+            element.phoneNumber, element.dateBirthday, element.department, element.gender,
+            element.Address, element.files, element.placeOfStudies,
+            element.descriptionHeadOfDepartment, element.accessRights, element.Accept ))});
+    let headOfDepartments: HeadOfDepartmentModel[] = [];
+    answer.headOfDepartments.forEach(element => {headOfDepartments.push(
+        new HeadOfDepartmentModel(
+            element.id, element.login, element.name,
+            element.surname, element.patronymic, element.email,
+            element.dateEmployment, element.dateDismissal,
+            element.phoneNumber, element.dateBirthday, element.doctors, element.gender,
+            element.Address, element.files, element.placeOfStudies,
+            element.descriptionHeadOfDepartment, element.accessRights, element.Accept
+        ))})
+    let medicRegistrations: MedicRegistrationModel[] = [];
+    answer.medicRegistrations.forEach(element => {medicRegistrations.push(
+        new MedicRegistrationModel(
+            element.id, element.login, element.name,
+            element.surname, element.patronymic, element.email,
+            element.dateEmployment, element.dateDismissal,
+            element.phoneNumber, element.dateBirthday, element.doctors, element.gender,
+            element.Address, element.files, element.placeOfStudies, element.accessRights, element.Accept
+        ))})
+    let patients: PatientModel[] = [];
+    answer.patients.forEach(element => {patients.push(
+        new PatientModel(
+            element.id, element.login, element.name,
+            element.surname, element.birthday, element.accept,
+            element.gender, element.patronymic, element.email,
+            element.phoneNumber, element.outpatientCards, element.researchAreas
+        ))});
+    let sysAdmins: SysAdminModel[] = [];
+    answer.sysAdmins.forEach(element => {sysAdmins.push(
+        new SysAdminModel(
+            element.id, element.login, element.accept
+        ))})
+    result = new AllUsers(chiefsOfMedicine, doctors, headOfDepartments, medicRegistrations, patients, sysAdmins);
     return result;
 }
 export async function RemoveAllUsers(token){

@@ -15,7 +15,7 @@ namespace Business.Interop.DoctorModel
         public Guid Id { get; set; }
         public string Login { get; set; }
         public string Name { get; set; }
-        public string Surnane { get; set; }
+        public string Surname { get; set; }
         public string? Patronymic { get; set; }
         public string? Email { get; set; }
         public DateTime DateEmployment { get; set; }

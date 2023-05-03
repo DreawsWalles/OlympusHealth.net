@@ -1,6 +1,6 @@
 import {AddressToken, Api, Controllers} from "../../Constants";
 
-async function getStreetByServer(country, region, city, street){
+async function getStreetByServer(country: string, region: string, city: string, street: string): Promise<string[]>{
     let tmp;
     await fetch(`${Api}${Controllers["Address"]}Street?name=${street}&country=${country}&region=${region}&city=${city}`, {
         method:"Post",
@@ -28,9 +28,8 @@ async function getStreetByServer(country, region, city, street){
     return result;
 }
 
-async function getStreetByApi(country, region, city, street){
+async function getStreetByApi(country: string, region: string, city: string, street: string): Promise<string[]>{
     let result = [];
-    debugger
     let locations = [{region: region.toString().split(' ')[0], city: city.toString().split(' ')[1]}];
     let tmp;
     await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", {
@@ -60,8 +59,14 @@ async function getStreetByApi(country, region, city, street){
     }
     return result;
 }
-export async function GetStreetMatchName(street, props){
-    let serverData = await getStreetByServer(props.country, props.region, props.city, street);
-    let apiData = await getStreetByApi(props.country, props.region, props.city, street);
-    return serverData.concat(apiData).unique();
+export async function GetStreetMatchName(street: string, country: string, region: string, city: string): Promise<[]>{
+    let serverData = await getStreetByServer(country, region, city, street);
+    let apiData = await getStreetByApi(country, region, city, street);
+    let result = new Set();
+    apiData.forEach(element => serverData.push(element));
+    serverData.forEach(element => {
+        if (!result.has(element)){
+            result.add(element);
+        }});
+    return Array.from(result);
 }
