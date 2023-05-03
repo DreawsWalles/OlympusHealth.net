@@ -1,0 +1,17 @@
+.element{
+    background-color: white;
+    transition: background-color 0.2s, padding-left 0.1s, padding-right 0.1s, padding-bottom 0.1s, padding-top 0.1s, ease-in-out;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
+.element:hover{
+    background-color: rgba(212, 127, 141, 0.2);
+}
+.open{
+    padding: 2px 8px;
+}
+.close{
+    padding: 0;
+}
